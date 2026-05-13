@@ -236,7 +236,7 @@ const LESSONS_DONE = 0;
 const STATUS = "green"; // "green" | "yellow" | "red"
 // ═══════════════════════════════════════
 
-const ICS = "https://p114-caldav.icloud.com/published/2/MTAzODM5NjM0NDEwMzgzOfLQsQVqgHn0vsKQCxSns5Rvsd7hocuHrllKei9NbXzeMB51PLujw4aS1QBdZTzAZNh76JcJTJp5iJLhgsk5k9M";
+const ICS = "https://calendar.google.com/calendar/ical/f3c72bce6e9b4784ce23c34fda61c8c99bd275f1bb38bd5619394fd1435f72bf%40group.calendar.google.com/public/basic.ics";
 const WA = "5519953335757";
 const IG = "duo.linguas";
 const ARRIVAL = new Date(2026, 5, 11);
@@ -329,11 +329,13 @@ function parseICS(raw){
 }
 function icsDateOnly(s){ return new Date(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8)); }
 function icsDate(s){
-  var utc=s.endsWith("Z"),c=s.replace("Z","").replace(/[T]/,"").replace(/[-:]/g,"");
-  if(c.length===8)return{d:new Date(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8)),a:true};
-  var clean=s.replace("Z","");
-  var y=+clean.slice(0,4),mo=+clean.slice(4,6)-1,d=+clean.slice(6,8);
-  var h=+clean.slice(9,11)||0,m=+clean.slice(11,13)||0,sc=+(clean.slice(13,15)||0);
+  var utc=s.endsWith("Z"), c=s.replace("Z","");
+  // All-day: pure date YYYYMMDD
+  if(c.length===8) return{d:new Date(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8)),a:true};
+  // DateTime: YYYYMMDDTHHMMSS[Z]
+  var y=+c.slice(0,4), mo=+c.slice(4,6)-1, d=+c.slice(6,8);
+  var timePart=c.slice(9)||"000000";
+  var h=+timePart.slice(0,2)||0, m=+timePart.slice(2,4)||0, sc=+timePart.slice(4,6)||0;
   return{d:utc?new Date(Date.UTC(y,mo,d,h,m,sc)):new Date(y,mo,d,h,m,sc),a:false};
 }
 function isBusy(date,hour){

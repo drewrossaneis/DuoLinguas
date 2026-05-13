@@ -281,13 +281,12 @@ var days = Math.ceil((ARRIVAL - new Date())/86400000);
 document.getElementById("cd").textContent = Math.max(0,days);
 
 /* WEATHER */
-fetch("https://wttr.in/Sao+Paulo?format=%t")
-  .then(function(r){ return r.text(); })
-  .then(function(t){
-    var temp = t.trim().replace("+","");
-    document.getElementById("wval").textContent = temp;
-    var deg = parseInt(temp);
-    var ico = deg >= 30 ? "ti-sun" : deg >= 20 ? "ti-cloud-sun" : "ti-cloud";
+fetch("https://corsproxy.io/?url="+encodeURIComponent("https://wttr.in/Sao+Paulo?format=j1"))
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    var temp = parseInt(d.current_condition[0].temp_C);
+    document.getElementById("wval").textContent = temp+"°C";
+    var ico = temp >= 30 ? "ti-sun" : temp >= 20 ? "ti-cloud-sun" : "ti-cloud";
     document.getElementById("wico").className = "ti "+ico+" weather-ico";
   })
   .catch(function(){ document.getElementById("wval").textContent = "--°C"; });

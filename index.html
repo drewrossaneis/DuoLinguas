@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DuoLinguas - Schedule</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:     #F1EFE8; --s1: #E8E5DC; --s2: #EDEAE1;
+  --border: rgba(28,25,23,0.10); --bhi: rgba(28,25,23,0.20);
+  --text:   #1C1917; --muted: #888780; --muted2: #555250;
+  --coral:  #D85A30; --green: #3a7a50;
+}
+body { background:var(--bg); color:var(--text); font-family:"DM Sans",system-ui,sans-serif; font-weight:300; min-height:100vh; max-width:900px; margin:0 auto; }
+.serif { font-family:"Cormorant Garamond",Georgia,serif; font-weight:300; }
+header { padding:22px 32px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.brand { display:flex; align-items:center; gap:14px; }
+.brand h1 { font-family:"Cormorant Garamond",serif; font-weight:300; font-size:18px; letter-spacing:0.16em; text-transform:uppercase; }
+.brand p { font-size:9px; color:var(--muted); letter-spacing:0.12em; margin-top:3px; text-transform:uppercase; }
+.clocks { display:flex; border:1px solid var(--border); border-radius:4px; overflow:hidden; flex-shrink:0; }
+.clock { padding:8px 20px; text-align:center; min-width:90px; }
+.clock + .clock { border-left:1px solid var(--border); }
+.clock-city { font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:4px; }
+.clock-time { font-family:"Cormorant Garamond",serif; font-size:22px; font-weight:300; font-variant-numeric:tabular-nums; }
+#t-sp { color:var(--text); } #t-at { color:var(--coral); }
+.countdown { padding:26px 32px; border-bottom:1px solid var(--border); display:flex; align-items:baseline; }
+.cd-num { font-family:"Cormorant Garamond",serif; font-weight:300; font-size:96px; line-height:1; letter-spacing:-0.02em; }
+.cd-meta { margin-left:20px; display:flex; flex-direction:column; gap:5px; }
+.cd-meta .unit { font-size:10px; color:var(--muted); letter-spacing:0.14em; text-transform:uppercase; }
+.cd-meta .sub { font-family:"Cormorant Garamond",serif; font-size:14px; font-style:italic; color:var(--muted); }
+.cd-right { margin-left:auto; text-align:right; }
+.cd-right .date { font-family:"Cormorant Garamond",serif; font-size:18px; color:var(--coral); letter-spacing:0.04em; }
+.cd-right .lbl { font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-top:5px; }
+.status-bar { padding:8px 32px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:9px; font-size:10px; color:var(--muted); letter-spacing:0.06em; }
+.dot { width:5px; height:5px; border-radius:50%; background:var(--muted); flex-shrink:0; transition:background 0.4s; }
+.dot.ok { background:var(--green); } .dot.error { background:var(--coral); }
+.dot.spin { animation:pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:.25} 50%{opacity:1} }
+.cal-section { padding:22px 32px 8px; }
+.cal-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+.nav-btn { background:none; border:1px solid var(--border); color:var(--muted); cursor:pointer; width:32px; height:32px; border-radius:3px; font-family:"Cormorant Garamond",serif; font-size:22px; display:flex; align-items:center; justify-content:center; transition:border-color .15s,color .15s; }
+.nav-btn:hover { border-color:var(--bhi); color:var(--text); }
+.week-label { font-family:"Cormorant Garamond",serif; font-size:16px; letter-spacing:0.06em; }
+.cal-grid { display:grid; grid-template-columns:76px repeat(5,1fr); }
+.day-header { text-align:center; padding-bottom:14px; }
+.day-short { font-size:9px; color:var(--muted); letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; }
+.day-num { font-family:"Cormorant Garamond",serif; font-size:20px; font-weight:300; }
+.day-num.today { color:var(--coral); }
+.today-pip { width:4px; height:4px; border-radius:50%; background:var(--coral); margin:5px auto 0; }
+.day-gap { height:9px; }
+.tlabel { text-align:right; padding-right:10px; padding-top:8px; display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.tz-br { font-size:9px; color:var(--muted); letter-spacing:0.04em; }
+.tz-at { font-size:9px; color:var(--coral); opacity:0.75; letter-spacing:0.04em; }
+.slot { height:34px; margin:2px; border-radius:3px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; transition:border-color .12s,background .12s; cursor:pointer; position:relative; background:transparent; }
+.slot:hover:not(.busy):not(.past) { border-color:var(--bhi); background:rgba(28,25,23,0.04); }
+.slot.busy { border-color:transparent; background:var(--s1); cursor:default; }
+.slot.past { border-color:transparent; opacity:0.2; pointer-events:none; }
+.busy-dash { width:12px; height:1px; background:var(--muted); opacity:0.5; }
+.slot:not(.busy):not(.past)::after { content:"Request"; position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%); background:var(--text); color:var(--bg); font-size:9px; letter-spacing:0.08em; padding:4px 8px; border-radius:3px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s; }
+.slot:not(.busy):not(.past):hover::after { opacity:1; }
+.legend { display:flex; gap:24px; padding:14px 32px; font-size:10px; color:var(--muted); letter-spacing:0.06em; border-top:1px solid var(--border); margin-top:10px; }
+.legend-item { display:flex; align-items:center; gap:8px; }
+.lbox { width:16px; height:12px; border-radius:2px; border:1px solid var(--bhi); }
+.lbox.busy { border-color:transparent; background:var(--s1); }
+footer { padding:16px 32px 28px; border-top:1px solid var(--border); margin-top:6px; display:flex; justify-content:space-between; align-items:center; }
+.slogan { font-family:"Cormorant Garamond",serif; font-style:italic; font-size:13px; color:var(--muted); letter-spacing:0.04em; }
+.footer-id { font-size:9px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; }
+.cal-loading { grid-column:1/-1; text-align:center; padding:48px 0; font-size:11px; color:var(--muted); font-style:italic; letter-spacing:0.08em; }
+@media(max-width:600px) { header,.countdown,.cal-section,.legend,footer,.status-bar{padding-left:16px;padding-right:16px;} .cd-num{font-size:72px;} .clocks{display:none;} }
+
+@media (prefers-color-scheme: dark) {
+  #logo-bg { fill: #F1EFE8; }
+  #logo-d1, #logo-d2 { fill: #1C1917; }
+  :root {
+    --bg:     #1C1917;
+    --s1:     #242220;
+    --s2:     #1E1D1B;
+    --border: rgba(241,239,232,0.08);
+    --bhi:    rgba(241,239,232,0.16);
+    --text:   #F1EFE8;
+    --muted:  #888780;
+    --muted2: #D3D1C7;
+    --coral:  #D85A30;
+    --green:  #4e9165;
+  }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg width="44" height="48" viewBox="0 0 160 175" xmlns="http://www.w3.org/2000/svg">
+      <circle id="logo-bg" cx="80" cy="78" r="54" fill="#1C1917"/>
+      <circle cx="80" cy="78" r="48" fill="none" stroke="#3a3835" stroke-width="0.8"/>
+      <path id="logo-d1" d="M 51 50 L 51 106 Q 77 106 77 78 Q 77 50 51 50 Z" fill="#F1EFE8"/>
+      <path id="logo-d2" d="M 109 50 L 109 106 Q 83 106 83 78 Q 83 50 109 50 Z" fill="#F1EFE8"/>
+      <path d="M 62 140 Q 80 154 98 140" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div class="brand-text">
+      <h1>DuoL&iacute;nguas</h1>
+      <p>Private School &middot; Deep Immersion BR</p>
+    </div>
+  </div>
+  <div class="clocks">
+    <div class="clock"><div class="clock-city">S&atilde;o Paulo</div><div class="clock-time serif" id="t-sp">--:--</div></div>
+    <div class="clock"><div class="clock-city">Athens</div><div class="clock-time serif" id="t-at">--:--</div></div>
+  </div>
+</header>
+<section class="countdown">
+  <div class="cd-num serif" id="cd-num">--</div>
+  <div class="cd-meta"><span class="unit">days</span><span class="sub">until the immersion begins</span></div>
+  <div class="cd-right"><div class="date serif">Jun 11, 2026</div><div class="lbl">Arrival in Brazil</div></div>
+</section>
+<div class="status-bar"><div class="dot spin" id="sdot"></div><span id="stxt">Loading calendar...</span></div>
+<section class="cal-section">
+  <div class="cal-nav">
+    <button class="nav-btn" id="btn-prev">&#8249;</button>
+    <span class="week-label serif" id="week-label"></span>
+    <button class="nav-btn" id="btn-next">&#8250;</button>
+  </div>
+  <div class="cal-grid" id="grid"><div class="cal-loading">Fetching your availability&hellip;</div></div>
+</section>
+<div class="legend">
+  <div class="legend-item"><div class="lbox"></div>Available &mdash; click to request via WhatsApp</div>
+  <div class="legend-item"><div class="lbox busy"></div>Busy</div>
+</div>
+<footer>
+  <div class="slogan">&ldquo;Porque a l&iacute;ngua certa faz toda a diferen&ccedil;a.&rdquo;</div>
+  <div class="footer-id">&copy; DuoL&iacute;nguas Private School</div>
+</footer>
+<script>
+const ICS_URL = "https://p114-caldav.icloud.com/published/2/MTAzODM5NjM0NDEwMzgzOfLQsQVqgHn0vsKQCxSns5Rvsd7hocuHrllKei9NbXzeMB51PLujw4aS1QBdZTzAZNh76JcJTJp5iJLhgsk5k9M";
+const WA = "5519953335757";
+const ARRIVAL = new Date(2026, 5, 11);
+const H0 = 0, H1 = 24;
+const DS = ["Mon","Tue","Wed","Thu","Fri"];
+const DL = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+const MS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const ML = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const NL = String.fromCharCode(10);
+
+let offset = 0, evts = [], ready = false;
+
+function tick() {
+  try {
+    var f = function(tz) { return new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:tz}); };
+    document.getElementById("t-sp").textContent = f("America/Sao_Paulo");
+    document.getElementById("t-at").textContent = f("Europe/Athens");
+  } catch(e) {
+    var t = new Date();
+    var sp = new Date(t.getTime() - 3*3600000);
+    var at = new Date(t.getTime() + 3*3600000);
+    var fmt = function(d) { return String(d.getUTCHours()).padStart(2,"0")+":"+String(d.getUTCMinutes()).padStart(2,"0"); };
+    document.getElementById("t-sp").textContent = fmt(sp);
+    document.getElementById("t-at").textContent = fmt(at);
+  }
+}
+
+function cdUpdate() {
+  var d = Math.ceil((ARRIVAL - new Date()) / 86400000);
+  document.getElementById("cd-num").textContent = Math.max(0, d);
+}
+
+function setStatus(type, msg) {
+  document.getElementById("stxt").textContent = msg;
+  document.getElementById("sdot").className = "dot " + type;
+}
+
+function ft(url, ms) {
+  var ctrl = new AbortController();
+  var id = setTimeout(function(){ ctrl.abort(); }, ms);
+  return fetch(url, {signal: ctrl.signal}).finally(function(){ clearTimeout(id); });
+}
+
+async function loadCal() {
+  var proxies = [
+    "https://corsproxy.io/?url=" + encodeURIComponent(ICS_URL),
+    "https://api.allorigins.win/raw?url=" + encodeURIComponent(ICS_URL)
+  ];
+  for (var i = 0; i < proxies.length; i++) {
+    try {
+      var r = await ft(proxies[i], 10000);
+      if (!r.ok) continue;
+      var t = await r.text();
+      if (t.includes("BEGIN:VCALENDAR")) {
+        evts = parseICS(t);
+        ready = true;
+        setStatus("ok", "Calendar synced \u00B7 " + evts.length + " event" + (evts.length !== 1 ? "s" : "") + " loaded");
+        render();
+        return;
+      }
+    } catch(e) { continue; }
+  }
+  ready = true;
+  setStatus("error", "Could not load calendar \u2014 showing all slots as available");
+  render();
+}
+
+function parseICS(raw) {
+  var text = raw.replace(/\r?\n[ \t]/g, "");
+  var lines = text.split(/\r?\n/);
+  var out = [], e = null;
+  for (var i = 0; i < lines.length; i++) {
+    var ln = lines[i];
+    if (ln === "BEGIN:VEVENT") { e = {}; continue; }
+    if (ln === "END:VEVENT")   { if (e && e.s) out.push(e); e = null; continue; }
+    if (!e) continue;
+    var ci = ln.indexOf(":");
+    if (ci < 0) continue;
+    var key = ln.slice(0, ci).split(";")[0].toLowerCase();
+    var val = ln.slice(ci + 1).trim();
+    if (key === "dtstart") e.s  = icsDate(val);
+    if (key === "dtend")   e.en = icsDate(val);
+  }
+  return out;
+}
+
+function icsDate(s) {
+  var utc = s.endsWith("Z"), c = s.replace("Z","");
+  if (c.length === 8) return { d: new Date(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8)), a:true };
+  var y=+c.slice(0,4), mo=+c.slice(4,6)-1, d=+c.slice(6,8), h=+c.slice(9,11), m=+c.slice(11,13), sc=+(c.slice(13,15)||0);
+  return { d: utc ? new Date(Date.UTC(y,mo,d,h,m,sc)) : new Date(y,mo,d,h,m,sc), a:false };
+}
+
+function isBusy(date, hour) {
+  var ss = new Date(date); ss.setHours(hour,   0,0,0);
+  var se = new Date(date); se.setHours(hour+1, 0,0,0);
+  return evts.some(function(ev) {
+    if (!ev.s) return false;
+    var s = ev.s.d, en = ev.en ? ev.en.d : null;
+    if (ev.s.a) return s.getFullYear()===date.getFullYear() && s.getMonth()===date.getMonth() && s.getDate()===date.getDate();
+    return en ? (s < se && en > ss) : (s >= ss && s < se);
+  });
+}
+
+function wDates(off) {
+  var t = new Date(), day = t.getDay(), mon = new Date(t);
+  mon.setDate(t.getDate() + (day === 0 ? -6 : 1 - day) + off * 7);
+  mon.setHours(0,0,0,0);
+  return Array.from({length:5}, function(_,i){ var d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
+}
+
+function wLabel(dates) {
+  var s = dates[0], e = dates[4];
+  return s.getMonth() === e.getMonth()
+    ? MS[s.getMonth()] + " " + s.getDate() + "\u2013" + e.getDate() + ", " + s.getFullYear()
+    : MS[s.getMonth()] + " " + s.getDate() + " \u2013 " + MS[e.getMonth()] + " " + e.getDate() + ", " + e.getFullYear();
+}
+
+function waLink(date, hour) {
+  var dow  = DL[date.getDay()-1] || "";
+  var time = String(hour).padStart(2,"0") + ":00";
+  var parts = [
+    "Dear Poutana Please,",
+    "",
+    "I need a class. I'd like to book on " + dow + ", " + ML[date.getMonth()] + " " + date.getDate() + " at " + time + ".",
+    "",
+    "D.P",
+    "",
+    '"Because the right tongue makes all the difference."'
+  ];
+  return "https://wa.me/" + WA + "?text=" + encodeURIComponent(parts.join(NL));
+}
+
+function mk(tag, cls) { var e=document.createElement(tag); if(cls) e.className=cls; return e; }
+
+function render() {
+  var dates = wDates(offset);
+  var today = new Date(); today.setHours(0,0,0,0);
+  document.getElementById("week-label").textContent = wLabel(dates);
+  var g = document.getElementById("grid");
+  g.innerHTML = "";
+
+  var corner = mk("div");
+  corner.style.cssText = "display:flex;flex-direction:column;align-items:flex-end;padding-right:10px;padding-bottom:6px;gap:2px;justify-content:flex-end;";
+  corner.innerHTML = "<span style='font-size:8px;letter-spacing:.1em;color:var(--muted);'>BR</span><span style='font-size:8px;letter-spacing:.1em;color:var(--coral);opacity:.75;'>AT</span>";
+  g.appendChild(corner);
+
+  dates.forEach(function(d, i) {
+    var isT = d.getTime() === today.getTime();
+    var c = mk("div","day-header");
+    c.innerHTML = "<div class='day-short'>" + DS[i] + "</div>" +
+      "<div class='day-num serif" + (isT?" today":"") + "'>" + d.getDate() + "</div>" +
+      (isT ? "<div class='today-pip'></div>" : "<div class='day-gap'></div>");
+    g.appendChild(c);
+  });
+
+  var now = new Date();
+  for (var h = H0; h < H1; h++) {
+    var atH = (h + 6) % 24;
+    var tl = mk("div","tlabel");
+    tl.innerHTML = "<span class='tz-br'>" + String(h).padStart(2,"0") + ":00</span>" +
+                   "<span class='tz-at'>" + String(atH).padStart(2,"0") + ":00</span>";
+    g.appendChild(tl);
+    dates.forEach(function(d) {
+      var se = new Date(d); se.setHours(h+1,0,0,0);
+      var past = se < now;
+      var bk   = ready && isBusy(d, h);
+      var s    = mk("div","slot"+(bk?" busy":"")+(past?" past":""));
+      if (bk) { s.appendChild(mk("div","busy-dash")); }
+      else if (!past) { (function(dd,hh){ s.addEventListener("click",function(){ window.open(waLink(dd,hh),"_blank"); }); })(d,h); }
+      g.appendChild(s);
+    });
+  }
+}
+
+document.getElementById("btn-prev").onclick = function(){ offset--; render(); };
+document.getElementById("btn-next").onclick = function(){ offset++; render(); };
+
+tick();
+setInterval(tick, 30000);
+cdUpdate();
+render();
+loadCal();
+</script>
+</body>
+</html>

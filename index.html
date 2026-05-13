@@ -19,19 +19,19 @@ body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif
 .header { padding:16px 16px 12px; display:grid; grid-template-columns:1fr 1.4fr 1fr; align-items:center; gap:8px; }
 .logo-col { display:flex; justify-content:center; }
 .name-col { text-align:center; }
-.wordmark { font-family:'EB Garamond',Georgia,serif; font-size:22px; letter-spacing:.08em; line-height:1.1; }
-.school { font-size:8px; color:var(--muted); letter-spacing:.22em; text-transform:uppercase; margin-top:4px; }
+.wordmark { font-family:'EB Garamond',Georgia,serif; font-size:24px; letter-spacing:.08em; line-height:1.1; }
+.school { font-size:10px; color:var(--muted); letter-spacing:.22em; text-transform:uppercase; margin-top:4px; }
 .info-col { display:flex; flex-direction:column; gap:5px; align-items:flex-end; }
 .clock-box { border:0.5px solid var(--border); border-radius:4px; overflow:hidden; width:100%; }
 .clock-row { padding:4px 8px; display:flex; align-items:center; justify-content:space-between; }
 .clock-row+.clock-row { border-top:0.5px solid var(--border); }
-.clock-lbl { font-size:8px; color:var(--muted); letter-spacing:.1em; }
-.clock-val { font-family:'EB Garamond',serif; font-size:14px; font-variant-numeric:tabular-nums; }
+.clock-lbl { font-size:10px; color:var(--muted); letter-spacing:.1em; }
+.clock-val { font-family:'EB Garamond',serif; font-size:16px; font-variant-numeric:tabular-nums; }
 #t-sp { color:var(--text); } #t-at { color:var(--coral); }
 .weather-box { border:0.5px solid var(--border); border-radius:4px; padding:4px 8px; width:100%; display:flex; align-items:center; justify-content:space-between; }
-.weather-lbl { font-size:8px; color:var(--muted); letter-spacing:.08em; }
-.weather-val { font-family:'EB Garamond',serif; font-size:14px; color:var(--text); }
-.weather-ico { font-size:13px; color:var(--coral); }
+.weather-lbl { font-size:10px; color:var(--muted); letter-spacing:.08em; }
+.weather-val { font-family:'EB Garamond',serif; font-size:16px; color:var(--text); }
+.weather-ico { font-size:15px; color:var(--coral); }
 
 /* DIVIDER */
 .div { display:flex; align-items:center; padding:8px 36px; }
@@ -40,23 +40,23 @@ body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif
 
 /* USER */
 .user { text-align:center; padding:4px 20px 6px; }
-.user-name { font-family:'EB Garamond',serif; font-size:18px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.user-name { font-family:'EB Garamond',serif; font-size:20px; display:flex; align-items:center; justify-content:center; gap:8px; }
 .user-icon { font-size:14px; color:var(--muted); }
-.prog-row { font-size:10px; color:var(--muted); margin-top:5px; display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; }
-.ass-tag { font-size:8px; color:var(--coral); border:0.5px solid var(--coral); padding:1px 6px; border-radius:2px; letter-spacing:.08em; white-space:nowrap; }
+.prog-row { font-size:12px; color:var(--muted); margin-top:5px; display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap; }
+.ass-tag { font-size:10px; color:var(--coral); border:0.5px solid var(--coral); padding:1px 6px; border-radius:2px; letter-spacing:.08em; white-space:nowrap; }
 
 /* STATS */
 .stats { display:flex; align-items:flex-start; justify-content:space-around; padding:6px 16px 8px; }
 .stat-col { text-align:center; width:90px; }
-.circle { width:72px; height:72px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto; }
+.circle { width:80px; height:80px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto; }
 .circle-cd  { background:rgba(28,25,23,0.07); border:1px solid rgba(28,25,23,0.15); }
 .circle-dark { background:rgba(28,25,23,0.78); border:1px solid rgba(28,25,23,0.78); }
 .circle-status { border:1px solid; }
-.stat-num { font-family:'EB Garamond',serif; font-size:28px; line-height:1; }
-.stat-unit { font-size:7px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-top:1px; }
-.stat-num-light { font-family:'EB Garamond',serif; font-size:26px; color:var(--bg); line-height:1; }
-.stat-check { color:var(--coral); font-size:10px; line-height:1; margin-top:1px; }
-.stat-label { font-size:11px; font-style:italic; color:var(--muted2); margin-top:5px; line-height:1.3; }
+.stat-num { font-family:'EB Garamond',serif; font-size:36px; line-height:1; }
+.stat-unit { font-size:11px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-top:1px; }
+.stat-num-light { font-family:'EB Garamond',serif; font-size:32px; color:var(--bg); line-height:1; }
+.stat-check { color:var(--coral); font-size:12px; line-height:1; margin-top:1px; }
+.stat-label { font-size:14px; font-style:italic; color:var(--muted2); margin-top:5px; line-height:1.3; }
 
 /* CALENDAR */
 .cal { padding:0 14px 6px; }
@@ -64,19 +64,19 @@ body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif
 .cal-nav-center { display:flex; align-items:center; gap:8px; }
 .nav-btn { background:none; border:0.5px solid var(--border); border-radius:3px; width:26px; height:26px; font-family:'EB Garamond',serif; font-size:18px; color:var(--muted); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .15s,color .15s; }
 .nav-btn:hover { border-color:var(--bhi); color:var(--text); }
-.week-lbl { font-family:'EB Garamond',serif; font-size:13px; letter-spacing:.04em; }
+.week-lbl { font-family:'EB Garamond',serif; font-size:15px; letter-spacing:.04em; }
 .time-nav { display:flex; gap:4px; }
 .cal-grid { display:grid; grid-template-columns:62px repeat(7,1fr); }
 .day-hdr { text-align:center; padding-bottom:8px; }
-.day-s { font-size:8px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:2px; }
-.day-n { font-family:'EB Garamond',serif; font-size:15px; }
+.day-s { font-size:10px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:2px; }
+.day-n { font-family:'EB Garamond',serif; font-size:17px; }
 .day-n.today { color:var(--coral); }
 .today-pip { width:4px; height:4px; border-radius:50%; background:var(--coral); margin:2px auto 0; }
 .day-gap { height:6px; }
 .tlbl { text-align:right; padding-right:8px; padding-top:12px; display:flex; flex-direction:column; align-items:flex-end; gap:2px; min-width:58px; }
 .tz-br { font-size:11px; color:var(--muted2); letter-spacing:.02em; font-family:'EB Garamond',serif; }
 .tz-at { font-size:10px; color:var(--coral); opacity:.85; letter-spacing:.02em; font-family:'EB Garamond',serif; }
-.slot { height:54px; margin:1px; border-radius:3px; border:0.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .12s,background .12s; font-size:9px; letter-spacing:.06em; }
+.slot { height:54px; margin:1px; border-radius:3px; border:0.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .12s,background .12s; font-size:11px; letter-spacing:.06em; }
 .slot:hover:not(.busy):not(.past) { border-color:var(--bhi); background:rgba(28,25,23,0.04); }
 .slot.busy { border:0.5px solid rgba(216,90,48,0.3); background:rgba(216,90,48,0.12); cursor:default; color:var(--coral); }
 .slot.past { border-color:transparent; opacity:.2; pointer-events:none; }
@@ -86,8 +86,8 @@ body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif
 .banner { margin:6px 14px; padding:12px 14px; background:var(--s1); border:0.5px solid rgba(216,90,48,0.35); border-radius:4px; display:none; }
 .banner.show { display:block; }
 .banner-top { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:10px; }
-.banner-time { font-family:'EB Garamond',serif; font-size:16px; }
-.banner-sub { font-size:9px; color:var(--muted); margin-top:3px; letter-spacing:.04em; }
+.banner-time { font-family:'EB Garamond',serif; font-size:18px; }
+.banner-sub { font-size:11px; color:var(--muted); margin-top:3px; letter-spacing:.04em; }
 .banner-close { background:none; border:none; color:var(--muted); cursor:pointer; font-size:18px; font-family:serif; padding:0 2px; line-height:1; }
 .contact-row { display:flex; gap:16px; align-items:center; }
 .cbtn { background:none; border:none; cursor:pointer; color:var(--coral); padding:0; width:26px; height:26px; display:flex; align-items:center; justify-content:center; opacity:.8; transition:opacity .15s; }
@@ -96,12 +96,12 @@ body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif
 
 /* FOOTER */
 footer { padding:8px 20px 20px; text-align:center; border-top:0.5px solid var(--border); margin-top:8px; }
-.slogan { font-family:'EB Garamond',serif; font-style:italic; font-size:13px; color:var(--muted); letter-spacing:.04em; margin-bottom:10px; }
+.slogan { font-family:'EB Garamond',serif; font-style:italic; font-size:15px; color:var(--muted); letter-spacing:.04em; margin-bottom:10px; }
 .foot-icons { display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:8px; }
 .ficon { background:none; border:none; cursor:pointer; color:var(--coral); padding:0; width:28px; height:28px; display:flex; align-items:center; justify-content:center; opacity:.8; transition:opacity .15s; }
 .ficon:hover { opacity:1; }
 .ficon svg { width:24px; height:24px; }
-.foot-by { font-size:8px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
+.foot-by { font-size:10px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
 
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
@@ -116,7 +116,7 @@ footer { padding:8px 20px 20px; text-align:center; border-top:0.5px solid var(--
 <body>
 
 <div class="header">
-  <div class="logo-col"><svg width="82" height="90" viewBox="0 0 160 175" xmlns="http://www.w3.org/2000/svg">
+  <div class="logo-col"><svg width="110" height="120" viewBox="0 0 160 175" xmlns="http://www.w3.org/2000/svg">
   <circle id="logo-bg" cx="80" cy="78" r="54" fill="#1C1917"/>
   <circle cx="80" cy="78" r="48" fill="none" stroke="#3a3835" stroke-width="0.8"/>
   <path id="logo-d1" d="M 51 50 L 51 106 Q 77 106 77 78 Q 77 50 51 50 Z" fill="#F1EFE8"/>
@@ -157,19 +157,21 @@ footer { padding:8px 20px 20px; text-align:center; border-top:0.5px solid var(--
 <div class="div"><div class="div-line"></div><div class="div-dot"></div><div class="div-line"></div></div>
 
 <div class="stats">
+  <!-- Countdown: only number inside, label outside -->
   <div class="stat-col">
     <div class="circle circle-cd">
       <div class="stat-num" id="cd">--</div>
-      <div class="stat-unit">days</div>
     </div>
-    <div class="stat-label">to come</div>
+    <div class="stat-label">days<br>to come</div>
   </div>
+  <!-- Mission Status: text inside with contrast -->
   <div class="stat-col">
-    <div class="circle circle-status" id="sc" style="flex-direction:column;gap:4px;">
-      <i class="ti ti-circle-check" id="s-icon" style="font-size:22px;" aria-hidden="true"></i>
+    <div class="circle circle-status" id="sc" style="flex-direction:column;gap:5px;">
+      <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#F1EFE8;font-weight:600;line-height:1.3;text-align:center;font-family:'Lora',serif;">Mission<br>Status</div>
     </div>
-    <div style="font-size:8px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;">Mission Status</div><div class="stat-label" id="s-txt"></div>
+    <div class="stat-label" id="s-txt"></div>
   </div>
+  <!-- Lessons: number inside, label outside -->
   <div class="stat-col">
     <div class="circle circle-dark">
       <div class="stat-num-light" id="ln">0</div>
@@ -241,8 +243,8 @@ const ARRIVAL = new Date(2026, 5, 11);
 const NL = String.fromCharCode(10);
 
 const S_TEXT  = { green:"Not nice. But ok.", yellow:"Move your A.S.S. Protocol. Now.", red:"FODEEEEU." };
-const S_BG    = { green:"rgba(58,110,75,0.5)", yellow:"rgba(160,120,40,0.5)", red:"rgba(160,55,45,0.5)" };
-const S_BORD  = { green:"rgba(58,110,75,0.3)", yellow:"rgba(160,120,40,0.3)", red:"rgba(160,55,45,0.3)" };
+const S_BG    = { green:"rgba(40,80,50,0.85)", yellow:"rgba(130,95,20,0.85)", red:"rgba(130,40,35,0.85)" };
+const S_BORD  = { green:"rgba(40,80,50,0.5)", yellow:"rgba(130,95,20,0.5)", red:"rgba(130,40,35,0.5)" };
 
 const DS  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 const DL  = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
@@ -255,7 +257,7 @@ let weekOff=0, hourStart=Math.max(0,new Date().getHours()-1), evts=[], ready=fal
 var sc = document.getElementById("sc");
 sc.style.background = S_BG[STATUS];
 sc.style.borderColor = S_BORD[STATUS];
-document.getElementById("s-icon").style.color = S_BORD[STATUS].replace("0.3","0.9");
+var sIcon=document.getElementById("s-icon"); if(sIcon) sIcon.style.color = "#F1EFE8";
 document.getElementById("s-txt").textContent = S_TEXT[STATUS];
 
 /* LESSONS */
@@ -303,17 +305,37 @@ async function loadCal() {
 }
 
 function parseICS(raw){
-  var text=raw.replace(/\r?\n[ \t]/g,""); var lines=text.split(/\r?\n/); var out=[],e=null;
+  // Unfold lines (continuation lines start with space or tab)
+  var text = raw.replace(/\r\n/g,"\n").replace(/\r/g,"\n").replace(/\n[ \t]/g,"");
+  var lines = text.split("\n");
+  var out=[],e=null;
   for(var i=0;i<lines.length;i++){
-    var ln=lines[i];
-    if(ln==="BEGIN:VEVENT"){e={};continue;} if(ln==="END:VEVENT"){if(e&&e.s)out.push(e);e=null;continue;} if(!e)continue;
-    var ci=ln.indexOf(":"); if(ci<0)continue;
-    var key=ln.slice(0,ci).split(";")[0].toLowerCase(), val=ln.slice(ci+1).trim();
-    if(key==="dtstart")e.s=icsDate(val); if(key==="dtend")e.en=icsDate(val);
+    var ln=lines[i].trim();
+    if(ln==="BEGIN:VEVENT"){e={};continue;}
+    if(ln==="END:VEVENT"){if(e&&e.s)out.push(e);e=null;continue;}
+    if(!e)continue;
+    var ci=ln.indexOf(":");
+    if(ci<0)continue;
+    var prop=ln.slice(0,ci).toUpperCase();
+    var val=ln.slice(ci+1).trim();
+    // Handle DTSTART;TZID=... and DTSTART:...
+    var propBase=prop.split(";")[0];
+    if(propBase==="DTSTART")e.s=icsDate(val);
+    if(propBase==="DTEND")e.en=icsDate(val);
+    if(propBase==="DTSTART" && prop.indexOf("VALUE=DATE")>-1)e.s={d:icsDateOnly(val),a:true};
+    if(propBase==="DTEND" && prop.indexOf("VALUE=DATE")>-1)e.en={d:icsDateOnly(val),a:true};
   }
   return out;
 }
-function icsDate(s){ var utc=s.endsWith("Z"),c=s.replace("Z",""); if(c.length===8)return{d:new Date(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8)),a:true}; var y=+c.slice(0,4),mo=+c.slice(4,6)-1,d=+c.slice(6,8),h=+c.slice(9,11),m=+c.slice(11,13),sc=+(c.slice(13,15)||0); return{d:utc?new Date(Date.UTC(y,mo,d,h,m,sc)):new Date(y,mo,d,h,m,sc),a:false}; }
+function icsDateOnly(s){ return new Date(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8)); }
+function icsDate(s){
+  var utc=s.endsWith("Z"),c=s.replace("Z","").replace(/[T]/,"").replace(/[-:]/g,"");
+  if(c.length===8)return{d:new Date(+c.slice(0,4),+c.slice(4,6)-1,+c.slice(6,8)),a:true};
+  var clean=s.replace("Z","");
+  var y=+clean.slice(0,4),mo=+clean.slice(4,6)-1,d=+clean.slice(6,8);
+  var h=+clean.slice(9,11)||0,m=+clean.slice(11,13)||0,sc=+(clean.slice(13,15)||0);
+  return{d:utc?new Date(Date.UTC(y,mo,d,h,m,sc)):new Date(y,mo,d,h,m,sc),a:false};
+}
 function isBusy(date,hour){
   var ss=new Date(date); ss.setHours(hour,0,0,0); var se=new Date(date); se.setHours(hour+1,0,0,0);
   return evts.some(function(ev){ if(!ev.s)return false; var s=ev.s.d,en=ev.en?ev.en.d:null; if(ev.s.a)return s.getFullYear()===date.getFullYear()&&s.getMonth()===date.getMonth()&&s.getDate()===date.getDate(); return en?(s<se&&en>ss):(s>=ss&&s<se); });
@@ -377,7 +399,7 @@ function render(){
       var se=new Date(d); se.setHours(h+1,0,0,0);
       var past=se<now, bk=ready&&isBusy(d,h), isSel=sel&&sel.d===d&&sel.h===h;
       var s=mk("div","slot"+(bk?" busy":"")+(past?" past":"")+(isSel?" selected":""));
-      if(bk){ s.textContent="Ocupado"; }
+      if(bk){ s.textContent="Busy"; }
       else if(!past){(function(dd,hh){s.addEventListener("click",function(){if(sel&&sel.d===dd&&sel.h===hh){clearSel();}else{selectSlot(dd,hh);}});})(d,h);}
       g.appendChild(s);
     });

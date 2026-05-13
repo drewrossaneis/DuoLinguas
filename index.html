@@ -234,6 +234,7 @@ footer { padding:8px 20px 20px; text-align:center; border-top:0.5px solid var(--
 // ═══════════════════════════════════════
 const LESSONS_DONE = 0;
 const STATUS = "green"; // "green" | "yellow" | "red"
+const IGNORE = ["OFF","off","folga","Day Off","day off"]; // eventos a ignorar como Busy
 // ═══════════════════════════════════════
 
 const ICS = "https://calendar.google.com/calendar/ical/f3c72bce6e9b4784ce23c34fda61c8c99bd275f1bb38bd5619394fd1435f72bf%40group.calendar.google.com/public/basic.ics";
@@ -320,6 +321,7 @@ function parseICS(raw){
     var val=ln.slice(ci+1).trim();
     // Handle DTSTART;TZID=... and DTSTART:...
     var propBase=prop.split(";")[0];
+    if(propBase==="SUMMARY")e.title=val;
     if(propBase==="DTSTART")e.s=icsDate(val);
     if(propBase==="DTEND")e.en=icsDate(val);
     if(propBase==="DTSTART" && prop.indexOf("VALUE=DATE")>-1)e.s={d:icsDateOnly(val),a:true};
@@ -340,7 +342,7 @@ function icsDate(s){
 }
 function isBusy(date,hour){
   var ss=new Date(date); ss.setHours(hour,0,0,0); var se=new Date(date); se.setHours(hour+1,0,0,0);
-  return evts.some(function(ev){ if(!ev.s)return false; var s=ev.s.d,en=ev.en?ev.en.d:null; if(ev.s.a)return s.getFullYear()===date.getFullYear()&&s.getMonth()===date.getMonth()&&s.getDate()===date.getDate(); return en?(s<se&&en>ss):(s>=ss&&s<se); });
+  return evts.some(function(ev){ if(!ev.s)return false; if(ev.title&&IGNORE.some(function(k){return ev.title.indexOf(k)>-1;}))return false; var s=ev.s.d,en=ev.en?ev.en.d:null; if(ev.s.a)return s.getFullYear()===date.getFullYear()&&s.getMonth()===date.getMonth()&&s.getDate()===date.getDate(); return en?(s<se&&en>ss):(s>=ss&&s<se); });
 }
 
 /* WEEK */

@@ -66,17 +66,17 @@ body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif
 .nav-btn:hover { border-color:var(--bhi); color:var(--text); }
 .week-lbl { font-family:'EB Garamond',serif; font-size:13px; letter-spacing:.04em; }
 .time-nav { display:flex; gap:4px; }
-.cal-grid { display:grid; grid-template-columns:54px repeat(5,1fr); }
+.cal-grid { display:grid; grid-template-columns:62px repeat(7,1fr); }
 .day-hdr { text-align:center; padding-bottom:8px; }
 .day-s { font-size:8px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:2px; }
 .day-n { font-family:'EB Garamond',serif; font-size:15px; }
 .day-n.today { color:var(--coral); }
 .today-pip { width:4px; height:4px; border-radius:50%; background:var(--coral); margin:2px auto 0; }
 .day-gap { height:6px; }
-.tlbl { text-align:right; padding-right:7px; padding-top:10px; display:flex; flex-direction:column; align-items:flex-end; gap:1px; }
-.tz-br { font-size:8px; color:var(--muted); letter-spacing:.03em; }
-.tz-at { font-size:8px; color:var(--coral); opacity:.75; letter-spacing:.03em; }
-.slot { height:46px; margin:1px; border-radius:3px; border:0.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .12s,background .12s; font-size:9px; letter-spacing:.06em; }
+.tlbl { text-align:right; padding-right:8px; padding-top:12px; display:flex; flex-direction:column; align-items:flex-end; gap:2px; min-width:58px; }
+.tz-br { font-size:11px; color:var(--muted2); letter-spacing:.02em; font-family:'EB Garamond',serif; }
+.tz-at { font-size:10px; color:var(--coral); opacity:.85; letter-spacing:.02em; font-family:'EB Garamond',serif; }
+.slot { height:54px; margin:1px; border-radius:3px; border:0.5px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color .12s,background .12s; font-size:9px; letter-spacing:.06em; }
 .slot:hover:not(.busy):not(.past) { border-color:var(--bhi); background:rgba(28,25,23,0.04); }
 .slot.busy { border:0.5px solid rgba(216,90,48,0.3); background:rgba(216,90,48,0.12); cursor:default; color:var(--coral); }
 .slot.past { border-color:transparent; opacity:.2; pointer-events:none; }
@@ -168,7 +168,7 @@ footer { padding:8px 20px 20px; text-align:center; border-top:0.5px solid var(--
     <div class="circle circle-status" id="sc" style="flex-direction:column;gap:4px;">
       <i class="ti ti-circle-check" id="s-icon" style="font-size:22px;" aria-hidden="true"></i>
     </div>
-    <div class="stat-label" id="s-txt"></div>
+    <div style="font-size:8px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;">Mission Status</div><div class="stat-label" id="s-txt"></div>
   </div>
   <div class="stat-col">
     <div class="circle circle-dark">
@@ -244,8 +244,8 @@ const S_TEXT  = { green:"Not nice. But ok.", yellow:"Move your A.S.S. Protocol. 
 const S_BG    = { green:"rgba(58,110,75,0.5)", yellow:"rgba(160,120,40,0.5)", red:"rgba(160,55,45,0.5)" };
 const S_BORD  = { green:"rgba(58,110,75,0.3)", yellow:"rgba(160,120,40,0.3)", red:"rgba(160,55,45,0.3)" };
 
-const DS  = ["Mon","Tue","Wed","Thu","Fri"];
-const DL  = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+const DS  = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const DL  = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const MS  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const ML  = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -320,12 +320,12 @@ function isBusy(date,hour){
 }
 
 /* WEEK */
-function wDates(off){ var t=new Date(),day=t.getDay(),mon=new Date(t); mon.setDate(t.getDate()+(day===0?-6:1-day)+off*7); mon.setHours(0,0,0,0); return Array.from({length:5},function(_,i){var d=new Date(mon);d.setDate(mon.getDate()+i);return d;}); }
+function wDates(off){ var t=new Date(),day=t.getDay(),mon=new Date(t); mon.setDate(t.getDate()+(day===0?-6:1-day)+off*7); mon.setHours(0,0,0,0); return Array.from({length:7},function(_,i){var d=new Date(mon);d.setDate(mon.getDate()+i);return d;}); }
 function wLabel(dates){ var s=dates[0],e=dates[4]; return s.getMonth()===e.getMonth()?MS[s.getMonth()]+" "+s.getDate()+"\u2013"+e.getDate()+", "+s.getFullYear():MS[s.getMonth()]+" "+s.getDate()+" \u2013 "+MS[e.getMonth()]+" "+e.getDate()+", "+e.getFullYear(); }
 
 /* MSG */
 function buildMsg(date,hour){
-  var dow=DL[date.getDay()-1]||"",time=String(hour).padStart(2,"0")+":00";
+  var dayIdx=date.getDay()===0?6:date.getDay()-1; var dow=DL[dayIdx]||"",time=String(hour).padStart(2,"0")+":00";
   return ["Dear Poutana Please,","","I need a class. I'd like to book on "+dow+", "+ML[date.getMonth()]+" "+date.getDate()+" at "+time+".","","D.P","",'"Because the right tongue makes all the difference."'].join(NL);
 }
 

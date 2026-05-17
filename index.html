@@ -345,7 +345,8 @@ function wLabel(dates){ var s=dates[0],e=dates[4]; return s.getMonth()===e.getMo
 /* MSG */
 function buildMsg(date,hour){
   var dayIdx=date.getDay()===0?6:date.getDay()-1; var dow=DL[dayIdx]||"",time=String(hour).padStart(2,"0")+":00";
-  return ["Dear Poutana Please,","","I need a class. I'd like to book on "+dow+", "+ML[date.getMonth()]+" "+date.getDate()+" at "+time+".","","D.P","",'"Because the right tongue makes all the difference."'].join(NL);
+  return ["Dear Poutana Please,","","I need a class. I'd like to book on "+dow+", "+ML[date.getMonth()]+" "+date.getDate()+" at "+time+".","","D.P",
+         ].join(NL);
 }
 
 /* SELECT */

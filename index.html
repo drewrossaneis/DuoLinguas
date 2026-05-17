@@ -362,13 +362,13 @@ function clearSel(){ sel=null; document.getElementById("banner").classList.remov
 document.getElementById("ban-x").onclick=clearSel;
 
 /* CONTACT */
-document.getElementById("btn-wa").onclick=function(){ if(!sel)return; window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(buildMsg(sel.d,sel.h)),"_blank"); };
+document.getElementById("btn-wa").onclick=function(){ if(!sel)return; window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(buildMsg(sel.d,sel.h)); };
 document.getElementById("btn-sms").onclick=function(){ if(!sel)return; window.location.href="sms:+"+WA+"&body="+encodeURIComponent(buildMsg(sel.d,sel.h)); };
-document.getElementById("btn-ig").onclick=function(){ window.open("https://ig.me/m/"+IG,"_blank"); };
+document.getElementById("btn-ig").onclick=function(){ window.location.href="https://ig.me/m/"+IG; };
 document.getElementById("btn-ft").onclick=function(){ window.location.href="facetime:+"+WA; };
-document.getElementById("f-wa").onclick=function(){ if(!sel)return; window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(buildMsg(sel.d,sel.h)),"_blank"); };
-document.getElementById("f-sms").onclick=function(){ if(!sel)return; window.location.href="sms:+"+WA+"&body="+encodeURIComponent(buildMsg(sel.d,sel.h)); };
-document.getElementById("f-ig").onclick=function(){ window.open("https://ig.me/m/"+IG,"_blank"); };
+document.getElementById("f-wa").onclick=function(){ var msg=sel?buildMsg(sel.d,sel.h):"Dear Poutana Please,"+NL+NL+"I'd like to book a class."+NL+NL+"D.P"; window.location.href="https://wa.me/"+WA+"?text="+encodeURIComponent(msg); };
+document.getElementById("f-sms").onclick=function(){ var msg=sel?buildMsg(sel.d,sel.h):"Dear Poutana Please,"+NL+NL+"I'd like to book a class."+NL+NL+"D.P"; window.location.href="sms:+"+WA+"&body="+encodeURIComponent(msg); };
+document.getElementById("f-ig").onclick=function(){ window.location.href="https://ig.me/m/"+IG; };
 document.getElementById("f-ft").onclick=function(){ window.location.href="facetime:+"+WA; };
 
 /* RENDER */

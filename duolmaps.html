@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoL Maps — São Paulo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #1A1714;
+    --bg2: #141210;
+    --bg3: #0F0D0C;
+    --border: rgba(255,255,255,0.06);
+    --border2: rgba(255,255,255,0.10);
+    --text: #F1EFE8;
+    --text2: #888780;
+    --text3: #444441;
+    --coral: #D85A30;
+    --zone-blue: rgba(74, 144, 217, 0.22);
+    --zone-yellow: rgba(232, 184, 75, 0.20);
+    --zone-orange: rgba(216, 90, 48, 0.20);
+    --zone-red: rgba(160, 30, 30, 0.22);
+    --zone-blue-solid: #4A90D9;
+    --zone-yellow-solid: #E8B84B;
+    --zone-orange-solid: #D85A30;
+    --zone-red-solid: #A01E1E;
+  }
+
+  html, body { height: 100%; overflow: hidden; background: var(--bg); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: var(--text); }
+
+  /* HEADER */
+  #header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 48px; background: var(--bg2);
+    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px;
+  }
+  .h-logo { display: flex; align-items: center; gap: 10px; }
+  .h-logo-name { font-family: Georgia, 'Times New Roman', serif; font-size: 15px; color: var(--text); letter-spacing: 0.3px; }
+  .h-logo-sub { font-size: 6px; letter-spacing: 4px; color: var(--text3); display: block; margin-top: 1px; }
+  .h-right { display: flex; align-items: center; gap: 10px; }
+  .h-tag { font-size: 6px; letter-spacing: 3px; color: var(--text3); border: 0.5px solid var(--border2); padding: 3px 8px; border-radius: 2px; }
+  .h-back { font-size: 6px; letter-spacing: 2px; color: var(--text3); text-decoration: none; border: 0.5px solid var(--border); padding: 4px 10px; border-radius: 2px; transition: color 0.2s, border-color 0.2s; }
+  .h-back:hover { color: var(--coral); border-color: var(--coral); }
+
+  /* LAYOUT */
+  #layout { display: flex; height: 100vh; padding-top: 48px; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 0; overflow: hidden; background: var(--bg2);
+    border-right: 0.5px solid var(--border);
+    transition: width 0.25s ease;
+    flex-shrink: 0; display: flex; flex-direction: column;
+  }
+  #sidebar.open { width: 168px; }
+  .sb-inner { width: 168px; padding: 14px 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
+  .sb-label { font-size: 6px; letter-spacing: 3px; color: var(--text3); padding: 0 14px 8px; white-space: nowrap; }
+  .sb-zone-btn {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 14px; cursor: pointer; border: none;
+    background: none; width: 100%; text-align: left;
+    transition: background 0.15s;
+  }
+  .sb-zone-btn:hover { background: rgba(255,255,255,0.03); }
+  .sb-zone-btn.active { background: rgba(255,255,255,0.05); }
+  .sb-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .sb-zone-name { font-size: 11px; color: var(--text2); white-space: nowrap; }
+  .sb-divider { height: 0.5px; background: var(--border); margin: 10px 14px; }
+  .sb-filter-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 14px; cursor: pointer; border: none;
+    background: none; width: 100%; text-align: left;
+    transition: background 0.15s;
+  }
+  .sb-filter-btn:hover { background: rgba(255,255,255,0.03); }
+  .sb-filter-btn.active { background: rgba(255,255,255,0.05); }
+  .sb-filter-name { font-size: 10px; color: var(--text2); white-space: nowrap; }
+  .sb-toggle-label { font-size: 9px; color: var(--text3); white-space: nowrap; margin-left: auto; padding-right: 14px; }
+
+  /* MAP AREA */
+  #map-wrap { flex: 1; position: relative; }
+  #map { width: 100%; height: 100%; }
+
+  /* TOGGLE SIDEBAR BTN */
+  #toggle-btn {
+    position: absolute; top: 12px; left: 12px; z-index: 10;
+    background: var(--bg2); border: 0.5px solid var(--border2);
+    border-radius: 3px; padding: 7px 10px; cursor: pointer;
+    color: var(--text2); font-size: 14px; transition: color 0.2s;
+  }
+  #toggle-btn:hover { color: var(--text); }
+
+  /* SEARCH BAR */
+  #search-wrap {
+    position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 10; width: 260px;
+  }
+  #search-input {
+    width: 100%; background: var(--bg2); border: 0.5px solid var(--border2);
+    border-radius: 3px; padding: 8px 14px; font-size: 11px;
+    color: var(--text); letter-spacing: 0.5px; outline: none;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  #search-input::placeholder { color: var(--text3); letter-spacing: 1px; font-size: 10px; }
+  #search-input:focus { border-color: rgba(255,255,255,0.15); }
+  #search-results {
+    background: var(--bg2); border: 0.5px solid var(--border2);
+    border-top: none; border-radius: 0 0 3px 3px;
+    display: none; max-height: 200px; overflow-y: auto;
+  }
+  .search-result-item {
+    padding: 8px 14px; cursor: pointer; font-size: 11px;
+    color: var(--text2); border-bottom: 0.5px solid var(--border);
+    transition: background 0.15s;
+  }
+  .search-result-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+  .search-result-item:last-child { border-bottom: none; }
+
+  /* ZONE TAG on search result */
+  .zone-tag {
+    display: inline-block; font-size: 7px; letter-spacing: 2px;
+    padding: 2px 6px; border-radius: 2px; margin-top: 3px;
+    font-weight: 500;
+  }
+  .zt-blue { background: rgba(74,144,217,0.2); color: #6BADD4; }
+  .zt-yellow { background: rgba(232,184,75,0.2); color: #C9A43E; }
+  .zt-orange { background: rgba(216,90,48,0.2); color: #D85A30; }
+  .zt-red { background: rgba(160,30,30,0.2); color: #C04040; }
+  .zt-unknown { background: rgba(255,255,255,0.06); color: var(--text3); }
+
+  /* ZONES TOGGLE */
+  #zones-toggle {
+    position: absolute; top: 12px; right: 12px; z-index: 10;
+    background: var(--bg2); border: 0.5px solid var(--border2);
+    border-radius: 3px; padding: 7px 12px; cursor: pointer;
+    font-size: 8px; letter-spacing: 2px; color: var(--text2);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  #zones-toggle:hover { color: var(--text); }
+  #zones-toggle.active { border-color: var(--coral); color: var(--coral); }
+
+  /* ZONE INFO PANEL */
+  #zone-panel {
+    position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
+    background: var(--bg2); border-top: 0.5px solid var(--border);
+    transform: translateY(100%); transition: transform 0.3s ease;
+    max-height: 55vh; overflow-y: auto;
+  }
+  #zone-panel.visible { transform: translateY(0); }
+  .zp-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px; border-bottom: 0.5px solid var(--border);
+    position: sticky; top: 0; background: var(--bg2); z-index: 1;
+  }
+  .zp-tabs { display: flex; gap: 4px; }
+  .zp-tab {
+    display: flex; align-items: center; gap: 7px;
+    padding: 5px 12px; border-radius: 2px; cursor: pointer;
+    border: 0.5px solid var(--border); background: none;
+    font-size: 9px; letter-spacing: 1.5px; color: var(--text3);
+    transition: all 0.2s; white-space: nowrap;
+  }
+  .zp-tab:hover { color: var(--text2); border-color: var(--border2); }
+  .zp-tab.active { color: var(--text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+  .zp-tab-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .zp-close {
+    font-size: 8px; letter-spacing: 2px; color: var(--text3);
+    cursor: pointer; background: none; border: none; padding: 4px 8px;
+    transition: color 0.2s;
+  }
+  .zp-close:hover { color: var(--text); }
+  .zp-content { display: none; padding: 20px; }
+  .zp-content.active { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 700px) { .zp-content.active { grid-template-columns: 1fr; } }
+  .zp-zone-name { font-size: 14px; color: var(--text); margin-bottom: 4px; font-family: Georgia, serif; }
+  .zp-zone-area { font-size: 7px; letter-spacing: 2px; color: var(--text3); margin-bottom: 12px; }
+  .zp-desc { font-size: 11px; color: var(--text2); line-height: 1.65; margin-bottom: 14px; }
+  .zp-stats { display: flex; flex-direction: column; gap: 8px; }
+  .zp-stat { display: flex; flex-direction: column; gap: 2px; }
+  .zp-stat-label { font-size: 7px; letter-spacing: 2px; color: var(--text3); }
+  .zp-stat-value { font-size: 11px; color: var(--text2); }
+  .zp-stat-value span { color: var(--coral); }
+
+  /* SELECTED PLACE CARD */
+  #place-card {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+    z-index: 15; background: var(--bg2); border: 0.5px solid var(--border2);
+    border-radius: 4px 4px 0 0; padding: 14px 18px; min-width: 260px;
+    transition: transform 0.25s ease; max-width: 360px;
+  }
+  #place-card.visible { transform: translateX(-50%) translateY(0); }
+  #zone-panel.visible ~ #place-card { display: none; }
+  .pc-name { font-size: 13px; color: var(--text); margin-bottom: 4px; font-family: Georgia, serif; }
+  .pc-addr { font-size: 10px; color: var(--text3); margin-bottom: 8px; }
+  .pc-close-btn { position: absolute; top: 10px; right: 12px; background: none; border: none; color: var(--text3); cursor: pointer; font-size: 12px; }
+
+  /* FOOTER */
+  #footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 5;
+    height: 28px; background: var(--bg3);
+    border-top: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 16px; pointer-events: none;
+  }
+  .f-slogan { font-family: Georgia, serif; font-size: 8px; font-style: italic; color: var(--text3); }
+  .f-coords { font-size: 7px; color: var(--border2); letter-spacing: 1px; font-family: monospace; }
+
+  /* ZONE PANEL OPEN — push footer up */
+  body.panel-open #footer { display: none; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="h-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="26" viewBox="0 0 200 215">
+      <circle cx="100" cy="95" r="62" fill="none" stroke="#D85A30" stroke-width="2"/>
+      <circle cx="100" cy="95" r="54" fill="#1A2235"/>
+      <path d="M 71 67 L 71 123 Q 97 123 97 95 Q 97 67 71 67 Z" fill="#FFFFFF"/>
+      <path d="M 129 67 L 129 123 Q 103 123 103 95 Q 103 67 129 67 Z" fill="#FFFFFF"/>
+      <path d="M 84 173 Q 100 187 116 173" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <div class="h-logo-name">DuoL Maps</div>
+      <span class="h-logo-sub">SÃO PAULO · URBAN GUIDE</span>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="h-tag">DEEP IMMERSION BR</div>
+    <a href="index.html" class="h-back">← SCHEDULE</a>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div id="layout">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sb-inner">
+      <div class="sb-label">ZONES</div>
+      <button class="sb-zone-btn" data-zone="fakesafe">
+        <div class="sb-dot" style="background:#4A90D9;"></div>
+        <div class="sb-zone-name">Fake Safe</div>
+      </button>
+      <button class="sb-zone-btn" data-zone="caution">
+        <div class="sb-dot" style="background:#E8B84B;"></div>
+        <div class="sb-zone-name">Caution</div>
+      </button>
+      <button class="sb-zone-btn" data-zone="avoid">
+        <div class="sb-dot" style="background:#D85A30;"></div>
+        <div class="sb-zone-name">Avoid at night</div>
+      </button>
+      <button class="sb-zone-btn" data-zone="highrisk">
+        <div class="sb-dot" style="background:#A01E1E;"></div>
+        <div class="sb-zone-name">High risk</div>
+      </button>
+
+      <div class="sb-divider"></div>
+      <div class="sb-label">FILTERS</div>
+
+      <button class="sb-filter-btn active" data-filter="hotel">
+        <div class="sb-filter-name">🏨 Hotel · Work</div>
+      </button>
+      <button class="sb-filter-btn active" data-filter="coffee">
+        <div class="sb-filter-name">☕ Coffee</div>
+      </button>
+      <button class="sb-filter-btn active" data-filter="restaurant">
+        <div class="sb-filter-name">🍽 Restaurant</div>
+      </button>
+      <button class="sb-filter-btn active" data-filter="market">
+        <div class="sb-filter-name">🛒 Market · OXXO</div>
+      </button>
+      <button class="sb-filter-btn active" data-filter="pharmacy">
+        <div class="sb-filter-name">💊 Pharmacy</div>
+      </button>
+      <button class="sb-filter-btn active" data-filter="atm">
+        <div class="sb-filter-name">🏧 ATM · Bank</div>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div id="map-wrap">
+    <div id="map"></div>
+
+    <!-- TOGGLE SIDEBAR -->
+    <button id="toggle-btn" onclick="toggleSidebar()" title="Toggle menu">☰</button>
+
+    <!-- SEARCH -->
+    <div id="search-wrap">
+      <input id="search-input" type="text" placeholder="SEARCH" autocomplete="off" />
+      <div id="search-results"></div>
+    </div>
+
+    <!-- ZONES TOGGLE -->
+    <button id="zones-toggle" class="active" onclick="toggleZones()">ZONES ON</button>
+
+    <!-- PLACE CARD -->
+    <div id="place-card">
+      <button class="pc-close-btn" onclick="closePlaceCard()">✕</button>
+      <div class="pc-name" id="pc-name"></div>
+      <div class="pc-addr" id="pc-addr"></div>
+      <div id="pc-zone-tag"></div>
+    </div>
+
+    <!-- ZONE INFO PANEL -->
+    <div id="zone-panel">
+      <div class="zp-header">
+        <div class="zp-tabs">
+          <button class="zp-tab active" data-tab="fakesafe" onclick="switchTab('fakesafe')">
+            <div class="zp-tab-dot" style="background:#4A90D9;"></div>FAKE SAFE
+          </button>
+          <button class="zp-tab" data-tab="caution" onclick="switchTab('caution')">
+            <div class="zp-tab-dot" style="background:#E8B84B;"></div>CAUTION
+          </button>
+          <button class="zp-tab" data-tab="avoid" onclick="switchTab('avoid')">
+            <div class="zp-tab-dot" style="background:#D85A30;"></div>AVOID AT NIGHT
+          </button>
+          <button class="zp-tab" data-tab="highrisk" onclick="switchTab('highrisk')">
+            <div class="zp-tab-dot" style="background:#A01E1E;"></div>HIGH RISK
+          </button>
+        </div>
+        <button class="zp-close" onclick="closePanel()">✕ CLOSE</button>
+      </div>
+
+      <!-- FAKE SAFE -->
+      <div class="zp-content active" id="tab-fakesafe">
+        <div>
+          <div class="zp-zone-name">Fake Safe</div>
+          <div class="zp-zone-area">BERRINI · BROOKLIN · ITAIM BIBI · VILA OLÍMPIA · FARIA LIMA</div>
+          <div class="zp-desc">This is where your hotel and workplace are. Corporate towers, private security everywhere, Uber on every corner, cafés with badges and overpriced coffee. During business hours, this is one of the most controlled environments in São Paulo. The problem starts when you assume the rest of the city works the same way. It does not.</div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">DISTANCE FROM HOTEL</div>
+              <div class="zp-stat-value"><span>0 km</span> — you are here</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">UBER AVAILABILITY</div>
+              <div class="zp-stat-value"><span>High</span> — usually under 3 min</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">DAYTIME</div>
+              <div class="zp-stat-value">Comfortable. Walk freely.</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">NIGHTTIME</div>
+              <div class="zp-stat-value">Still relatively safe. Stay on main avenues. Phone in pocket.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">WHAT TO KNOW</div>
+              <div class="zp-stat-value">The corporate bubble creates a false sense of security. The city changes completely beyond Av. Santo Amaro and Marginal Pinheiros. Do not use Berrini as your reference for the rest of São Paulo.</div>
+            </div>
+            <div class="zp-stat" style="margin-top:10px;">
+              <div class="zp-stat-label">WATCH OUT FOR</div>
+              <div class="zp-stat-value">Phone theft near busy intersections. Motorcycle approach at traffic lights. Empty side streets after 10pm.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAUTION -->
+      <div class="zp-content" id="tab-caution">
+        <div>
+          <div class="zp-zone-name">Caution</div>
+          <div class="zp-zone-area">MOEMA · CAMPO BELO · SANTO AMARO · MORUMBI · PINHEIROS</div>
+          <div class="zp-desc">Transition zone. Still upper-middle class, still relatively safe during the day. But you are leaving the corporate bubble. Fewer private security cameras, less constant pedestrian flow, more variance by street and time. Google Maps may say 10 minutes walk. Check the route first.</div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">DISTANCE FROM HOTEL</div>
+              <div class="zp-stat-value"><span>2–6 km</span> — short Uber ride</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">UBER AVAILABILITY</div>
+              <div class="zp-stat-value"><span>Good</span> — wait may vary</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">TRAVEL TIME (UBER)</div>
+              <div class="zp-stat-value"><span>15–40 min</span> depending on traffic</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">DAYTIME</div>
+              <div class="zp-stat-value">Fine. Normal city behavior.</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">NIGHTTIME</div>
+              <div class="zp-stat-value">Pay attention. Avoid isolated streets. Stay near busy areas.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">WHAT TO KNOW</div>
+              <div class="zp-stat-value">These neighborhoods look very similar to Berrini on the surface. The difference is in the details: lighting, pedestrian density, and what happens at the end of the block.</div>
+            </div>
+            <div class="zp-stat" style="margin-top:10px;">
+              <div class="zp-stat-label">WATCH OUT FOR</div>
+              <div class="zp-stat-value">Less predictable traffic. Phone visible on street. Don't walk back to the hotel alone late at night.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AVOID AT NIGHT -->
+      <div class="zp-content" id="tab-avoid">
+        <div>
+          <div class="zp-zone-name">Avoid at night</div>
+          <div class="zp-zone-area">VILA ANDRADE · CAPÃO REDONDO DIRECTION · OUTER ZONA SUL</div>
+          <div class="zp-desc">Not where you will be staying. But São Paulo is a city where a 5km trip can completely change your context. If you venture beyond the bubble — intentionally or by Uber route — this is what exists on the other side. Not impossible, but requires awareness, planning, and ideally company.</div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">DISTANCE FROM HOTEL</div>
+              <div class="zp-stat-value"><span>8–15 km</span> — feels close, it is not</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">UBER AVAILABILITY</div>
+              <div class="zp-stat-value"><span>Lower</span> — surge pricing common</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">TRAVEL TIME (UBER)</div>
+              <div class="zp-stat-value"><span>40–90 min</span> in peak hours</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">DAYTIME</div>
+              <div class="zp-stat-value">Manageable with attention. Don't go alone to unfamiliar streets.</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">NIGHTTIME</div>
+              <div class="zp-stat-value">Strongly avoid unless with trusted local company.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">WHAT TO KNOW</div>
+              <div class="zp-stat-value">São Paulo's Zona Sul has the highest crime growth rates in the city. Capão Redondo and surroundings consistently rank among the most dangerous districts. Distance on the map is misleading.</div>
+            </div>
+            <div class="zp-stat" style="margin-top:10px;">
+              <div class="zp-stat-label">WATCH OUT FOR</div>
+              <div class="zp-stat-value">Motorcycle theft. Armed robbery near bus terminals. Long waits for Uber after 10pm with no safe spot to wait.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HIGH RISK -->
+      <div class="zp-content" id="tab-highrisk">
+        <div>
+          <div class="zp-zone-name">High risk</div>
+          <div class="zp-zone-area">CENTRO HISTÓRICO · SÉ · REPÚBLICA · LUZ · BRÁS · LIBERDADE</div>
+          <div class="zp-desc">The historic center. Landmarks, culture, architecture, and the highest robbery rates in the city. The Praça da Sé district alone registered thousands of robberies in a single year — the highest in São Paulo's historical record. Go with purpose, go during the day, go alert. Liberdade is worth visiting. So is Pinacoteca. Just don't treat it like Berrini.</div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">DISTANCE FROM HOTEL</div>
+              <div class="zp-stat-value"><span>12–16 km</span> from Berrini</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">UBER AVAILABILITY</div>
+              <div class="zp-stat-value"><span>High</span> — central area, many cars</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">TRAVEL TIME (UBER)</div>
+              <div class="zp-stat-value"><span>30–75 min</span> — São Paulo traffic</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">DAYTIME</div>
+              <div class="zp-stat-value">Go. Stay on main streets. Phone out of sight at all times.</div>
+            </div>
+            <div class="zp-stat">
+              <div class="zp-stat-label">NIGHTTIME</div>
+              <div class="zp-stat-value">Avoid unless specific planned event with safe return.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="zp-stats">
+            <div class="zp-stat">
+              <div class="zp-stat-label">WHAT TO KNOW</div>
+              <div class="zp-stat-value">Pickpockets and phone theft are extremely common near tourist spots. This is a high-volume crime area — not because it's violent, but because there are many targets and fast exits.</div>
+            </div>
+            <div class="zp-stat" style="margin-top:10px;">
+              <div class="zp-stat-label">WORTH VISITING</div>
+              <div class="zp-stat-value">Liberdade (Japanese neighborhood) · Pinacoteca · Mercadão · Theatro Municipal · MASP (Paulista, adjacent)</div>
+            </div>
+            <div class="zp-stat" style="margin-top:10px;">
+              <div class="zp-stat-label">WATCH OUT FOR</div>
+              <div class="zp-stat-value">Phone on hand near Sé metro. Strangers approaching with distraction tactics. Isolated alleyways.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ZONE GUIDE BUTTON -->
+    <button id="zone-guide-btn" onclick="openPanel()" style="
+      position: absolute; bottom: 36px; right: 12px; z-index: 10;
+      background: transparent; border: 0.5px solid #D85A30;
+      border-radius: 2px; padding: 8px 14px; cursor: pointer;
+      font-size: 7px; letter-spacing: 2px; color: #D85A30;
+      transition: background 0.2s;
+    ">ZONE GUIDE →</button>
+
+  </div><!-- end map-wrap -->
+</div><!-- end layout -->
+
+<!-- FOOTER -->
+<div id="footer">
+  <div class="f-slogan">Porque a língua certa faz toda a diferença.</div>
+  <div class="f-coords">-23.6042° S · -46.6922° W</div>
+</div>
+
+<script>
+// ─── ZONE DEFINITIONS (polygons in lat/lng) ───────────────────────────────
+const ZONES = {
+  fakesafe: {
+    label: 'Fake Safe',
+    color: '#4A90D9',
+    fillOpacity: 0.15,
+    tagClass: 'zt-blue',
+    paths: [[
+      {lat: -23.5880, lng: -46.7050},
+      {lat: -23.5880, lng: -46.6700},
+      {lat: -23.5950, lng: -46.6600},
+      {lat: -23.6050, lng: -46.6580},
+      {lat: -23.6150, lng: -46.6600},
+      {lat: -23.6200, lng: -46.6680},
+      {lat: -23.6250, lng: -46.6780},
+      {lat: -23.6220, lng: -46.6950},
+      {lat: -23.6100, lng: -46.7100},
+      {lat: -23.5980, lng: -46.7120},
+      {lat: -23.5880, lng: -46.7050},
+    ]]
+  },
+  caution: {
+    label: 'Caution',
+    color: '#E8B84B',
+    fillOpacity: 0.14,
+    tagClass: 'zt-yellow',
+    paths: [[
+      {lat: -23.5700, lng: -46.7200},
+      {lat: -23.5700, lng: -46.6400},
+      {lat: -23.5880, lng: -46.6700},
+      {lat: -23.5880, lng: -46.7050},
+      {lat: -23.5980, lng: -46.7120},
+      {lat: -23.6100, lng: -46.7100},
+      {lat: -23.6220, lng: -46.6950},
+      {lat: -23.6250, lng: -46.6780},
+      {lat: -23.6350, lng: -46.6700},
+      {lat: -23.6500, lng: -46.6900},
+      {lat: -23.6600, lng: -46.7200},
+      {lat: -23.6400, lng: -46.7400},
+      {lat: -23.6200, lng: -46.7350},
+      {lat: -23.5900, lng: -46.7300},
+      {lat: -23.5700, lng: -46.7200},
+    ]]
+  },
+  avoid: {
+    label: 'Avoid at night',
+    color: '#D85A30',
+    fillOpacity: 0.14,
+    tagClass: 'zt-orange',
+    paths: [[
+      {lat: -23.6500, lng: -46.6900},
+      {lat: -23.6350, lng: -46.6700},
+      {lat: -23.6600, lng: -46.6400},
+      {lat: -23.6900, lng: -46.6500},
+      {lat: -23.7100, lng: -46.6800},
+      {lat: -23.7000, lng: -46.7200},
+      {lat: -23.6700, lng: -46.7300},
+      {lat: -23.6600, lng: -46.7200},
+      {lat: -23.6500, lng: -46.6900},
+    ]]
+  },
+  highrisk: {
+    label: 'High risk',
+    color: '#A01E1E',
+    fillOpacity: 0.18,
+    tagClass: 'zt-red',
+    paths: [[
+      {lat: -23.5300, lng: -46.6500},
+      {lat: -23.5300, lng: -46.6000},
+      {lat: -23.5600, lng: -46.5800},
+      {lat: -23.5800, lng: -46.5900},
+      {lat: -23.5900, lng: -46.6200},
+      {lat: -23.5750, lng: -46.6500},
+      {lat: -23.5600, lng: -46.6600},
+      {lat: -23.5400, lng: -46.6600},
+      {lat: -23.5300, lng: -46.6500},
+    ]]
+  }
+};
+
+// ─── MY MAPS LAYER ID ──────────────────────────────────────────────────────
+const MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
+const API_KEY = 'AIzaSyCCahWJZzec6FIZW_m6fvUBCH9MS3i-9ns';
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+let map, polygons = {}, zonesVisible = true;
+let autocomplete, placesService, geocoder;
+let activeTab = 'fakesafe';
+
+// ─── MAP INIT ──────────────────────────────────────────────────────────────
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: -23.6042, lng: -46.6922 },
+    zoom: 14,
+    mapTypeId: 'roadmap',
+    styles: [
+      { elementType: 'geometry', stylers: [{ color: '#1a1714' }] },
+      { elementType: 'labels.text.fill', stylers: [{ color: '#888780' }] },
+      { elementType: 'labels.text.stroke', stylers: [{ color: '#141210' }] },
+      { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2a2724' }] },
+      { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
+      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#1a1714' }] },
+      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a3530' }] },
+      { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#5f5e5a' }] },
+      { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#444441' }] },
+      { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
+      { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#888780' }] },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] },
+      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#2c2825' }] },
+    ],
+    disableDefaultUI: true,
+    zoomControl: true,
+    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
+  });
+
+  // Load My Maps layer
+  const myMapsLayer = new google.maps.KmlLayer({
+    url: `https://www.google.com/maps/d/kml?mid=${MY_MAPS_ID}&forcekml=1`,
+    map: map,
+    preserveViewport: true,
+    suppressInfoWindows: false,
+  });
+
+  // Draw zone polygons
+  Object.entries(ZONES).forEach(([key, zone]) => {
+    zone.paths.forEach(path => {
+      const poly = new google.maps.Polygon({
+        paths: path,
+        strokeColor: zone.color,
+        strokeOpacity: 0.5,
+        strokeWeight: 1,
+        fillColor: zone.color,
+        fillOpacity: zone.fillOpacity,
+        map: zonesVisible ? map : null,
+        clickable: true,
+      });
+      poly.addListener('click', () => openPanelTab(key));
+      if (!polygons[key]) polygons[key] = [];
+      polygons[key].push(poly);
+    });
+  });
+
+  // Services
+  placesService = new google.maps.places.PlacesService(map);
+  geocoder = new google.maps.Geocoder();
+
+  // Search
+  const input = document.getElementById('search-input');
+  autocomplete = new google.maps.places.Autocomplete(input, {
+    componentRestrictions: { country: 'br' },
+    fields: ['geometry', 'name', 'formatted_address'],
+  });
+  autocomplete.addListener('place_changed', onPlaceSelected);
+
+  // Map click — close cards
+  map.addListener('click', () => { closePlaceCard(); });
+}
+
+// ─── PLACE SELECTED ────────────────────────────────────────────────────────
+let selectedMarker = null;
+function onPlaceSelected() {
+  const place = autocomplete.getPlace();
+  if (!place.geometry) return;
+
+  const loc = place.geometry.location;
+  map.panTo(loc);
+  map.setZoom(15);
+
+  if (selectedMarker) selectedMarker.setMap(null);
+  selectedMarker = new google.maps.Marker({
+    position: loc,
+    map: map,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 7,
+      fillColor: '#D85A30',
+      fillOpacity: 1,
+      strokeColor: '#1A1714',
+      strokeWeight: 2,
+    }
+  });
+
+  const zone = getZoneForPoint(loc.lat(), loc.lng());
+  showPlaceCard(place.name, place.formatted_address, zone);
+}
+
+// ─── ZONE DETECTION ────────────────────────────────────────────────────────
+function getZoneForPoint(lat, lng) {
+  const point = new google.maps.LatLng(lat, lng);
+  for (const [key, zone] of Object.entries(ZONES)) {
+    for (const path of zone.paths) {
+      const poly = new google.maps.Polygon({ paths: path });
+      if (google.maps.geometry.poly.containsLocation(point, poly)) {
+        return { key, ...zone };
+      }
+    }
+  }
+  return null;
+}
+
+// ─── PLACE CARD ────────────────────────────────────────────────────────────
+function showPlaceCard(name, addr, zone) {
+  document.getElementById('pc-name').textContent = name || '';
+  document.getElementById('pc-addr').textContent = addr || '';
+  const tagEl = document.getElementById('pc-zone-tag');
+  if (zone) {
+    tagEl.innerHTML = `<span class="zone-tag ${zone.tagClass}">#${zone.label.replace(/ /g,'')}</span>`;
+  } else {
+    tagEl.innerHTML = `<span class="zone-tag zt-unknown">#OutsideZones</span>`;
+  }
+  document.getElementById('place-card').classList.add('visible');
+}
+
+function closePlaceCard() {
+  document.getElementById('place-card').classList.remove('visible');
+  if (selectedMarker) { selectedMarker.setMap(null); selectedMarker = null; }
+  document.getElementById('search-input').value = '';
+}
+
+// ─── SIDEBAR ───────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ─── ZONES TOGGLE ──────────────────────────────────────────────────────────
+function toggleZones() {
+  zonesVisible = !zonesVisible;
+  const btn = document.getElementById('zones-toggle');
+  btn.textContent = zonesVisible ? 'ZONES ON' : 'ZONES OFF';
+  btn.classList.toggle('active', zonesVisible);
+  Object.values(polygons).flat().forEach(p => p.setMap(zonesVisible ? map : null));
+}
+
+// ─── ZONE PANEL ────────────────────────────────────────────────────────────
+function openPanel() {
+  document.getElementById('zone-panel').classList.add('visible');
+  document.body.classList.add('panel-open');
+}
+function openPanelTab(tab) {
+  openPanel();
+  switchTab(tab);
+}
+function closePanel() {
+  document.getElementById('zone-panel').classList.remove('visible');
+  document.body.classList.remove('panel-open');
+}
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.zp-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.zp-content').forEach(c => c.classList.toggle('active', c.id === 'tab-' + tab));
+}
+
+// ─── SIDEBAR ZONE BUTTONS ──────────────────────────────────────────────────
+document.querySelectorAll('.sb-zone-btn').forEach(btn => {
+  btn.addEventListener('click', () => openPanelTab(btn.dataset.zone));
+});
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCahWJZzec6FIZW_m6fvUBCH9MS3i-9ns&libraries=places,geometry&callback=initMap" async defer></script>
+
+</body>
+</html>

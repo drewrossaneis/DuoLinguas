@@ -160,11 +160,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 }
 #zone-panel.visible { transform: translateY(0); }
 .zp-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px; height: 44px; border-bottom: 0.5px solid var(--border);
-  position: sticky; top: 0; background: var(--bg2); z-index: 1;
+  display: flex; align-items: center;
+  height: 44px; border-bottom: 0.5px solid var(--border);
+  position: sticky; top: 0; background: var(--bg2); z-index: 1; padding-left: 12px;
 }
-.zp-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.zp-tabs { display: flex; gap: 4px; flex-wrap: nowrap; flex-shrink: 0; overflow-x: auto; }
 .zp-tab {
   display: flex; align-items: center; gap: 7px;
   padding: 5px 12px; border-radius: 2px; cursor: pointer;
@@ -668,5 +668,7 @@ document.querySelectorAll('.sb-filter-btn').forEach(function(btn) {
 });
 </script>
 </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCahWJZzec6FIZW_m6fvUBCH9MS3i-9ns&libraries=places,geometry&callback=initMap" async defer></script>
 </body>
 </html>

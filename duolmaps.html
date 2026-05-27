@@ -8,20 +8,14 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --bg: #1A1714;
-  --bg2: #141210;
-  --bg3: #0F0D0C;
-  --border: rgba(255,255,255,0.06);
-  --border2: rgba(255,255,255,0.12);
-  --text: #F1EFE8;
-  --text2: #888780;
-  --text3: #444441;
-  --coral: #D85A30;
-  --petrol: #1A2235;
+  --bg: #1A1714; --bg2: #141210; --bg3: #0F0D0C;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.12);
+  --text: #F1EFE8; --text2: #B4B2A9; --text3: #666360;
+  --coral: #D85A30; --petrol: #1A2235;
 }
 html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Lora', Georgia, serif; }
 
-/* ── HEADER ── */
+/* HEADER */
 #header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   height: 48px; background: var(--bg2);
@@ -40,78 +34,84 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   transition: color 0.2s, border-color 0.2s;
 }
 .h-nav-link:hover, .h-nav-link.active { color: var(--coral); border-color: var(--coral); }
-.h-tag { font-size: 6px; letter-spacing: 3px; color: var(--text3); border: 0.5px solid var(--border2); padding: 3px 8px; border-radius: 2px; }
 
-/* ── LAYOUT ── */
+/* LAYOUT */
 #layout { display: flex; height: 100vh; padding-top: 48px; }
 
-/* ── SIDEBAR ── */
+/* SIDEBAR */
 #sidebar {
   width: 0; overflow: hidden; background: var(--bg2);
-  border-right: 0.5px solid var(--border);
+  border-right: 0.5px solid var(--border2);
   transition: width 0.25s ease;
-  flex-shrink: 0; display: flex; flex-direction: column;
-  z-index: 50;
+  flex-shrink: 0; display: flex; flex-direction: column; z-index: 50;
 }
-#sidebar.open { width: 160px; }
-.sb-inner { width: 160px; padding: 14px 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
-.sb-label { font-size: 6px; letter-spacing: 3px; color: var(--text2); padding: 0 14px 8px; white-space: nowrap; font-family: 'Lora', serif; }
+#sidebar.open { width: 164px; }
+.sb-inner { width: 164px; padding: 16px 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
+.sb-label {
+  font-size: 9px; letter-spacing: 3px; color: var(--text);
+  padding: 0 14px 10px; white-space: nowrap; font-family: 'Lora', serif;
+  text-transform: uppercase; opacity: 0.7;
+}
 .sb-zone-btn {
   display: flex; align-items: center; gap: 9px;
   padding: 8px 14px; cursor: pointer; border: none;
-  background: none; width: 100%; text-align: left;
-  transition: background 0.15s;
+  background: none; width: 100%; text-align: left; transition: background 0.15s;
 }
 .sb-zone-btn:hover { background: rgba(255,255,255,0.04); }
-.sb-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.sb-zone-name { font-size: 11px; color: var(--text); white-space: nowrap; font-family: 'Lora', serif; }
-.sb-divider { height: 0.5px; background: var(--border); margin: 10px 14px; }
+.sb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sb-zone-name { font-size: 13px; color: var(--text); white-space: nowrap; font-family: 'Lora', serif; }
+.sb-divider { height: 0.5px; background: var(--border2); margin: 12px 14px; }
 .sb-filter-btn {
   display: flex; align-items: center; gap: 8px;
-  padding: 6px 14px; cursor: pointer; border: none;
-  background: none; width: 100%; text-align: left;
-  transition: background 0.15s; opacity: 0.5;
+  padding: 7px 14px; cursor: pointer; border: none;
+  background: none; width: 100%; text-align: left; transition: background 0.15s, opacity 0.2s;
+  opacity: 0.4;
 }
 .sb-filter-btn.active { opacity: 1; }
 .sb-filter-btn:hover { background: rgba(255,255,255,0.03); }
-.sb-filter-name { font-size: 10px; color: var(--text); white-space: nowrap; font-family: 'Lora', serif; }
+.sb-filter-name { font-size: 13px; color: var(--text); white-space: nowrap; font-family: 'Lora', serif; }
 
-/* ── MAP ── */
+/* MAP */
 #map-wrap { flex: 1; position: relative; }
 #map { width: 100%; height: 100%; }
 
-/* ── TOGGLE BTN ── */
+/* TOGGLE BTN */
 #toggle-btn {
   position: absolute; top: 12px; left: 12px; z-index: 10;
   background: var(--bg2); border: 0.5px solid var(--border2);
   border-radius: 3px; padding: 7px 10px; cursor: pointer;
-  color: var(--text2); font-size: 14px; transition: color 0.2s;
-  font-family: monospace;
+  color: var(--text2); font-size: 14px; transition: color 0.2s; font-family: monospace;
 }
 #toggle-btn:hover { color: var(--text); }
 
-/* ── SEARCH ── */
+/* SEARCH */
 #search-wrap {
   position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-  z-index: 10; width: 260px;
+  z-index: 10; width: 280px;
 }
 #pac-input {
   width: 100%; background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: 3px; padding: 8px 14px; font-size: 11px;
+  border-radius: 3px 3px 0 0; padding: 8px 14px; font-size: 11px;
   color: var(--text); letter-spacing: 1px; outline: none;
   font-family: 'Lora', Georgia, serif;
 }
 #pac-input::placeholder { color: var(--text3); letter-spacing: 2px; font-size: 10px; }
 #pac-input:focus { border-color: rgba(255,255,255,0.2); }
-
-/* Google Autocomplete dropdown override */
+#pin-results {
+  display: none; background: var(--bg2); border: 0.5px solid var(--border2);
+  border-top: 0.5px solid var(--border); max-height: 160px; overflow-y: auto;
+}
+.pin-result-item {
+  padding: 8px 14px; cursor: pointer; font-size: 11px; color: var(--text2);
+  border-bottom: 0.5px solid var(--border); transition: background 0.15s;
+  font-family: 'Lora', serif;
+}
+.pin-result-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+.pin-result-item:last-child { border-bottom: none; }
 .pac-container {
-  background: var(--bg2) !important;
-  border: 0.5px solid var(--border2) !important;
-  border-top: none !important;
-  border-radius: 0 0 3px 3px !important;
-  box-shadow: none !important;
-  font-family: 'Lora', Georgia, serif !important;
+  background: var(--bg2) !important; border: 0.5px solid var(--border2) !important;
+  border-top: none !important; border-radius: 0 0 3px 3px !important;
+  box-shadow: none !important; font-family: 'Lora', Georgia, serif !important;
 }
 .pac-item { color: var(--text2) !important; border-top: 0.5px solid var(--border) !important; padding: 6px 14px !important; cursor: pointer; font-size: 11px !important; }
 .pac-item:hover { background: rgba(255,255,255,0.04) !important; }
@@ -119,7 +119,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .pac-matched { color: var(--coral) !important; }
 .pac-icon { display: none !important; }
 
-/* ── ZONES TOGGLE ── */
+/* ZONES TOGGLE */
 #zones-toggle {
   position: absolute; top: 12px; right: 12px; z-index: 10;
   background: var(--bg2); border: 0.5px solid var(--border2);
@@ -129,15 +129,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 }
 #zones-toggle.active { border-color: var(--coral); color: var(--coral); }
 
-/* ── PLACE CARD ── */
+/* PLACE CARD */
 #place-card {
   position: absolute; bottom: 0; left: 50%;
   transform: translateX(-50%) translateY(100%);
-  z-index: 15; background: var(--bg2);
-  border: 0.5px solid var(--border2);
-  border-radius: 4px 4px 0 0;
-  padding: 14px 18px 16px; min-width: 280px; max-width: 380px;
-  transition: transform 0.25s ease;
+  z-index: 15; background: var(--bg2); border: 0.5px solid var(--border2);
+  border-radius: 4px 4px 0 0; padding: 14px 18px 16px;
+  min-width: 280px; max-width: 380px; transition: transform 0.25s ease;
 }
 #place-card.visible { transform: translateX(-50%) translateY(0); }
 .pc-name { font-family: 'EB Garamond', Georgia, serif; font-size: 14px; color: var(--text); margin-bottom: 3px; }
@@ -145,8 +143,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .pc-close-btn { position: absolute; top: 10px; right: 12px; background: none; border: none; color: var(--text3); cursor: pointer; font-size: 12px; }
 .zone-tag {
   display: inline-block; font-size: 8px; letter-spacing: 2px;
-  padding: 3px 8px; border-radius: 2px; margin-top: 2px;
-  font-family: 'Lora', serif;
+  padding: 3px 8px; border-radius: 2px; margin-top: 2px; font-family: 'Lora', serif;
 }
 .zt-blue { background: rgba(74,144,217,0.15); color: #6BADD4; border: 0.5px solid rgba(74,144,217,0.3); }
 .zt-yellow { background: rgba(232,184,75,0.15); color: #C9A43E; border: 0.5px solid rgba(232,184,75,0.3); }
@@ -154,17 +151,17 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .zt-red { background: rgba(160,30,30,0.15); color: #C04040; border: 0.5px solid rgba(160,30,30,0.3); }
 .zt-unknown { background: rgba(255,255,255,0.05); color: var(--text3); border: 0.5px solid var(--border); }
 
-/* ── ZONE PANEL ── */
+/* ZONE PANEL */
 #zone-panel {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
   background: var(--bg2); border-top: 0.5px solid var(--border2);
   transform: translateY(100%); transition: transform 0.3s ease;
-  max-height: 55vh; overflow-y: auto;
+  max-height: 40vh; overflow-y: auto;
 }
 #zone-panel.visible { transform: translateY(0); }
 .zp-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 20px; border-bottom: 0.5px solid var(--border);
+  padding: 10px 20px; border-bottom: 0.5px solid var(--border);
   position: sticky; top: 0; background: var(--bg2); z-index: 1;
 }
 .zp-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -179,11 +176,12 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .zp-tab.active { color: var(--text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
 .zp-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .zp-close {
-  font-size: 8px; letter-spacing: 2px; color: var(--text3);
-  cursor: pointer; background: none; border: none; padding: 4px 8px;
-  transition: color 0.2s; font-family: 'Lora', serif;
+  font-size: 11px; letter-spacing: 2px; color: var(--text2);
+  cursor: pointer; background: rgba(255,255,255,0.06); border: 0.5px solid var(--border2);
+  padding: 6px 14px; border-radius: 2px;
+  transition: color 0.2s, background 0.2s; font-family: 'Lora', serif;
 }
-.zp-close:hover { color: var(--text); }
+.zp-close:hover { color: var(--text); background: rgba(255,255,255,0.10); }
 .zp-content { display: none; padding: 20px; }
 .zp-content.active { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 @media (max-width: 700px) { .zp-content.active { grid-template-columns: 1fr; } }
@@ -196,7 +194,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .zp-stat-value { font-size: 11px; color: var(--text2); font-family: 'Lora', serif; line-height: 1.5; }
 .zp-stat-value span { color: var(--coral); }
 
-/* ── ZONE GUIDE BTN ── */
+/* ZONE GUIDE BTN */
 #zone-guide-btn {
   position: absolute; bottom: 12px; right: 12px; z-index: 10;
   background: transparent; border: 0.5px solid var(--coral);
@@ -206,19 +204,6 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 }
 #zone-guide-btn:hover { background: rgba(216,90,48,0.08); }
 
-/* ── FOOTER ── */
-#footer {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  height: 28px; background: var(--bg3);
-  border-top: 0.5px solid var(--border);
-  display: none; align-items: center; justify-content: space-between;
-  padding: 0 16px; pointer-events: none;
-}
-.f-slogan { font-family: 'EB Garamond', Georgia, serif; font-size: 9px; font-style: italic; color: var(--text3); }
-.f-coords { font-size: 7px; color: var(--border2); letter-spacing: 1px; font-family: monospace; }
-
-body.panel-open #footer { display: none; }
-
 /* scrollbar */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -227,7 +212,6 @@ body.panel-open #footer { display: none; }
 </head>
 <body>
 
-<!-- HEADER -->
 <div id="header">
   <div class="h-left">
     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="28" viewBox="0 0 200 215">
@@ -247,16 +231,12 @@ body.panel-open #footer { display: none; }
     <a href="play.html" class="h-nav-link">Play</a>
     <a href="duolmaps.html" class="h-nav-link active">Maps</a>
   </div>
-  <div class="h-tag">DEEP IMMERSION BR</div>
 </div>
 
-<!-- LAYOUT -->
 <div id="layout">
-
-  <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sb-inner">
-      <div class="sb-label">ZONES</div>
+      <div class="sb-label">Zones</div>
       <button class="sb-zone-btn" data-zone="fakesafe">
         <div class="sb-dot" style="background:#4A90D9;"></div>
         <div class="sb-zone-name">Fake Safe</div>
@@ -273,43 +253,40 @@ body.panel-open #footer { display: none; }
         <div class="sb-dot" style="background:#A01E1E;"></div>
         <div class="sb-zone-name">High risk</div>
       </button>
-
       <div class="sb-divider"></div>
-      <div class="sb-label">FILTERS</div>
-      <button class="sb-filter-btn active" data-filter="Hotel">
+      <div class="sb-label">Filters</div>
+      <button class="sb-filter-btn active" data-filter="hotel">
         <div class="sb-filter-name">🏨 Hotel · Work</div>
       </button>
-      <button class="sb-filter-btn active" data-filter="Coffee">
+      <button class="sb-filter-btn active" data-filter="coffee">
         <div class="sb-filter-name">☕ Coffee</div>
       </button>
-      <button class="sb-filter-btn active" data-filter="Restaurant">
+      <button class="sb-filter-btn active" data-filter="restaurant">
         <div class="sb-filter-name">🍽 Restaurant</div>
       </button>
-      <button class="sb-filter-btn active" data-filter="Market">
+      <button class="sb-filter-btn active" data-filter="market">
         <div class="sb-filter-name">🛒 Market · OXXO</div>
       </button>
-      <button class="sb-filter-btn active" data-filter="Pharmacy">
+      <button class="sb-filter-btn active" data-filter="pharmacy">
         <div class="sb-filter-name">💊 Pharmacy</div>
       </button>
-      <button class="sb-filter-btn active" data-filter="ATM">
+      <button class="sb-filter-btn active" data-filter="atm">
         <div class="sb-filter-name">🏧 ATM · Bank</div>
       </button>
     </div>
   </div>
 
-  <!-- MAP -->
   <div id="map-wrap">
     <div id="map"></div>
-
     <button id="toggle-btn" onclick="toggleSidebar()">☰</button>
 
     <div id="search-wrap">
       <input id="pac-input" type="text" placeholder="SEARCH" autocomplete="off" />
+      <div id="pin-results"></div>
     </div>
 
     <button id="zones-toggle" class="active" onclick="toggleZones()">ZONES ON</button>
 
-    <!-- PLACE CARD -->
     <div id="place-card">
       <button class="pc-close-btn" onclick="closePlaceCard()">✕</button>
       <div class="pc-name" id="pc-name"></div>
@@ -317,10 +294,8 @@ body.panel-open #footer { display: none; }
       <div id="pc-zone-tag"></div>
     </div>
 
-    <!-- ZONE GUIDE BTN -->
     <button id="zone-guide-btn" onclick="openPanel()">ZONE GUIDE →</button>
 
-    <!-- ZONE PANEL -->
     <div id="zone-panel">
       <div class="zp-header">
         <div class="zp-tabs">
@@ -340,7 +315,6 @@ body.panel-open #footer { display: none; }
         <button class="zp-close" onclick="closePanel()">✕ CLOSE</button>
       </div>
 
-      <!-- FAKE SAFE -->
       <div class="zp-content active" id="tab-fakesafe">
         <div>
           <div class="zp-zone-name">Fake Safe</div>
@@ -363,11 +337,10 @@ body.panel-open #footer { display: none; }
         </div>
       </div>
 
-      <!-- CAUTION -->
       <div class="zp-content" id="tab-caution">
         <div>
           <div class="zp-zone-name">Caution</div>
-          <div class="zp-zone-area">MOEMA · CAMPO BELO · SANTO AMARO · MORUMBI · PINHEIROS</div>
+          <div class="zp-zone-area">MOEMA · CAMPO BELO · SANTO AMARO · VILA MARIANA · JABAQUARA · IPIRANGA</div>
           <div class="zp-desc">Transition zone. Still relatively safe during the day. But you are leaving the corporate bubble. Fewer security cameras, less pedestrian flow, more variance by street and time. Google Maps may say 10 minutes walk. Check the route first.</div>
         </div>
         <div>
@@ -386,7 +359,6 @@ body.panel-open #footer { display: none; }
         </div>
       </div>
 
-      <!-- AVOID AT NIGHT -->
       <div class="zp-content" id="tab-avoid">
         <div>
           <div class="zp-zone-name">Avoid at night</div>
@@ -409,7 +381,6 @@ body.panel-open #footer { display: none; }
         </div>
       </div>
 
-      <!-- HIGH RISK -->
       <div class="zp-content" id="tab-highrisk">
         <div>
           <div class="zp-zone-name">High risk</div>
@@ -433,40 +404,52 @@ body.panel-open #footer { display: none; }
         </div>
       </div>
     </div>
-
-  </div><!-- end map-wrap -->
-</div><!-- end layout -->
-
-<!-- FOOTER -->
-<div id="footer">
-  <div class="f-slogan">Porque a língua certa faz toda a diferença.</div>
-  <div class="f-coords">-23.6042° S · -46.6922° W</div>
+  </div>
 </div>
 
 <script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const MY_MAPS_ID   = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
+const TG_TOKEN     = '8655634703:AAGF4DR9lUNH10tM4079_hN64-MTf-IA0Wg';
+const TG_CHAT_ID   = '1057611719';
+const SHEETS_ID    = '1JAmyoyFD3F7XHzvUxbtkgH0WyloApdQu-iNls0pWddg';
+
+// ── ZONES ───────────────────────────────────────────────────────────────────
 const ZONES = {
   fakesafe: {
     label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.15, tagClass: 'zt-blue',
     paths: [[
-      {lat:-23.5880,lng:-46.7050},{lat:-23.5880,lng:-46.6700},
-      {lat:-23.5950,lng:-46.6600},{lat:-23.6050,lng:-46.6580},
-      {lat:-23.6150,lng:-46.6600},{lat:-23.6200,lng:-46.6680},
-      {lat:-23.6250,lng:-46.6780},{lat:-23.6220,lng:-46.6950},
-      {lat:-23.6100,lng:-46.7100},{lat:-23.5980,lng:-46.7120},
-      {lat:-23.5880,lng:-46.7050}
+      {lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},
+      {lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},
+      {lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},
+      {lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},
+      {lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},
+      {lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},
+      {lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},
+      {lat:-23.5580,lng:-46.7050}
     ]]
   },
   caution: {
     label: 'Caution', color: '#E8B84B', fillOpacity: 0.13, tagClass: 'zt-yellow',
     paths: [[
-      {lat:-23.5700,lng:-46.7200},{lat:-23.5700,lng:-46.6400},
-      {lat:-23.5880,lng:-46.6700},{lat:-23.5880,lng:-46.7050},
-      {lat:-23.5980,lng:-46.7120},{lat:-23.6100,lng:-46.7100},
-      {lat:-23.6220,lng:-46.6950},{lat:-23.6250,lng:-46.6780},
-      {lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},
+      {lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},
+      {lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},
+      {lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},
+      {lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},
+      {lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},
+      {lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},
+      {lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},
+      {lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},
+      {lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},
+      {lat:-23.5400,lng:-46.6200},
+      {lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},
+      {lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},
+      {lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},
+      {lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},
+      {lat:-23.6500,lng:-46.6900},
       {lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},
       {lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},
-      {lat:-23.5700,lng:-46.7200}
+      {lat:-23.5400,lng:-46.7200}
     ]]
   },
   avoid: {
@@ -482,20 +465,21 @@ const ZONES = {
   highrisk: {
     label: 'High risk', color: '#A01E1E', fillOpacity: 0.17, tagClass: 'zt-red',
     paths: [[
-      {lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.6000},
-      {lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},
-      {lat:-23.5900,lng:-46.6200},{lat:-23.5750,lng:-46.6500},
-      {lat:-23.5600,lng:-46.6600},{lat:-23.5400,lng:-46.6600},
+      {lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},
+      {lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},
+      {lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},
+      {lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},
+      {lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},
       {lat:-23.5300,lng:-46.6500}
     ]]
   }
 };
 
-const MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
+// ── PIN DATA (carregado do KML) ──────────────────────────────────────────────
+let pinData = [];
+let map, polygons = {}, zonesVisible = true, selectedMarker = null, autocomplete, activeTab = 'fakesafe';
 
-let map, polygons = {}, zonesVisible = true, selectedMarker = null;
-let autocomplete, activeTab = 'fakesafe';
-
+// ── INIT MAP ─────────────────────────────────────────────────────────────────
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: -23.6042, lng: -46.6922 },
@@ -513,16 +497,14 @@ function initMap() {
       { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#5f5e5a' }] },
       { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#444441' }] },
       { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
-      { featureType: 'transit.station', elementType: 'labels.text.fill', stylers: [{ color: '#888780' }] },
       { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] },
-      { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#2c2825' }] },
     ],
     disableDefaultUI: true,
     zoomControl: true,
     zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
   });
 
-  // My Maps KML layer
+  // KML layer
   new google.maps.KmlLayer({
     url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
     map: map,
@@ -530,18 +512,17 @@ function initMap() {
     suppressInfoWindows: false,
   });
 
+  // Load pin data for local search
+  loadPinData();
+
   // Zone polygons
   Object.entries(ZONES).forEach(function([key, zone]) {
     zone.paths.forEach(function(path) {
       var poly = new google.maps.Polygon({
         paths: path,
-        strokeColor: zone.color,
-        strokeOpacity: 0.8,
-        strokeWeight: 1.5,
-        fillColor: zone.color,
-        fillOpacity: zone.fillOpacity,
-        map: map,
-        clickable: true,
+        strokeColor: zone.color, strokeOpacity: 0.7, strokeWeight: 1.5,
+        fillColor: zone.color, fillOpacity: zone.fillOpacity,
+        map: map, clickable: true,
       });
       poly.addListener('click', function() { openPanelTab(key); });
       if (!polygons[key]) polygons[key] = [];
@@ -549,19 +530,101 @@ function initMap() {
     });
   });
 
-  // Search autocomplete
+  // Google Places autocomplete
   var input = document.getElementById('pac-input');
   autocomplete = new google.maps.places.Autocomplete(input, {
     fields: ['geometry', 'name', 'formatted_address'],
   });
   autocomplete.addListener('place_changed', onPlaceSelected);
 
-  map.addListener('click', function() { closePlaceCard(); });
+  // Pin search on input
+  input.addEventListener('input', function() {
+    var q = input.value.trim().toLowerCase();
+    if (q.length < 2) { hidePinResults(); return; }
+    var matches = pinData.filter(function(p) {
+      return p.name.toLowerCase().indexOf(q) > -1;
+    });
+    showPinResults(matches);
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { hidePinResults(); input.value = ''; }
+  });
+
+  map.addListener('click', function() { closePlaceCard(); hidePinResults(); });
 }
 
+// ── PIN DATA LOADER ───────────────────────────────────────────────────────────
+function loadPinData() {
+  fetch('https://corsproxy.io/?url=' + encodeURIComponent('https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID))
+    .then(function(r) { return r.text(); })
+    .then(function(xml) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(xml, 'text/xml');
+      var placemarks = doc.querySelectorAll('Placemark');
+      pinData = [];
+      placemarks.forEach(function(pm) {
+        var nameEl = pm.querySelector('name');
+        var coordEl = pm.querySelector('coordinates');
+        if (!nameEl || !coordEl) return;
+        var name = nameEl.textContent.trim();
+        var coords = coordEl.textContent.trim().split(',');
+        if (coords.length < 2) return;
+        var lng = parseFloat(coords[0]);
+        var lat = parseFloat(coords[1]);
+        if (isNaN(lat) || isNaN(lng)) return;
+        pinData.push({ name: name, lat: lat, lng: lng });
+      });
+    })
+    .catch(function() {});
+}
+
+// ── PIN SEARCH RESULTS ────────────────────────────────────────────────────────
+function showPinResults(matches) {
+  var container = document.getElementById('pin-results');
+  if (!matches.length) { hidePinResults(); return; }
+  container.innerHTML = '';
+  matches.slice(0, 5).forEach(function(pin) {
+    var item = document.createElement('div');
+    item.className = 'pin-result-item';
+    item.textContent = pin.name;
+    item.addEventListener('click', function() {
+      selectPin(pin);
+      hidePinResults();
+      document.getElementById('pac-input').value = pin.name;
+    });
+    container.appendChild(item);
+  });
+  container.style.display = 'block';
+}
+
+function hidePinResults() {
+  document.getElementById('pin-results').style.display = 'none';
+}
+
+function selectPin(pin) {
+  var loc = new google.maps.LatLng(pin.lat, pin.lng);
+  map.panTo(loc);
+  map.setZoom(16);
+  if (selectedMarker) selectedMarker.setMap(null);
+  selectedMarker = new google.maps.Marker({
+    position: loc, map: map,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 8, fillColor: '#D85A30', fillOpacity: 1,
+      strokeColor: '#1A1714', strokeWeight: 2,
+    }
+  });
+  var zone = getZoneForPoint(pin.lat, pin.lng);
+  showPlaceCard(pin.name, '', zone);
+  logSearch(pin.name);
+}
+
+// ── PLACE SELECTED (Google Places) ───────────────────────────────────────────
 function onPlaceSelected() {
   var place = autocomplete.getPlace();
   if (!place || !place.geometry) return;
+  hidePinResults();
   var loc = place.geometry.location;
   map.panTo(loc);
   map.setZoom(15);
@@ -575,9 +638,37 @@ function onPlaceSelected() {
     }
   });
   var zone = getZoneForPoint(loc.lat(), loc.lng());
-  showPlaceCard(place.name, place.formatted_address, zone);
+  showPlaceCard(place.name, place.formatted_address || '', zone);
+  logSearch(place.name);
 }
 
+// ── LOG SEARCH ────────────────────────────────────────────────────────────────
+function logSearch(term) {
+  var now = new Date().toISOString();
+
+  // Telegram
+  fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TG_CHAT_ID,
+      text: '🗺 DuoL Maps search\n' + term + '\n' + now,
+      parse_mode: 'HTML'
+    })
+  }).catch(function() {});
+
+  // Google Sheets via Apps Script web app
+  // NOTE: needs a published Apps Script — see EASY CONFIG comment below
+  if (window.SHEETS_WEBHOOK) {
+    fetch(window.SHEETS_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ term: term, time: now })
+    }).catch(function() {});
+  }
+}
+
+// ── ZONE DETECTION ────────────────────────────────────────────────────────────
 function getZoneForPoint(lat, lng) {
   var point = new google.maps.LatLng(lat, lng);
   for (var key in ZONES) {
@@ -592,15 +683,14 @@ function getZoneForPoint(lat, lng) {
   return null;
 }
 
+// ── PLACE CARD ────────────────────────────────────────────────────────────────
 function showPlaceCard(name, addr, zone) {
   document.getElementById('pc-name').textContent = name || '';
   document.getElementById('pc-addr').textContent = addr || '';
   var tag = document.getElementById('pc-zone-tag');
-  if (zone) {
-    tag.innerHTML = '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>';
-  } else {
-    tag.innerHTML = '<span class="zone-tag zt-unknown">#OutsideZones</span>';
-  }
+  tag.innerHTML = zone
+    ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
+    : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
   document.getElementById('place-card').classList.add('visible');
 }
 
@@ -610,10 +700,12 @@ function closePlaceCard() {
   document.getElementById('pac-input').value = '';
 }
 
+// ── SIDEBAR ───────────────────────────────────────────────────────────────────
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
 }
 
+// ── ZONES TOGGLE ──────────────────────────────────────────────────────────────
 function toggleZones() {
   zonesVisible = !zonesVisible;
   var btn = document.getElementById('zones-toggle');
@@ -622,14 +714,13 @@ function toggleZones() {
   Object.values(polygons).flat().forEach(function(p) { p.setMap(zonesVisible ? map : null); });
 }
 
+// ── ZONE PANEL ────────────────────────────────────────────────────────────────
 function openPanel() {
   document.getElementById('zone-panel').classList.add('visible');
-  document.body.classList.add('panel-open');
 }
 function openPanelTab(tab) { openPanel(); switchTab(tab); }
 function closePanel() {
   document.getElementById('zone-panel').classList.remove('visible');
-  document.body.classList.remove('panel-open');
 }
 function switchTab(tab) {
   activeTab = tab;
@@ -637,18 +728,17 @@ function switchTab(tab) {
   document.querySelectorAll('.zp-content').forEach(function(c) { c.classList.toggle('active', c.id === 'tab-' + tab); });
 }
 
-// Sidebar zone buttons → open panel
+// Sidebar zone buttons
 document.querySelectorAll('.sb-zone-btn').forEach(function(btn) {
   btn.addEventListener('click', function() { openPanelTab(btn.dataset.zone); });
 });
 
-// Filter buttons → toggle active state (visual only for now, KML layers not filterable by category without full data)
+// Filter buttons — visual toggle only (KML doesn't support runtime layer filtering)
 document.querySelectorAll('.sb-filter-btn').forEach(function(btn) {
   btn.addEventListener('click', function() { btn.classList.toggle('active'); });
 });
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCahWJZzec6FIZW_m6fvUBCH9MS3i-9ns&libraries=places,geometry&callback=initMap" async defer></script>
-
 </body>
 </html>

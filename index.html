@@ -21,7 +21,7 @@
   --text:#1C1917; --muted:#888780; --muted2:#555250;
   --coral:#D85A30; --petrol:#1A2235;
 }
-body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif; font-weight:400; min-height:100vh; max-width:540px; margin:0 auto; padding-bottom:24px; }
+body { background:var(--bg); color:var(--text); font-family:'Lora',Georgia,serif; font-weight:400; min-height:100vh; max-width:540px; margin:0 auto; padding-bottom:24px; padding-top:40px; }
 
 /* HEADER */
 .header { padding:16px 16px 12px; display:grid; grid-template-columns:1fr 1.4fr 1fr; align-items:center; gap:8px; }
@@ -112,22 +112,26 @@ footer { padding:8px 20px 20px; text-align:center; border-top:0.5px solid var(--
 .foot-by { font-size:10px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
 
 
-  /* ── TOP NAV ── */
+  
+
+  
+  /* ── TOP NAV FIXED ── */
   .duol-topnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
     display: flex; align-items: center; justify-content: center;
-    gap: 32px; padding: 10px 20px;
-    background: transparent;
-    border-bottom: 0.5px solid rgba(28,25,23,0.08);
+    gap: 32px; padding: 10px 20px; height: 40px;
+    background: var(--bg);
+    border-bottom: 0.5px solid rgba(28,25,23,0.12);
   }
   .duol-topnav a {
-    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
     text-decoration: none; color: var(--muted);
     transition: color 0.2s; font-family: 'Lora', serif;
   }
   .duol-topnav a:hover { color: var(--coral); }
   .duol-topnav a.nav-active { color: var(--coral); }
 
-  </style>
+</style>
 </head>
 <body>
 <nav class="duol-topnav"><a href="index.html" class="nav-active">Schedule</a><a href="play.html">Play</a><a href="duolmaps.html">Maps</a></nav>

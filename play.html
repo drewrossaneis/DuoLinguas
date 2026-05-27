@@ -262,9 +262,24 @@
     .tagline { font-size: 14px; }
     .back-link { top: 20px; left: 16px; }
   }
+  /* ── TOP NAV ── */
+  .duol-topnav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 32px; padding: 10px 20px;
+    background: transparent;
+    border-bottom: 0.5px solid rgba(241,239,232,0.08);
+  }
+  .duol-topnav a {
+    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    text-decoration: none; color: #444441;
+    transition: color 0.2s; font-family: Helvetica, Arial, sans-serif;
+  }
+  .duol-topnav a:hover { color: #D85A30; }
+  .duol-topnav a.nav-active { color: #D85A30; }
 </style>
 </head>
 <body>
+<nav class="duol-topnav"><a href="index.html">Schedule</a><a href="play.html" class="nav-active">Play</a><a href="duolmaps.html">Maps</a></nav>
 
 <header class="header">
 

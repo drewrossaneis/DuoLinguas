@@ -291,13 +291,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
 
     <button id="zones-toggle" class="active" onclick="toggleZones()">ZONES ON</button>
-    <button id="view-toggle" onclick="cycleMapView()" style="
-      position: absolute; top: 52px; right: 12px; z-index: 10;
-      background: var(--bg2); border: 0.5px solid var(--border2);
-      border-radius: 3px; padding: 7px 12px; cursor: pointer;
-      font-size: 8px; letter-spacing: 2px; color: var(--text2);
-      transition: color 0.2s; font-family: 'Lora', serif;
-    ">DARK</button>
+    <div id="view-btns" style="position:absolute;top:52px;right:12px;z-index:10;display:flex;flex-direction:column;gap:2px;">
+      <button onclick="setMapView('dark')" data-view="dark" style="background:var(--bg2);border:0.5px solid var(--coral);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--coral);font-family:'Lora',serif;">DARK</button>
+      <button onclick="setMapView('light')" data-view="light" style="background:var(--bg2);border:0.5px solid var(--border2);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--text2);font-family:'Lora',serif;">LIGHT</button>
+      <button onclick="setMapView('satellite')" data-view="satellite" style="background:var(--bg2);border:0.5px solid var(--border2);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--text2);font-family:'Lora',serif;">SAT</button>
+    </div>
 
     <div id="place-card">
       <button class="pc-close-btn" onclick="closePlaceCard()">✕</button>
@@ -524,25 +522,16 @@ function initMap() {
     url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
     map: map,
     preserveViewport: true,
-    suppressInfoWindows: true,
+    suppressInfoWindows: false,
   });
+  // Pin do My Maps — abre info window nativa + mostra tag de zona
   kmlLayer.addListener('click', function(e) {
     closePanel();
     var loc = e.latLng;
-    map.panTo(loc);
-    if (selectedMarker) selectedMarker.setMap(null);
-    selectedMarker = new google.maps.Marker({
-      position: loc, map: map,
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 8, fillColor: '#D85A30', fillOpacity: 1,
-        strokeColor: '#1A1714', strokeWeight: 2,
-      }
-    });
     var name = e.featureData.name || '';
-    var desc = e.featureData.description || '';
     var zone = getZoneForPoint(loc.lat(), loc.lng());
-    showPlaceCard(name, desc, zone);
+    // Mostrar tag de zona no place card customizado
+    showPlaceCard(name, '', zone);
     logSearch(name);
   });
 

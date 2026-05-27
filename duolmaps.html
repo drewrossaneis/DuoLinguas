@@ -423,69 +423,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 </div>
 
 <script>
-// ── CONFIG ──────────────────────────────────────────────────────────────────
 const MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
 const TG_TOKEN   = '8655634703:AAGF4DR9lUNH10tM4079_hN64-MTf-IA0Wg';
 const TG_CHAT_ID = '1057611719';
-
-const ZONES = {
-  fakesafe: {
-    label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.15, tagClass: 'zt-blue',
-    paths: [[
-      {lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},
-      {lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},
-      {lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},
-      {lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},
-      {lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},
-      {lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},
-      {lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},
-      {lat:-23.5580,lng:-46.7050}
-    ]]
-  },
-  caution: {
-    label: 'Caution', color: '#E8B84B', fillOpacity: 0.13, tagClass: 'zt-yellow',
-    paths: [[
-      {lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},
-      {lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},
-      {lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},
-      {lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},
-      {lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},
-      {lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},
-      {lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},
-      {lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},
-      {lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},
-      {lat:-23.5400,lng:-46.6200},{lat:-23.5400,lng:-46.6050},
-      {lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},
-      {lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},
-      {lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},
-      {lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},
-      {lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},
-      {lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},
-      {lat:-23.5400,lng:-46.7200}
-    ]]
-  },
-  avoid: {
-    label: 'Avoid at night', color: '#E07020', fillOpacity: 0.13, tagClass: 'zt-orange',
-    paths: [[
-      {lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},
-      {lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},
-      {lat:-23.7100,lng:-46.6800},{lat:-23.7000,lng:-46.7200},
-      {lat:-23.6700,lng:-46.7300},{lat:-23.6600,lng:-46.7200},
-      {lat:-23.6500,lng:-46.6900}
-    ]]
-  },
-  highrisk: {
-    label: 'High risk', color: '#C01515', fillOpacity: 0.17, tagClass: 'zt-red',
-    paths: [[
-      {lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},
-      {lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},
-      {lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},
-      {lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},
-      {lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},
-      {lat:-23.5300,lng:-46.6500}
-    ]]
-  }
-};
 
 var darkStyles = [
   { elementType: 'geometry', stylers: [{ color: '#1a1714' }] },
@@ -499,46 +439,45 @@ var darkStyles = [
   { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#5f5e5a' }] },
   { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#444441' }] },
   { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] }
 ];
+
+var ZONES = {
+  fakesafe: { label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.15, tagClass: 'zt-blue', paths: [[{lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},{lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},{lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},{lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},{lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},{lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},{lat:-23.5580,lng:-46.7050}]] },
+  caution: { label: 'Caution', color: '#E8B84B', fillOpacity: 0.13, tagClass: 'zt-yellow', paths: [[{lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},{lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},{lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},{lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},{lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},{lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},{lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},{lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},{lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},{lat:-23.5400,lng:-46.7200}]] },
+  avoid: { label: 'Avoid at night', color: '#E07020', fillOpacity: 0.13, tagClass: 'zt-orange', paths: [[{lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},{lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},{lat:-23.7100,lng:-46.6800},{lat:-23.7000,lng:-46.7200},{lat:-23.6700,lng:-46.7300},{lat:-23.6600,lng:-46.7200},{lat:-23.6500,lng:-46.6900}]] },
+  highrisk: { label: 'High risk', color: '#C01515', fillOpacity: 0.17, tagClass: 'zt-red', paths: [[{lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},{lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},{lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5300,lng:-46.6500}]] }
+};
 
 var pinData = [];
 var map, polygons = {}, zonesVisible = true, selectedMarker = null, autocomplete, activeTab = 'fakesafe';
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: -23.6042, lng: -46.6922 },
-    zoom: 13,
-    mapTypeId: 'roadmap',
-    styles: darkStyles,
-    disableDefaultUI: true,
-    zoomControl: true,
-    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
+    center: { lat: -23.6042, lng: -46.6922 }, zoom: 13,
+    mapTypeId: 'roadmap', styles: darkStyles,
+    disableDefaultUI: true, zoomControl: true,
+    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER }
   });
 
-  // KML — pins do My Maps com comportamento nativo + tag de zona
   var kmlLayer = new google.maps.KmlLayer({
     url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
-    map: map,
-    preserveViewport: true,
-    suppressInfoWindows: false,
+    map: map, preserveViewport: true, suppressInfoWindows: false
   });
   kmlLayer.addListener('click', function(e) {
     var name = (e.featureData && e.featureData.name) ? e.featureData.name : '';
-    var zone = getZoneForPoint(e.latLng.lat(), e.latLng.lng());
-    // Mostrar tag no nosso place card, o popup nativo do Google abre separado
-    if (name) { showZoneTag(zone); logSearch(name); }
+    if (name) { logSearch(name); }
   });
 
   loadPinData();
 
-  Object.entries(ZONES).forEach(function([key, zone]) {
+  Object.keys(ZONES).forEach(function(key) {
+    var zone = ZONES[key];
     zone.paths.forEach(function(path) {
       var poly = new google.maps.Polygon({
-        paths: path,
-        strokeColor: zone.color, strokeOpacity: 0.7, strokeWeight: 1.5,
-        fillColor: zone.color, fillOpacity: zone.fillOpacity,
-        map: map, clickable: true,
+        paths: path, strokeColor: zone.color, strokeOpacity: 0.7,
+        strokeWeight: 1.5, fillColor: zone.color, fillOpacity: zone.fillOpacity,
+        map: map, clickable: true
       });
       poly.addListener('click', function() { openPanelTab(key); });
       if (!polygons[key]) polygons[key] = [];
@@ -548,7 +487,7 @@ function initMap() {
 
   var input = document.getElementById('pac-input');
   autocomplete = new google.maps.places.Autocomplete(input, {
-    fields: ['geometry', 'name', 'formatted_address'],
+    fields: ['geometry', 'name', 'formatted_address']
   });
   autocomplete.addListener('place_changed', onPlaceSelected);
 
@@ -565,27 +504,21 @@ function initMap() {
   map.addListener('click', function() { closePlaceCard(); hidePinResults(); });
 }
 
-// ── MAP VIEWS ─────────────────────────────────────────────────────────────────
 function setMapView(view) {
   document.querySelectorAll('#view-btns button').forEach(function(b) {
     var active = b.dataset.view === view;
-    b.style.borderColor = active ? 'var(--coral)' : 'var(--border2)';
-    b.style.color = active ? 'var(--coral)' : 'var(--text2)';
+    b.style.borderColor = active ? '#D85A30' : 'rgba(255,255,255,0.12)';
+    b.style.color = active ? '#D85A30' : '#B4B2A9';
   });
-  if (view === 'dark') {
-    map.setOptions({ styles: darkStyles, mapTypeId: 'roadmap' });
-  } else if (view === 'light') {
-    map.setOptions({ styles: [], mapTypeId: 'roadmap' });
-  } else {
-    map.setOptions({ styles: [], mapTypeId: 'satellite' });
-  }
+  if (view === 'dark') { map.setOptions({ styles: darkStyles, mapTypeId: 'roadmap' }); }
+  else if (view === 'light') { map.setOptions({ styles: [], mapTypeId: 'roadmap' }); }
+  else { map.setOptions({ styles: [], mapTypeId: 'satellite' }); }
 }
 
-// ── ZONE ISOLATION ────────────────────────────────────────────────────────────
 function showOnlyZone(key) {
   zonesVisible = true;
-  Object.entries(polygons).forEach(function([k, polys]) {
-    polys.forEach(function(p) { p.setMap(k === key ? map : null); });
+  Object.keys(polygons).forEach(function(k) {
+    polygons[k].forEach(function(p) { p.setMap(k === key ? map : null); });
   });
   document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
     btn.classList.toggle('active', btn.dataset.zone === key);
@@ -596,17 +529,16 @@ function showOnlyZone(key) {
 
 function showAllZones() {
   zonesVisible = true;
-  Object.values(polygons).flat().forEach(function(p) { p.setMap(map); });
-  document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
-    btn.classList.remove('active');
+  Object.keys(polygons).forEach(function(k) {
+    polygons[k].forEach(function(p) { p.setMap(map); });
   });
+  document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) { btn.classList.remove('active'); });
   var allBtn = document.querySelector('.sb-all-zones');
   if (allBtn) allBtn.classList.add('active');
   var zt = document.getElementById('zones-toggle');
   if (zt) { zt.textContent = 'ZONES ON'; zt.classList.add('active'); }
 }
 
-// ── PIN DATA ──────────────────────────────────────────────────────────────────
 function loadPinData() {
   fetch('https://corsproxy.io/?url=' + encodeURIComponent('https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID))
     .then(function(r) { return r.text(); })
@@ -649,7 +581,6 @@ function showPinResults(matches) {
 
 function hidePinResults() { document.getElementById('pin-results').style.display = 'none'; }
 
-// ── PLACE SELECTED ────────────────────────────────────────────────────────────
 function onPlaceSelected() {
   var place = autocomplete.getPlace();
   if (!place || !place.geometry) return;
@@ -666,17 +597,14 @@ function onPlaceSelected() {
   logSearch(place.name);
 }
 
-// ── LOG ───────────────────────────────────────────────────────────────────────
 function logSearch(term) {
   fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: '🗺 DuoL Maps
-' + term + '
-' + new Date().toISOString() })
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: 'DuoL Maps: ' + term })
   }).catch(function() {});
 }
 
-// ── ZONE DETECTION ────────────────────────────────────────────────────────────
 function getZoneForPoint(lat, lng) {
   var point = new google.maps.LatLng(lat, lng);
   for (var key in ZONES) {
@@ -688,22 +616,14 @@ function getZoneForPoint(lat, lng) {
   return null;
 }
 
-// ── PLACE CARD ────────────────────────────────────────────────────────────────
 function showPlaceCard(name, addr, zone) {
   document.getElementById('pc-name').textContent = name || '';
   document.getElementById('pc-addr').textContent = addr || '';
   var tag = document.getElementById('pc-zone-tag');
   tag.innerHTML = zone
-    ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
+    ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g, '') + '</span>'
     : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
   document.getElementById('place-card').classList.add('visible');
-}
-
-function showZoneTag(zone) {
-  var tag = document.getElementById('pc-zone-tag');
-  tag.innerHTML = zone
-    ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
-    : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
 }
 
 function closePlaceCard() {
@@ -712,23 +632,22 @@ function closePlaceCard() {
   document.getElementById('pac-input').value = '';
 }
 
-// ── SIDEBAR ───────────────────────────────────────────────────────────────────
 function toggleSidebar() {
   var sb = document.getElementById('sidebar');
   sb.classList.toggle('open');
-  document.getElementById('toggle-btn').textContent = sb.classList.contains('open') ? '←' : '→';
+  document.getElementById('toggle-btn').textContent = sb.classList.contains('open') ? '<' : '>';
 }
 
-// ── ZONES TOGGLE ──────────────────────────────────────────────────────────────
 function toggleZones() {
   zonesVisible = !zonesVisible;
   var btn = document.getElementById('zones-toggle');
   btn.textContent = zonesVisible ? 'ZONES ON' : 'ZONES OFF';
   btn.classList.toggle('active', zonesVisible);
-  Object.values(polygons).flat().forEach(function(p) { p.setMap(zonesVisible ? map : null); });
+  Object.keys(polygons).forEach(function(k) {
+    polygons[k].forEach(function(p) { p.setMap(zonesVisible ? map : null); });
+  });
 }
 
-// ── ZONE PANEL ────────────────────────────────────────────────────────────────
 function openPanel() { document.getElementById('zone-panel').classList.add('visible'); }
 function openPanelTab(tab) { openPanel(); switchTab(tab); }
 function closePanel() { document.getElementById('zone-panel').classList.remove('visible'); }
@@ -737,24 +656,17 @@ function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.zp-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
   document.querySelectorAll('.zp-content').forEach(function(c) { c.classList.toggle('active', c.id === 'tab-' + tab); });
-  if (tab === 'all') { showAllZones(); }
-  else { showOnlyZone(tab); }
+  if (tab === 'all') { showAllZones(); } else { showOnlyZone(tab); }
 }
 
-// Sidebar zone buttons
 document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    showOnlyZone(btn.dataset.zone);
-    openPanelTab(btn.dataset.zone);
-  });
+  btn.addEventListener('click', function() { showOnlyZone(btn.dataset.zone); openPanelTab(btn.dataset.zone); });
 });
 
-// Filter buttons
 document.querySelectorAll('.sb-filter-btn').forEach(function(btn) {
   btn.addEventListener('click', function() { btn.classList.toggle('active'); });
 });
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCahWJZzec6FIZW_m6fvUBCH9MS3i-9ns&libraries=places,geometry&callback=initMap" async defer></script>
+</script>
 </body>
 </html>

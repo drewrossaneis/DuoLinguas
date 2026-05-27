@@ -26,7 +26,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .h-left { display: flex; align-items: center; gap: 10px; }
 .h-logo-name { font-family: 'EB Garamond', Georgia, serif; font-size: 16px; color: var(--text); letter-spacing: 0.3px; }
 .h-logo-sub { font-size: 6px; letter-spacing: 4px; color: var(--text3); display: block; margin-top: 1px; }
-.h-nav { display: flex; align-items: center; gap: 6px; }
+.h-nav { display: flex; align-items: center; gap: 6px; position: absolute; left: 50%; transform: translateX(-50%); }
 .h-nav-link {
   font-family: 'Lora', serif; font-size: 9px; letter-spacing: 2px;
   color: var(--text3); text-decoration: none; text-transform: uppercase;
@@ -161,7 +161,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 #zone-panel.visible { transform: translateY(0); }
 .zp-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 20px; border-bottom: 0.5px solid var(--border);
+  padding: 0 20px; height: 44px; border-bottom: 0.5px solid var(--border);
   position: sticky; top: 0; background: var(--bg2); z-index: 1;
 }
 .zp-tabs { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -169,7 +169,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   display: flex; align-items: center; gap: 7px;
   padding: 5px 12px; border-radius: 2px; cursor: pointer;
   border: 0.5px solid var(--border); background: none;
-  font-size: 8px; letter-spacing: 1.5px; color: var(--text3);
+  font-size: 10px; letter-spacing: 1.5px; color: var(--text3);
   transition: all 0.2s; white-space: nowrap; font-family: 'Lora', serif;
 }
 .zp-tab:hover { color: var(--text2); border-color: var(--border2); }
@@ -185,24 +185,25 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .zp-content { display: none; padding: 20px; }
 .zp-content.active { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 @media (max-width: 700px) { .zp-content.active { grid-template-columns: 1fr; } }
-.zp-zone-name { font-family: 'EB Garamond', Georgia, serif; font-size: 15px; color: var(--text); margin-bottom: 4px; }
-.zp-zone-area { font-size: 7px; letter-spacing: 2px; color: var(--text3); margin-bottom: 12px; font-family: 'Lora', serif; }
-.zp-desc { font-size: 11px; color: var(--text2); line-height: 1.7; margin-bottom: 14px; font-family: 'Lora', serif; }
+.zp-zone-name { font-family: 'EB Garamond', Georgia, serif; font-size: 18px; color: var(--text); margin-bottom: 4px; }
+.zp-zone-area { font-size: 9px; letter-spacing: 2px; color: var(--text3); margin-bottom: 12px; font-family: 'Lora', serif; }
+.zp-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 14px; font-family: 'Lora', serif; }
 .zp-stats { display: flex; flex-direction: column; gap: 10px; }
 .zp-stat { display: flex; flex-direction: column; gap: 2px; }
-.zp-stat-label { font-size: 7px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; }
-.zp-stat-value { font-size: 11px; color: var(--text2); font-family: 'Lora', serif; line-height: 1.5; }
+.zp-stat-label { font-size: 9px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; }
+.zp-stat-value { font-size: 13px; color: var(--text2); font-family: 'Lora', serif; line-height: 1.5; }
 .zp-stat-value span { color: var(--coral); }
 
 /* ZONE GUIDE BTN */
 #zone-guide-btn {
-  position: absolute; bottom: 12px; right: 12px; z-index: 10;
-  background: transparent; border: 0.5px solid var(--coral);
-  border-radius: 2px; padding: 8px 14px; cursor: pointer;
-  font-size: 8px; letter-spacing: 2px; color: var(--coral);
-  transition: background 0.2s; font-family: 'Lora', serif;
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  z-index: 10; background: var(--bg2);
+  border: 0.5px solid var(--border2); border-bottom: none;
+  border-radius: 4px 4px 0 0; padding: 6px 24px; cursor: pointer;
+  font-size: 18px; color: var(--text2);
+  transition: color 0.2s, background 0.2s; font-family: monospace;
 }
-#zone-guide-btn:hover { background: rgba(216,90,48,0.08); }
+#zone-guide-btn:hover { color: var(--text); background: var(--bg); }
 
 /* scrollbar */
 ::-webkit-scrollbar { width: 3px; }
@@ -237,6 +238,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div id="sidebar">
     <div class="sb-inner">
       <div class="sb-label">Zones</div>
+      <button class="sb-zone-btn sb-all-zones active" onclick="showAllZones()">
+        <div class="sb-dot" style="background:linear-gradient(135deg,#4A90D9 0%,#4A90D9 25%,#E8B84B 25%,#E8B84B 50%,#E07020 50%,#E07020 75%,#C01515 75%);"></div>
+        <div class="sb-zone-name">All Zones</div>
+      </button>
       <button class="sb-zone-btn" data-zone="fakesafe">
         <div class="sb-dot" style="background:#4A90D9;"></div>
         <div class="sb-zone-name">Fake Safe</div>
@@ -246,11 +251,11 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
         <div class="sb-zone-name">Caution</div>
       </button>
       <button class="sb-zone-btn" data-zone="avoid">
-        <div class="sb-dot" style="background:#D85A30;"></div>
+        <div class="sb-dot" style="background:#E07020;"></div>
         <div class="sb-zone-name">Avoid at night</div>
       </button>
       <button class="sb-zone-btn" data-zone="highrisk">
-        <div class="sb-dot" style="background:#A01E1E;"></div>
+        <div class="sb-dot" style="background:#C01515;"></div>
         <div class="sb-zone-name">High risk</div>
       </button>
       <div class="sb-divider"></div>
@@ -278,7 +283,7 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
   <div id="map-wrap">
     <div id="map"></div>
-    <button id="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <button id="toggle-btn" onclick="toggleSidebar()">→</button>
 
     <div id="search-wrap">
       <input id="pac-input" type="text" placeholder="SEARCH" autocomplete="off" />
@@ -286,6 +291,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
     </div>
 
     <button id="zones-toggle" class="active" onclick="toggleZones()">ZONES ON</button>
+    <button id="view-toggle" onclick="cycleMapView()" style="
+      position: absolute; top: 52px; right: 12px; z-index: 10;
+      background: var(--bg2); border: 0.5px solid var(--border2);
+      border-radius: 3px; padding: 7px 12px; cursor: pointer;
+      font-size: 8px; letter-spacing: 2px; color: var(--text2);
+      transition: color 0.2s; font-family: 'Lora', serif;
+    ">DARK</button>
 
     <div id="place-card">
       <button class="pc-close-btn" onclick="closePlaceCard()">✕</button>
@@ -294,11 +306,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <div id="pc-zone-tag"></div>
     </div>
 
-    <button id="zone-guide-btn" onclick="openPanel()">ZONE GUIDE →</button>
+    <button id="zone-guide-btn" onclick="openPanel()">↑</button>
 
     <div id="zone-panel">
       <div class="zp-header">
         <div class="zp-tabs">
+          <button class="zp-tab" data-tab="all" onclick="switchTab('all')">
+            <div class="zp-tab-dot" style="background:linear-gradient(135deg,#4A90D9 0%,#4A90D9 50%,#C01515 50%);"></div>ALL
+          </button>
           <button class="zp-tab active" data-tab="fakesafe" onclick="switchTab('fakesafe')">
             <div class="zp-tab-dot" style="background:#4A90D9;"></div>FAKE SAFE
           </button>
@@ -306,13 +321,13 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
             <div class="zp-tab-dot" style="background:#E8B84B;"></div>CAUTION
           </button>
           <button class="zp-tab" data-tab="avoid" onclick="switchTab('avoid')">
-            <div class="zp-tab-dot" style="background:#D85A30;"></div>AVOID AT NIGHT
+            <div class="zp-tab-dot" style="background:#E07020;"></div>AVOID AT NIGHT
           </button>
           <button class="zp-tab" data-tab="highrisk" onclick="switchTab('highrisk')">
-            <div class="zp-tab-dot" style="background:#A01E1E;"></div>HIGH RISK
+            <div class="zp-tab-dot" style="background:#C01515;"></div>HIGH RISK
           </button>
         </div>
-        <button class="zp-close" onclick="closePanel()">✕ CLOSE</button>
+        <button class="zp-close" onclick="closePanel()">↓</button>
       </div>
 
       <div class="zp-content active" id="tab-fakesafe">
@@ -453,7 +468,7 @@ const ZONES = {
     ]]
   },
   avoid: {
-    label: 'Avoid at night', color: '#D85A30', fillOpacity: 0.13, tagClass: 'zt-orange',
+    label: 'Avoid at night', color: '#E07020', fillOpacity: 0.13, tagClass: 'zt-orange',
     paths: [[
       {lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},
       {lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},
@@ -463,7 +478,7 @@ const ZONES = {
     ]]
   },
   highrisk: {
-    label: 'High risk', color: '#A01E1E', fillOpacity: 0.17, tagClass: 'zt-red',
+    label: 'High risk', color: '#C01515', fillOpacity: 0.17, tagClass: 'zt-red',
     paths: [[
       {lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},
       {lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},
@@ -505,11 +520,30 @@ function initMap() {
   });
 
   // KML layer
-  new google.maps.KmlLayer({
+  var kmlLayer = new google.maps.KmlLayer({
     url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
     map: map,
     preserveViewport: true,
-    suppressInfoWindows: false,
+    suppressInfoWindows: true,
+  });
+  kmlLayer.addListener('click', function(e) {
+    closePanel();
+    var loc = e.latLng;
+    map.panTo(loc);
+    if (selectedMarker) selectedMarker.setMap(null);
+    selectedMarker = new google.maps.Marker({
+      position: loc, map: map,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 8, fillColor: '#D85A30', fillOpacity: 1,
+        strokeColor: '#1A1714', strokeWeight: 2,
+      }
+    });
+    var name = e.featureData.name || '';
+    var desc = e.featureData.description || '';
+    var zone = getZoneForPoint(loc.lat(), loc.lng());
+    showPlaceCard(name, desc, zone);
+    logSearch(name);
   });
 
   // Load pin data for local search
@@ -551,7 +585,7 @@ function initMap() {
     if (e.key === 'Escape') { hidePinResults(); input.value = ''; }
   });
 
-  map.addListener('click', function() { closePlaceCard(); hidePinResults(); });
+  map.addListener('click', function() { closePlaceCard(); hidePinResults(); closePanel(); });
 }
 
 // ── PIN DATA LOADER ───────────────────────────────────────────────────────────
@@ -702,7 +736,9 @@ function closePlaceCard() {
 
 // ── SIDEBAR ───────────────────────────────────────────────────────────────────
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
+  var sb = document.getElementById('sidebar');
+  sb.classList.toggle('open');
+  document.getElementById('toggle-btn').textContent = sb.classList.contains('open') ? '←' : '→';
 }
 
 // ── ZONES TOGGLE ──────────────────────────────────────────────────────────────

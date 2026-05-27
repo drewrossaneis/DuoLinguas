@@ -176,12 +176,14 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .zp-tab.active { color: var(--text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
 .zp-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .zp-close {
-  font-size: 11px; letter-spacing: 2px; color: var(--text2);
-  cursor: pointer; background: rgba(255,255,255,0.06); border: 0.5px solid var(--border2);
-  padding: 6px 14px; border-radius: 2px;
-  transition: color 0.2s, background 0.2s; font-family: 'Lora', serif;
+  font-size: 22px; color: var(--text2);
+  cursor: pointer; background: none; border: none; border-left: 0.5px solid var(--border2);
+  flex: 1; height: 100%;
+  transition: color 0.2s, background 0.2s;
+  display: flex; align-items: center; justify-content: center;
+  min-width: 60px;
 }
-.zp-close:hover { color: var(--text); background: rgba(255,255,255,0.10); }
+.zp-close:hover { color: var(--text); background: rgba(255,255,255,0.04); }
 .zp-content { display: none; padding: 20px; }
 .zp-content.active { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
 @media (max-width: 700px) { .zp-content.active { grid-template-columns: 1fr; } }
@@ -422,12 +424,10 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 <script>
 // ── CONFIG ──────────────────────────────────────────────────────────────────
-const MY_MAPS_ID   = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
-const TG_TOKEN     = '8655634703:AAGF4DR9lUNH10tM4079_hN64-MTf-IA0Wg';
-const TG_CHAT_ID   = '1057611719';
-const SHEETS_ID    = '1JAmyoyFD3F7XHzvUxbtkgH0WyloApdQu-iNls0pWddg';
+const MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
+const TG_TOKEN   = '8655634703:AAGF4DR9lUNH10tM4079_hN64-MTf-IA0Wg';
+const TG_CHAT_ID = '1057611719';
 
-// ── ZONES ───────────────────────────────────────────────────────────────────
 const ZONES = {
   fakesafe: {
     label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.15, tagClass: 'zt-blue',
@@ -454,12 +454,11 @@ const ZONES = {
       {lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},
       {lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},
       {lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},
-      {lat:-23.5400,lng:-46.6200},
-      {lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},
-      {lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},
-      {lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},
-      {lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},
-      {lat:-23.6500,lng:-46.6900},
+      {lat:-23.5400,lng:-46.6200},{lat:-23.5400,lng:-46.6050},
+      {lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},
+      {lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},
+      {lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},
+      {lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},
       {lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},
       {lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},
       {lat:-23.5400,lng:-46.7200}
@@ -488,57 +487,51 @@ const ZONES = {
   }
 };
 
-// ── PIN DATA (carregado do KML) ──────────────────────────────────────────────
-let pinData = [];
-let map, polygons = {}, zonesVisible = true, selectedMarker = null, autocomplete, activeTab = 'fakesafe';
+var darkStyles = [
+  { elementType: 'geometry', stylers: [{ color: '#1a1714' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#888780' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#141210' }] },
+  { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2a2724' }] },
+  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#1a1714' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a3530' }] },
+  { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#5f5e5a' }] },
+  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#444441' }] },
+  { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] },
+];
 
-// ── INIT MAP ─────────────────────────────────────────────────────────────────
+var pinData = [];
+var map, polygons = {}, zonesVisible = true, selectedMarker = null, autocomplete, activeTab = 'fakesafe';
+
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: -23.6042, lng: -46.6922 },
     zoom: 13,
     mapTypeId: 'roadmap',
-    styles: [
-      { elementType: 'geometry', stylers: [{ color: '#1a1714' }] },
-      { elementType: 'labels.text.fill', stylers: [{ color: '#888780' }] },
-      { elementType: 'labels.text.stroke', stylers: [{ color: '#141210' }] },
-      { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2a2724' }] },
-      { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
-      { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#1a1714' }] },
-      { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a3530' }] },
-      { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#5f5e5a' }] },
-      { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#444441' }] },
-      { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
-      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] },
-    ],
+    styles: darkStyles,
     disableDefaultUI: true,
     zoomControl: true,
     zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER },
   });
 
-  // KML layer
+  // KML — pins do My Maps com comportamento nativo + tag de zona
   var kmlLayer = new google.maps.KmlLayer({
     url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
     map: map,
     preserveViewport: true,
     suppressInfoWindows: false,
   });
-  // Pin do My Maps — abre info window nativa + mostra tag de zona
   kmlLayer.addListener('click', function(e) {
-    closePanel();
-    var loc = e.latLng;
-    var name = e.featureData.name || '';
-    var zone = getZoneForPoint(loc.lat(), loc.lng());
-    // Mostrar tag de zona no place card customizado
-    showPlaceCard(name, '', zone);
-    logSearch(name);
+    var name = (e.featureData && e.featureData.name) ? e.featureData.name : '';
+    var zone = getZoneForPoint(e.latLng.lat(), e.latLng.lng());
+    // Mostrar tag no nosso place card, o popup nativo do Google abre separado
+    if (name) { showZoneTag(zone); logSearch(name); }
   });
 
-  // Load pin data for local search
   loadPinData();
 
-  // Zone polygons
   Object.entries(ZONES).forEach(function([key, zone]) {
     zone.paths.forEach(function(path) {
       var poly = new google.maps.Polygon({
@@ -553,56 +546,85 @@ function initMap() {
     });
   });
 
-  // Google Places autocomplete
   var input = document.getElementById('pac-input');
   autocomplete = new google.maps.places.Autocomplete(input, {
     fields: ['geometry', 'name', 'formatted_address'],
   });
   autocomplete.addListener('place_changed', onPlaceSelected);
 
-  // Pin search on input
   input.addEventListener('input', function() {
     var q = input.value.trim().toLowerCase();
     if (q.length < 2) { hidePinResults(); return; }
-    var matches = pinData.filter(function(p) {
-      return p.name.toLowerCase().indexOf(q) > -1;
-    });
-    showPinResults(matches);
+    showPinResults(pinData.filter(function(p) { return p.name.toLowerCase().indexOf(q) > -1; }));
   });
 
   input.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') { hidePinResults(); input.value = ''; }
   });
 
-  map.addListener('click', function() { closePlaceCard(); hidePinResults(); closePanel(); });
+  map.addListener('click', function() { closePlaceCard(); hidePinResults(); });
 }
 
-// ── PIN DATA LOADER ───────────────────────────────────────────────────────────
+// ── MAP VIEWS ─────────────────────────────────────────────────────────────────
+function setMapView(view) {
+  document.querySelectorAll('#view-btns button').forEach(function(b) {
+    var active = b.dataset.view === view;
+    b.style.borderColor = active ? 'var(--coral)' : 'var(--border2)';
+    b.style.color = active ? 'var(--coral)' : 'var(--text2)';
+  });
+  if (view === 'dark') {
+    map.setOptions({ styles: darkStyles, mapTypeId: 'roadmap' });
+  } else if (view === 'light') {
+    map.setOptions({ styles: [], mapTypeId: 'roadmap' });
+  } else {
+    map.setOptions({ styles: [], mapTypeId: 'satellite' });
+  }
+}
+
+// ── ZONE ISOLATION ────────────────────────────────────────────────────────────
+function showOnlyZone(key) {
+  zonesVisible = true;
+  Object.entries(polygons).forEach(function([k, polys]) {
+    polys.forEach(function(p) { p.setMap(k === key ? map : null); });
+  });
+  document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.zone === key);
+  });
+  var allBtn = document.querySelector('.sb-all-zones');
+  if (allBtn) allBtn.classList.remove('active');
+}
+
+function showAllZones() {
+  zonesVisible = true;
+  Object.values(polygons).flat().forEach(function(p) { p.setMap(map); });
+  document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+  var allBtn = document.querySelector('.sb-all-zones');
+  if (allBtn) allBtn.classList.add('active');
+  var zt = document.getElementById('zones-toggle');
+  if (zt) { zt.textContent = 'ZONES ON'; zt.classList.add('active'); }
+}
+
+// ── PIN DATA ──────────────────────────────────────────────────────────────────
 function loadPinData() {
   fetch('https://corsproxy.io/?url=' + encodeURIComponent('https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID))
     .then(function(r) { return r.text(); })
     .then(function(xml) {
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(xml, 'text/xml');
-      var placemarks = doc.querySelectorAll('Placemark');
+      var doc = new DOMParser().parseFromString(xml, 'text/xml');
       pinData = [];
-      placemarks.forEach(function(pm) {
+      doc.querySelectorAll('Placemark').forEach(function(pm) {
         var nameEl = pm.querySelector('name');
         var coordEl = pm.querySelector('coordinates');
         if (!nameEl || !coordEl) return;
-        var name = nameEl.textContent.trim();
         var coords = coordEl.textContent.trim().split(',');
         if (coords.length < 2) return;
-        var lng = parseFloat(coords[0]);
-        var lat = parseFloat(coords[1]);
-        if (isNaN(lat) || isNaN(lng)) return;
-        pinData.push({ name: name, lat: lat, lng: lng });
+        var lng = parseFloat(coords[0]), lat = parseFloat(coords[1]);
+        if (!isNaN(lat) && !isNaN(lng)) pinData.push({ name: nameEl.textContent.trim(), lat: lat, lng: lng });
       });
-    })
-    .catch(function() {});
+    }).catch(function() {});
 }
 
-// ── PIN SEARCH RESULTS ────────────────────────────────────────────────────────
 function showPinResults(matches) {
   var container = document.getElementById('pin-results');
   if (!matches.length) { hidePinResults(); return; }
@@ -612,95 +634,55 @@ function showPinResults(matches) {
     item.className = 'pin-result-item';
     item.textContent = pin.name;
     item.addEventListener('click', function() {
-      selectPin(pin);
+      map.panTo(new google.maps.LatLng(pin.lat, pin.lng));
+      map.setZoom(16);
       hidePinResults();
       document.getElementById('pac-input').value = pin.name;
+      var zone = getZoneForPoint(pin.lat, pin.lng);
+      showPlaceCard(pin.name, '', zone);
+      logSearch(pin.name);
     });
     container.appendChild(item);
   });
   container.style.display = 'block';
 }
 
-function hidePinResults() {
-  document.getElementById('pin-results').style.display = 'none';
-}
+function hidePinResults() { document.getElementById('pin-results').style.display = 'none'; }
 
-function selectPin(pin) {
-  var loc = new google.maps.LatLng(pin.lat, pin.lng);
-  map.panTo(loc);
-  map.setZoom(16);
-  if (selectedMarker) selectedMarker.setMap(null);
-  selectedMarker = new google.maps.Marker({
-    position: loc, map: map,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 8, fillColor: '#D85A30', fillOpacity: 1,
-      strokeColor: '#1A1714', strokeWeight: 2,
-    }
-  });
-  var zone = getZoneForPoint(pin.lat, pin.lng);
-  showPlaceCard(pin.name, '', zone);
-  logSearch(pin.name);
-}
-
-// ── PLACE SELECTED (Google Places) ───────────────────────────────────────────
+// ── PLACE SELECTED ────────────────────────────────────────────────────────────
 function onPlaceSelected() {
   var place = autocomplete.getPlace();
   if (!place || !place.geometry) return;
   hidePinResults();
   var loc = place.geometry.location;
-  map.panTo(loc);
-  map.setZoom(15);
+  map.panTo(loc); map.setZoom(15);
   if (selectedMarker) selectedMarker.setMap(null);
   selectedMarker = new google.maps.Marker({
     position: loc, map: map,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 8, fillColor: '#D85A30', fillOpacity: 1,
-      strokeColor: '#1A1714', strokeWeight: 2,
-    }
+    icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillColor: '#D85A30', fillOpacity: 1, strokeColor: '#1A1714', strokeWeight: 2 }
   });
   var zone = getZoneForPoint(loc.lat(), loc.lng());
   showPlaceCard(place.name, place.formatted_address || '', zone);
   logSearch(place.name);
 }
 
-// ── LOG SEARCH ────────────────────────────────────────────────────────────────
+// ── LOG ───────────────────────────────────────────────────────────────────────
 function logSearch(term) {
-  var now = new Date().toISOString();
-
-  // Telegram
   fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: TG_CHAT_ID,
-      text: '🗺 DuoL Maps search\n' + term + '\n' + now,
-      parse_mode: 'HTML'
-    })
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: '🗺 DuoL Maps
+' + term + '
+' + new Date().toISOString() })
   }).catch(function() {});
-
-  // Google Sheets via Apps Script web app
-  // NOTE: needs a published Apps Script — see EASY CONFIG comment below
-  if (window.SHEETS_WEBHOOK) {
-    fetch(window.SHEETS_WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ term: term, time: now })
-    }).catch(function() {});
-  }
 }
 
 // ── ZONE DETECTION ────────────────────────────────────────────────────────────
 function getZoneForPoint(lat, lng) {
   var point = new google.maps.LatLng(lat, lng);
   for (var key in ZONES) {
-    var zone = ZONES[key];
-    for (var i = 0; i < zone.paths.length; i++) {
-      var poly = new google.maps.Polygon({ paths: zone.paths[i] });
-      if (google.maps.geometry.poly.containsLocation(point, poly)) {
-        return Object.assign({ key: key }, zone);
-      }
+    for (var i = 0; i < ZONES[key].paths.length; i++) {
+      var poly = new google.maps.Polygon({ paths: ZONES[key].paths[i] });
+      if (google.maps.geometry.poly.containsLocation(point, poly)) return Object.assign({ key: key }, ZONES[key]);
     }
   }
   return null;
@@ -715,6 +697,13 @@ function showPlaceCard(name, addr, zone) {
     ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
     : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
   document.getElementById('place-card').classList.add('visible');
+}
+
+function showZoneTag(zone) {
+  var tag = document.getElementById('pc-zone-tag');
+  tag.innerHTML = zone
+    ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
+    : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
 }
 
 function closePlaceCard() {
@@ -740,25 +729,27 @@ function toggleZones() {
 }
 
 // ── ZONE PANEL ────────────────────────────────────────────────────────────────
-function openPanel() {
-  document.getElementById('zone-panel').classList.add('visible');
-}
+function openPanel() { document.getElementById('zone-panel').classList.add('visible'); }
 function openPanelTab(tab) { openPanel(); switchTab(tab); }
-function closePanel() {
-  document.getElementById('zone-panel').classList.remove('visible');
-}
+function closePanel() { document.getElementById('zone-panel').classList.remove('visible'); }
+
 function switchTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.zp-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
   document.querySelectorAll('.zp-content').forEach(function(c) { c.classList.toggle('active', c.id === 'tab-' + tab); });
+  if (tab === 'all') { showAllZones(); }
+  else { showOnlyZone(tab); }
 }
 
 // Sidebar zone buttons
-document.querySelectorAll('.sb-zone-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() { openPanelTab(btn.dataset.zone); });
+document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    showOnlyZone(btn.dataset.zone);
+    openPanelTab(btn.dataset.zone);
+  });
 });
 
-// Filter buttons — visual toggle only (KML doesn't support runtime layer filtering)
+// Filter buttons
 document.querySelectorAll('.sb-filter-btn').forEach(function(btn) {
   btn.addEventListener('click', function() { btn.classList.toggle('active'); });
 });

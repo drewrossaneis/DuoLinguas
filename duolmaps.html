@@ -151,61 +151,45 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .zt-red { background: rgba(160,30,30,0.15); color: #C04040; border: 0.5px solid rgba(160,30,30,0.3); }
 .zt-unknown { background: rgba(255,255,255,0.05); color: var(--text3); border: 0.5px solid var(--border); }
 
-/* ZONE PANEL */
+/* ZONE SIDE PANEL */
 #zone-panel {
-  position: absolute; bottom: 0; left: 0; right: 0; z-index: 20;
-  background: var(--bg2); border-top: 0.5px solid var(--border2);
-  transform: translateY(100%); transition: transform 0.3s ease;
-  max-height: 40vh; overflow-y: auto;
+  position: fixed; top: 48px; right: 0; bottom: 0; z-index: 50;
+  width: 0; overflow: hidden;
+  background: var(--bg2); border-left: 0.5px solid var(--border2);
+  transition: width 0.3s ease;
 }
-#zone-panel.visible { transform: translateY(0); }
+#zone-panel.visible { width: 420px; }
+.zp-inner { width: 420px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
 .zp-header {
-  display: flex; align-items: center;
-  height: 44px; border-bottom: 0.5px solid var(--border);
-  position: sticky; top: 0; background: var(--bg2); z-index: 1; padding-left: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 0.5px solid var(--border);
+  position: sticky; top: 0; background: var(--bg2); z-index: 1; flex-shrink: 0;
 }
-.zp-tabs { display: flex; gap: 4px; flex-wrap: nowrap; flex-shrink: 0; overflow-x: auto; }
-.zp-tab {
-  display: flex; align-items: center; gap: 7px;
-  padding: 5px 12px; border-radius: 2px; cursor: pointer;
-  border: 0.5px solid var(--border); background: none;
-  font-size: 10px; letter-spacing: 1.5px; color: var(--text3);
-  transition: all 0.2s; white-space: nowrap; font-family: 'Lora', serif;
-}
-.zp-tab:hover { color: var(--text2); border-color: var(--border2); }
-.zp-tab.active { color: var(--text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
-.zp-tab-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.zp-header-zone { display: flex; align-items: center; gap: 10px; }
+.zp-header-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.zp-header-name { font-family: 'EB Garamond', Georgia, serif; font-size: 18px; color: var(--text); }
 .zp-close {
-  font-size: 22px; color: var(--text2);
-  cursor: pointer; background: none; border: none; border-left: 0.5px solid var(--border2);
-  flex: 1; height: 100%;
-  transition: color 0.2s, background 0.2s;
-  display: flex; align-items: center; justify-content: center;
-  min-width: 60px;
+  font-size: 18px; color: var(--text2); cursor: pointer;
+  background: none; border: none; padding: 4px 8px;
+  transition: color 0.2s;
 }
-.zp-close:hover { color: var(--text); background: rgba(255,255,255,0.04); }
-.zp-content { display: none; padding: 20px; }
-.zp-content.active { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-@media (max-width: 700px) { .zp-content.active { grid-template-columns: 1fr; } }
-.zp-zone-name { font-family: 'EB Garamond', Georgia, serif; font-size: 18px; color: var(--text); margin-bottom: 4px; }
-.zp-zone-area { font-size: 9px; letter-spacing: 2px; color: var(--text3); margin-bottom: 12px; font-family: 'Lora', serif; }
-.zp-desc { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 14px; font-family: 'Lora', serif; }
-.zp-stats { display: flex; flex-direction: column; gap: 10px; }
-.zp-stat { display: flex; flex-direction: column; gap: 2px; }
-.zp-stat-label { font-size: 9px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; }
+.zp-close:hover { color: var(--text); }
+.zp-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.zp-zone-area { font-size: 8px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; margin-bottom: 4px; }
+.zp-desc { font-size: 13px; color: var(--text2); line-height: 1.7; font-family: 'Lora', serif; }
+.zp-divider { height: 0.5px; background: var(--border); }
+.zp-stats { display: flex; flex-direction: column; gap: 12px; }
+.zp-stat { display: flex; flex-direction: column; gap: 3px; }
+.zp-stat-label { font-size: 8px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; }
 .zp-stat-value { font-size: 13px; color: var(--text2); font-family: 'Lora', serif; line-height: 1.5; }
 .zp-stat-value span { color: var(--coral); }
 
-/* ZONE GUIDE BTN */
-#zone-guide-btn {
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  z-index: 10; background: var(--bg2);
-  border: 0.5px solid var(--border2); border-bottom: none;
-  border-radius: 4px 4px 0 0; padding: 6px 24px; cursor: pointer;
-  font-size: 18px; color: var(--text2);
-  transition: color 0.2s, background 0.2s; font-family: monospace;
+/* + botão nas zonas da sidebar */
+.sb-zone-plus {
+  margin-left: auto; font-size: 16px; color: var(--text3);
+  transition: color 0.2s; line-height: 1; padding-right: 4px;
 }
-#zone-guide-btn:hover { color: var(--text); background: var(--bg); }
+.sb-zone-btn:hover .sb-zone-plus { color: var(--text2); }
 
 /* scrollbar */
 ::-webkit-scrollbar { width: 3px; }
@@ -247,18 +231,22 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <button class="sb-zone-btn" data-zone="fakesafe">
         <div class="sb-dot" style="background:#4A90D9;"></div>
         <div class="sb-zone-name">Fake Safe</div>
+        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('fakesafe')">+</span>
       </button>
       <button class="sb-zone-btn" data-zone="caution">
         <div class="sb-dot" style="background:#E8B84B;"></div>
         <div class="sb-zone-name">Caution</div>
+        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('caution')">+</span>
       </button>
       <button class="sb-zone-btn" data-zone="avoid">
         <div class="sb-dot" style="background:#E07020;"></div>
         <div class="sb-zone-name">Avoid at night</div>
+        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('avoid')">+</span>
       </button>
       <button class="sb-zone-btn" data-zone="highrisk">
         <div class="sb-dot" style="background:#C01515;"></div>
         <div class="sb-zone-name">High risk</div>
+        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('highrisk')">+</span>
       </button>
       <div class="sb-divider"></div>
       <div class="sb-label">Filters</div>
@@ -443,10 +431,10 @@ var darkStyles = [
 ];
 
 var ZONES = {
-  fakesafe: { label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.15, tagClass: 'zt-blue', paths: [[{lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},{lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},{lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},{lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},{lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},{lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},{lat:-23.5580,lng:-46.7050}]] },
-  caution: { label: 'Caution', color: '#E8B84B', fillOpacity: 0.13, tagClass: 'zt-yellow', paths: [[{lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},{lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},{lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},{lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},{lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},{lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},{lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},{lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},{lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},{lat:-23.5400,lng:-46.7200}]] },
-  avoid: { label: 'Avoid at night', color: '#E07020', fillOpacity: 0.13, tagClass: 'zt-orange', paths: [[{lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},{lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},{lat:-23.7100,lng:-46.6800},{lat:-23.7000,lng:-46.7200},{lat:-23.6700,lng:-46.7300},{lat:-23.6600,lng:-46.7200},{lat:-23.6500,lng:-46.6900}]] },
-  highrisk: { label: 'High risk', color: '#C01515', fillOpacity: 0.17, tagClass: 'zt-red', paths: [[{lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},{lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},{lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5300,lng:-46.6500}]] }
+  fakesafe: { label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.30, tagClass: 'zt-blue', paths: [[{lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},{lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},{lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},{lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},{lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},{lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},{lat:-23.5580,lng:-46.7050}]] },
+  caution: { label: 'Caution', color: '#E8B84B', fillOpacity: 0.25, tagClass: 'zt-yellow', paths: [[{lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},{lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},{lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},{lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},{lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},{lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},{lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},{lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},{lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},{lat:-23.5400,lng:-46.7200}]] },
+  avoid: { label: 'Avoid at night', color: '#E07020', fillOpacity: 0.25, tagClass: 'zt-orange', paths: [[{lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},{lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},{lat:-23.7100,lng:-46.6800},{lat:-23.7000,lng:-46.7200},{lat:-23.6700,lng:-46.7300},{lat:-23.6600,lng:-46.7200},{lat:-23.6500,lng:-46.6900}]] },
+  highrisk: { label: 'High risk', color: '#C01515', fillOpacity: 0.32, tagClass: 'zt-red', paths: [[{lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},{lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},{lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5300,lng:-46.6500}]] }
 };
 
 var pinData = [];
@@ -475,8 +463,8 @@ function initMap() {
     var zone = ZONES[key];
     zone.paths.forEach(function(path) {
       var poly = new google.maps.Polygon({
-        paths: path, strokeColor: zone.color, strokeOpacity: 0.7,
-        strokeWeight: 1.5, fillColor: zone.color, fillOpacity: zone.fillOpacity,
+        paths: path, strokeColor: zone.color, strokeOpacity: 0.9,
+        strokeWeight: 2, fillColor: zone.color, fillOpacity: zone.fillOpacity,
         map: map, clickable: true
       });
       poly.addListener('click', function() { openPanelTab(key); });
@@ -648,15 +636,36 @@ function toggleZones() {
   });
 }
 
-function openPanel() { document.getElementById('zone-panel').classList.add('visible'); }
-function openPanelTab(tab) { openPanel(); switchTab(tab); }
-function closePanel() { document.getElementById('zone-panel').classList.remove('visible'); }
+var ZONE_INFO = {"fakesafe": {"color": "#4A90D9", "label": "Fake Safe", "area": "BERRINI · BROOKLIN · ITAIM BIBI · VILA OLÍMPIA · FARIA LIMA", "desc": "This is where your hotel and workplace are. Corporate towers, private security everywhere, Uber on every corner. During business hours, this is one of the most controlled environments in São Paulo. The problem starts when you assume the rest of the city works the same way. It does not.", "stats": [["DISTANCE FROM HOTEL", "<span>0 km</span> — you are here"], ["UBER AVAILABILITY", "<span>High</span> — usually under 3 min"], ["DAYTIME", "Comfortable. Walk freely."], ["NIGHTTIME", "Relatively safe. Stay on main avenues. Phone in pocket."], ["WHAT TO KNOW", "The corporate bubble creates a false sense of security. The city changes completely beyond Av. Santo Amaro and Marginal Pinheiros. Do not use Berrini as your reference for the rest of Sao Paulo."], ["WATCH OUT FOR", "Phone theft near busy intersections. Motorcycle approach at traffic lights. Empty side streets after 10pm."]]}, "caution": {"color": "#E8B84B", "label": "Caution", "area": "MOEMA · CAMPO BELO · SANTO AMARO · VILA MARIANA · JABAQUARA · IPIRANGA", "desc": "Transition zone. Still relatively safe during the day. But you are leaving the corporate bubble. Fewer security cameras, less pedestrian flow, more variance by street and time. Google Maps may say 10 minutes walk. Check the route first.", "stats": [["DISTANCE FROM HOTEL", "<span>2-6 km</span> — short Uber ride"], ["UBER AVAILABILITY", "<span>Good</span> — wait may vary"], ["TRAVEL TIME (UBER)", "<span>15-40 min</span> depending on traffic"], ["NIGHTTIME", "Pay attention. Avoid isolated streets. Stay near busy areas."], ["WHAT TO KNOW", "These neighborhoods look similar to Berrini on the surface. The difference is in the details: lighting, pedestrian density, and what happens at the end of the block."], ["WATCH OUT FOR", "Less predictable traffic. Phone visible on street. Do not walk back to the hotel alone late at night."]]}, "avoid": {"color": "#E07020", "label": "Avoid at night", "area": "VILA ANDRADE · CAPAO REDONDO DIRECTION · OUTER ZONA SUL", "desc": "Not where you will be staying. But Sao Paulo is a city where a 5km trip can completely change your context. If you venture beyond the bubble, this is what exists on the other side. Requires awareness, planning, and ideally company.", "stats": [["DISTANCE FROM HOTEL", "<span>8-15 km</span> — feels close, it is not"], ["UBER AVAILABILITY", "<span>Lower</span> — surge pricing common"], ["TRAVEL TIME (UBER)", "<span>40-90 min</span> in peak hours"], ["NIGHTTIME", "Strongly avoid unless with trusted local company."], ["WHAT TO KNOW", "Sao Paulo Zona Sul has the highest crime growth rates in the city. Capao Redondo consistently ranks among the most dangerous districts. Distance on the map is misleading."], ["WATCH OUT FOR", "Motorcycle theft. Armed robbery near bus terminals. Long waits for Uber after 10pm with no safe spot to wait."]]}, "highrisk": {"color": "#C01515", "label": "High risk", "area": "CENTRO HISTORICO · SE · REPUBLICA · LUZ · BRAS · LIBERDADE", "desc": "The historic center. Landmarks, culture, architecture and the highest robbery rates in the city. Go with purpose, go during the day, go alert. Liberdade is worth visiting. So is Pinacoteca. Just do not treat it like Berrini.", "stats": [["DISTANCE FROM HOTEL", "<span>12-16 km</span> from Berrini"], ["UBER AVAILABILITY", "<span>High</span> — central area, many cars"], ["TRAVEL TIME (UBER)", "<span>30-75 min</span> — Sao Paulo traffic"], ["NIGHTTIME", "Avoid unless specific planned event with safe return."], ["WHAT TO KNOW", "Pickpockets and phone theft are extremely common near tourist spots. High-volume crime area many targets and fast exits."], ["WORTH VISITING", "Liberdade · Pinacoteca · Mercadao · Theatro Municipal · MASP"], ["WATCH OUT FOR", "Phone on hand near Se metro. Strangers approaching with distraction tactics. Isolated alleyways."]]}};
+
+function openZonePanel(key) {
+  var zone = ZONE_INFO[key];
+  if (!zone) return;
+  document.getElementById('zp-dot').style.background = zone.color;
+  document.getElementById('zp-name').textContent = zone.label;
+  var body = document.getElementById('zp-body');
+  var html = '<div class="zp-zone-area">' + zone.area + '</div>';
+  html += '<div class="zp-desc">' + zone.desc + '</div>';
+  html += '<div class="zp-divider"></div>';
+  html += '<div class="zp-stats">';
+  zone.stats.forEach(function(s) {
+    html += '<div class="zp-stat"><div class="zp-stat-label">' + s[0] + '</div><div class="zp-stat-value">' + s[1] + '</div></div>';
+  });
+  html += '</div>';
+  body.innerHTML = html;
+  document.getElementById('zone-panel').classList.add('visible');
+  showOnlyZone(key);
+}
+
+function openPanelTab(key) { openZonePanel(key); }
+function closePanel() {
+  document.getElementById('zone-panel').classList.remove('visible');
+  showAllZones();
+}
 
 function switchTab(tab) {
-  activeTab = tab;
-  document.querySelectorAll('.zp-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
-  document.querySelectorAll('.zp-content').forEach(function(c) { c.classList.toggle('active', c.id === 'tab-' + tab); });
-  if (tab === 'all') { showAllZones(); } else { showOnlyZone(tab); }
+  if (tab === 'all') { showAllZones(); }
+  else { openZonePanel(tab); }
 }
 
 document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {

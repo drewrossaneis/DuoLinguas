@@ -271,7 +271,25 @@ var ZONE_INFO = {
   highrisk:{color:'#C01515',label:'High risk',area:'CENTRO HISTORICO · SE · REPUBLICA · LUZ · BRAS · LIBERDADE',desc:'The historic center. Landmarks, culture, architecture and the highest robbery rates in the city. Go with purpose, go during the day, go alert.',stats:[['DISTANCE FROM HOTEL','<span>12-16 km</span> from Berrini'],['UBER AVAILABILITY','<span>High</span> — central area, many cars'],['TRAVEL TIME (UBER)','<span>30-75 min</span> — Sao Paulo traffic'],['NIGHTTIME','Avoid unless specific planned event with safe return.'],['WORTH VISITING','Liberdade · Pinacoteca · Mercadao · Theatro Municipal · MASP'],['WATCH OUT FOR','Phone on hand near Se metro. Strangers with distraction tactics.']]}
 };
 
-var darkStyles=[{elementType:'geometry',stylers:[{color:'#1a1714'}]},{elementType:'labels.text.fill',stylers:[{color:'#888780'}]},{elementType:'labels.text.stroke',stylers:[{color:'#141210'}]},{featureType:'administrative',elementType:'geometry',stylers:[{color:'#2a2724'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#2c2825'}]},{featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1a1714'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#3a3530'}]},{featureType:'road.arterial',elementType:'labels.text.fill',stylers:[{color:'#5f5e5a'}]},{featureType:'road.local',elementType:'labels.text.fill',stylers:[{color:'#444441'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#2c2825'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#0f0d0c'}]}];
+var darkStyles=[
+  {elementType:'geometry',stylers:[{color:'#1a1714'}]},
+  {elementType:'labels.text.fill',stylers:[{color:'#B4B2A9'}]},
+  {elementType:'labels.text.stroke',stylers:[{color:'#1a1714'}]},
+  {featureType:'administrative',elementType:'geometry',stylers:[{color:'#2a2724'}]},
+  {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#F1EFE8'}]},
+  {featureType:'administrative.province',elementType:'labels.text.fill',stylers:[{color:'#D4D2C9'}]},
+  {featureType:'administrative.locality',elementType:'labels.text.fill',stylers:[{color:'#D4D2C9'}]},
+  {featureType:'administrative.neighborhood',elementType:'labels.text.fill',stylers:[{color:'#B4B2A9'}]},
+  {featureType:'poi',stylers:[{visibility:'off'}]},
+  {featureType:'road',elementType:'geometry',stylers:[{color:'#2c2825'}]},
+  {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1a1714'}]},
+  {featureType:'road.highway',elementType:'geometry',stylers:[{color:'#3a3530'}]},
+  {featureType:'road.arterial',elementType:'labels.text.fill',stylers:[{color:'#888780'}]},
+  {featureType:'road.local',elementType:'labels.text.fill',stylers:[{color:'#666360'}]},
+  {featureType:'transit',elementType:'geometry',stylers:[{color:'#2c2825'}]},
+  {featureType:'water',elementType:'geometry',stylers:[{color:'#0f0d0c'}]},
+  {featureType:'water',elementType:'labels.text.fill',stylers:[{color:'#444441'}]}
+];
 
 var map,polygons={},zonesVisible=true,autocomplete,pinData=[];
 
@@ -283,15 +301,65 @@ function initMap(){
     zoomControlOptions:{position:google.maps.ControlPosition.RIGHT_CENTER}
   });
 
-  // KML — pins do My Maps com popup nativo do Google
+  // KML — pins do My Maps
   var kml=new google.maps.KmlLayer({
     url:'https://www.google.com/maps/d/kml?forcekml=1&mid='+MY_MAPS_ID,
-    map:map,preserveViewport:true,suppressInfoWindows:false
+    map:map,preserveViewport:true,suppressInfoWindows:true
   });
+
+  var infoWindow=new google.maps.InfoWindow();
+
   kml.addListener('click',function(e){
-    var name=(e.featureData&&e.featureData.name)?e.featureData.name:'';
+    var name=(e.featureData&&e.featureData.name)||'';
+    var desc=(e.featureData&&e.featureData.description)||'';
+    var loc=e.latLng;
+
+    // Zoom no pin — só se estiver dentro da área de SP
+    var spBounds2=new google.maps.LatLngBounds(
+      new google.maps.LatLng(-24.1,-47.0),
+      new google.maps.LatLng(-23.2,-46.0)
+    );
+    if(spBounds2.contains(loc)){
+      map.panTo(loc);
+      map.setZoom(16);
+    } else {
+      map.panTo(loc);
+      map.setZoom(13);
+    }
+
+    // Montar conteúdo do popup — estilo DuoLínguas
+    var zone=getZoneForPoint(loc.lat(),loc.lng());
+    var zoneTag='';
+    if(zone&&ZONES[zone]){
+      var zdata=ZONES[zone];
+      zoneTag='<div style="margin-top:8px;"><span style="background:rgba(255,255,255,0.1);color:#F1EFE8;font-size:10px;letter-spacing:1px;padding:3px 8px;border-radius:2px;font-family:Lora,serif;">#'+zdata.label+'</span></div>';
+    }
+
+    // Extrair imagem da descrição se houver
+    var imgMatch=desc.match(/<img[^>]+src="([^"]+)"/i);
+    var imgHtml=imgMatch?'<img src="'+imgMatch[1]+'" style="width:100%;height:140px;object-fit:cover;border-radius:4px;margin-bottom:8px;">':'';
+
+    // Limpar descrição de tags HTML
+    var cleanDesc=desc.replace(/<[^>]*>/g,'').trim();
+
+    var mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' Sao Paulo');
+
+    var content='<div style="background:#141210;color:#F1EFE8;padding:14px;border-radius:6px;min-width:220px;max-width:280px;font-family:Lora,Georgia,serif;">'
+      +imgHtml
+      +'<div style="font-size:14px;font-weight:500;margin-bottom:4px;">'+name+'</div>'
+      +(cleanDesc?'<div style="font-size:11px;color:#B4B2A9;line-height:1.5;margin-bottom:8px;">'+cleanDesc+'</div>':'')
+      +zoneTag
+      +'<a href="'+mapsUrl+'" target="_blank" style="display:inline-block;margin-top:10px;background:transparent;border:0.5px solid #D85A30;color:#D85A30;font-size:9px;letter-spacing:2px;padding:5px 12px;border-radius:2px;text-decoration:none;font-family:Lora,serif;">VER NO MAPS &#x2197;</a>'
+      +'</div>';
+
+    infoWindow.setContent(content);
+    infoWindow.setPosition(loc);
+    infoWindow.open(map);
+
     if(name) logSearch(name);
   });
+
+  map.addListener('click',function(){infoWindow.close();});
 
   loadPinData();
 

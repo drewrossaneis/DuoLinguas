@@ -149,6 +149,31 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* Google InfoWindow override */
+.gm-style .gm-style-iw-c {
+  background: #141210 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+  padding: 0 !important;
+}
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+  max-height: none !important;
+}
+.gm-style .gm-style-iw-t::after {
+  background: #141210 !important;
+}
+.gm-style .gm-style-iw-ch {
+  padding-top: 0 !important;
+}
+.gm-style button.gm-ui-hover-effect {
+  top: 4px !important;
+  right: 4px !important;
+}
+.gm-style button.gm-ui-hover-effect span {
+  background-color: #888780 !important;
+}
 </style>
 </head>
 <body>
@@ -455,10 +480,10 @@ function onPlaceSelected(){
 }
 
 function logSearch(term){
-  fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({chat_id:TG_CHAT_ID,text:'DuoL Maps: '+term})
-  }).catch(function(){});
+  var url='https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage'
+    +'?chat_id='+TG_CHAT_ID
+    +'&text='+encodeURIComponent('DuoL Maps: '+term);
+  fetch(url).catch(function(){});
 }
 
 function getZoneForPoint(lat,lng){

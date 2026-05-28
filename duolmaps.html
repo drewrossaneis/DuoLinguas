@@ -150,6 +150,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
+/* PIN CARD — canto inferior esquerdo */
+#pin-card {
+  position: absolute; bottom: 36px; left: 188px; z-index: 10;
+  background: #141210; border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: 4px; padding: 12px 14px; min-width: 200px; max-width: 260px;
+  display: none; font-family: 'Lora', Georgia, serif;
+}
+#pin-card.visible { display: block; }
+#pin-card-name { font-size: 13px; color: #F1EFE8; margin-bottom: 4px; }
+#pin-card-addr { font-size: 10px; color: #666360; margin-bottom: 8px; line-height: 1.4; }
+#pin-card-zone { margin-bottom: 8px; }
+#pin-card-close { position: absolute; top: 8px; right: 10px; background: none; border: none; color: #666360; cursor: pointer; font-size: 12px; }
+#pin-card-link { display: inline-block; background: transparent; border: 0.5px solid #D85A30; color: #D85A30; font-size: 8px; letter-spacing: 2px; padding: 4px 10px; border-radius: 2px; text-decoration: none; font-family: 'Lora', serif; }
+
 /* Google InfoWindow override */
 .gm-style .gm-style-iw-c {
   background: #141210 !important;
@@ -256,6 +270,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
       <button data-view="satellite" onclick="setMapView('satellite')">SAT</button>
     </div>
 
+    <div id="pin-card">
+      <button id="pin-card-close" onclick="closePinCard()">&#x2715;</button>
+      <div id="pin-card-name"></div>
+      <div id="pin-card-addr"></div>
+      <div id="pin-card-zone"></div>
+      <a id="pin-card-link" href="#" target="_blank">VER NO MAPS &#x2197;</a>
+    </div>
+
     <div id="zone-panel">
       <div class="zp-inner">
         <div class="zp-header">
@@ -332,8 +354,6 @@ function initMap(){
     map:map,preserveViewport:true,suppressInfoWindows:true
   });
 
-  var infoWindow=new google.maps.InfoWindow();
-
   kml.addListener('click',function(e){
     var name=(e.featureData&&e.featureData.name)||'';
     var desc=(e.featureData&&e.featureData.description)||'';
@@ -377,14 +397,20 @@ function initMap(){
       +'<a href="'+mapsUrl+'" target="_blank" style="display:inline-block;margin-top:10px;background:transparent;border:0.5px solid #D85A30;color:#D85A30;font-size:9px;letter-spacing:2px;padding:5px 12px;border-radius:2px;text-decoration:none;font-family:Lora,serif;">VER NO MAPS &#x2197;</a>'
       +'</div>';
 
-    infoWindow.setContent(content);
-    infoWindow.setPosition(loc);
-    infoWindow.open(map);
+    // Preencher pin-card no canto
+    document.getElementById('pin-card-name').textContent = name;
+    document.getElementById('pin-card-addr').textContent = cleanDesc || '';
+    document.getElementById('pin-card-zone').innerHTML = zoneTag;
+    document.getElementById('pin-card-link').href = mapsUrl;
+    document.getElementById('pin-card').classList.add('visible');
 
     if(name) logSearch(name);
   });
 
-  map.addListener('click',function(){infoWindow.close();});
+  map.addListener('click', function() {
+    closePinCard();
+    hidePinResults();
+  });
 
   loadPinData();
 
@@ -463,6 +489,7 @@ function showPinResults(matches){
   container.style.display='block';
 }
 function hidePinResults(){document.getElementById('pin-results').style.display='none';}
+function closePinCard(){document.getElementById('pin-card').classList.remove('visible');}
 
 var selectedMarker=null;
 function onPlaceSelected(){
@@ -476,6 +503,17 @@ function onPlaceSelected(){
     position:loc,map:map,
     icon:{path:google.maps.SymbolPath.CIRCLE,scale:8,fillColor:'#D85A30',fillOpacity:1,strokeColor:'#1A1714',strokeWeight:2}
   });
+  var zone=getZoneForPoint(loc.lat(),loc.lng());
+  var zoneTag='';
+  if(zone&&ZONES[zone]){
+    zoneTag='<span style="background:rgba(255,255,255,0.08);color:#F1EFE8;font-size:9px;letter-spacing:1px;padding:2px 7px;border-radius:2px;font-family:Lora,serif;">#'+ZONES[zone].label+'</span>';
+  }
+  var mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((place.name||'')+' '+((place.formatted_address)||''));
+  document.getElementById('pin-card-name').textContent = place.name||'';
+  document.getElementById('pin-card-addr').textContent = place.formatted_address||'';
+  document.getElementById('pin-card-zone').innerHTML = zoneTag;
+  document.getElementById('pin-card-link').href = mapsUrl;
+  document.getElementById('pin-card').classList.add('visible');
   logSearch(place.name);
 }
 

@@ -153,9 +153,9 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 
 /* ZONE SIDE PANEL */
 #zone-panel {
-  position: fixed; top: 48px; right: 0; bottom: 0; z-index: 50;
+  position: fixed; top: 48px; left: 0; bottom: 0; z-index: 60;
   width: 0; overflow: hidden;
-  background: var(--bg2); border-left: 0.5px solid var(--border2);
+  background: var(--bg2); border-right: 0.5px solid var(--border2);
   transition: width 0.3s ease;
 }
 #zone-panel.visible { width: 420px; }
@@ -382,15 +382,21 @@ function initMap() {
         strokeWeight: 2, fillColor: zone.color, fillOpacity: zone.fillOpacity,
         map: map, clickable: true
       });
-      poly.addListener('click', function() { openPanelTab(key); });
+      poly.addListener('click', function() { /* zona clicada — sem acao */ });
       if (!polygons[key]) polygons[key] = [];
       polygons[key].push(poly);
     });
   });
 
   var input = document.getElementById('pac-input');
+  var spBounds = new google.maps.LatLngBounds(
+    new google.maps.LatLng(-24.0, -46.9),
+    new google.maps.LatLng(-23.3, -46.3)
+  );
   autocomplete = new google.maps.places.Autocomplete(input, {
-    fields: ['geometry', 'name', 'formatted_address']
+    fields: ['geometry', 'name', 'formatted_address'],
+    bounds: spBounds,
+    strictBounds: false
   });
   autocomplete.addListener('place_changed', onPlaceSelected);
 
@@ -584,7 +590,7 @@ function switchTab(tab) {
 }
 
 document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
-  btn.addEventListener('click', function() { showOnlyZone(btn.dataset.zone); openPanelTab(btn.dataset.zone); });
+  btn.addEventListener('click', function() { showOnlyZone(btn.dataset.zone); });
 });
 
 document.querySelectorAll('.sb-filter-btn').forEach(function(btn) {

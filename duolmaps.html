@@ -6,195 +6,149 @@
 <title>DuoL Maps &middot; São Paulo</title>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #1A1714; --bg2: #141210; --bg3: #0F0D0C;
-  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.12);
-  --text: #F1EFE8; --text2: #B4B2A9; --text3: #666360;
-  --coral: #D85A30; --petrol: #1A2235;
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#1A1714;--bg2:#141210;--bg3:#0F0D0C;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#F1EFE8;--text2:#B4B2A9;--text3:#666360;
+  --coral:#D85A30;
 }
-html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: 'Lora', Georgia, serif; }
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Lora',Georgia,serif;}
 
 /* HEADER */
-#header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  height: 48px; background: var(--bg2);
-  border-bottom: 0.5px solid var(--border2);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px;
+#header{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:48px;background:var(--bg2);border-bottom:0.5px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;padding:0 16px;
 }
-.h-left { display: flex; align-items: center; gap: 10px; }
-.h-logo-name { font-family: 'EB Garamond', Georgia, serif; font-size: 16px; color: var(--text); letter-spacing: 0.3px; }
-.h-logo-sub { font-size: 6px; letter-spacing: 4px; color: var(--text3); display: block; margin-top: 1px; }
-.h-nav { display: flex; align-items: center; gap: 6px; position: absolute; left: 50%; transform: translateX(-50%); }
-.h-nav-link {
-  font-family: 'Lora', serif; font-size: 9px; letter-spacing: 2px;
-  color: var(--text3); text-decoration: none; text-transform: uppercase;
-  border: 0.5px solid var(--border); padding: 4px 10px; border-radius: 2px;
-  transition: color 0.2s, border-color 0.2s;
-}
-.h-nav-link:hover, .h-nav-link.active { color: var(--coral); border-color: var(--coral); }
+.h-left{display:flex;align-items:center;gap:10px;}
+.h-logo-name{font-family:'EB Garamond',Georgia,serif;font-size:16px;color:var(--text);}
+.h-logo-sub{font-size:6px;letter-spacing:4px;color:var(--text3);display:block;margin-top:1px;}
+.h-nav{display:flex;align-items:center;gap:6px;position:absolute;left:50%;transform:translateX(-50%);}
+.h-nav-link{font-size:9px;letter-spacing:2px;color:var(--text3);text-decoration:none;text-transform:uppercase;border:0.5px solid var(--border);padding:4px 10px;border-radius:2px;transition:color .2s,border-color .2s;font-family:'Lora',serif;}
+.h-nav-link:hover,.h-nav-link.active{color:var(--coral);border-color:var(--coral);}
 
 /* LAYOUT */
-#layout { display: flex; height: 100vh; padding-top: 48px; }
+#layout{display:flex;height:100vh;padding-top:48px;}
 
 /* SIDEBAR */
-#sidebar {
-  width: 0; overflow: hidden; background: var(--bg2);
-  border-right: 0.5px solid var(--border2);
-  transition: width 0.25s ease;
-  flex-shrink: 0; display: flex; flex-direction: column; z-index: 50;
+#sidebar{
+  width:0;overflow:hidden;background:var(--bg2);border-right:0.5px solid var(--border2);
+  transition:width .25s ease;flex-shrink:0;z-index:50;
 }
-#sidebar.open { width: 164px; }
-.sb-inner { width: 164px; padding: 16px 0; display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
-.sb-label {
-  font-size: 9px; letter-spacing: 3px; color: var(--text);
-  padding: 0 14px 10px; white-space: nowrap; font-family: 'Lora', serif;
-  text-transform: uppercase; opacity: 0.7;
+#sidebar.open{width:170px;}
+.sb-inner{width:170px;padding:16px 0;height:100%;overflow-y:auto;display:flex;flex-direction:column;}
+.sb-label{font-size:9px;letter-spacing:3px;color:var(--text2);padding:0 14px 10px;white-space:nowrap;font-family:'Lora',serif;text-transform:uppercase;}
+.sb-zone-btn{
+  display:flex;align-items:center;gap:9px;
+  padding:8px 14px;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:background .15s;
 }
-.sb-zone-btn {
-  display: flex; align-items: center; gap: 9px;
-  padding: 8px 14px; cursor: pointer; border: none;
-  background: none; width: 100%; text-align: left; transition: background 0.15s;
+.sb-zone-btn:hover{background:rgba(255,255,255,0.04);}
+.sb-zone-btn.active{background:rgba(255,255,255,0.06);}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sb-zone-name{font-size:13px;color:var(--text);white-space:nowrap;font-family:'Lora',serif;flex:1;}
+.sb-plus{font-size:18px;color:var(--text3);line-height:1;padding-right:4px;transition:color .2s;}
+.sb-zone-btn:hover .sb-plus{color:var(--text2);}
+.sb-divider{height:0.5px;background:var(--border2);margin:12px 14px;}
+.sb-filter-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 14px;cursor:pointer;border:none;background:none;width:100%;text-align:left;
+  transition:background .15s,opacity .2s;opacity:.4;
 }
-.sb-zone-btn:hover { background: rgba(255,255,255,0.04); }
-.sb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.sb-zone-name { font-size: 13px; color: var(--text); white-space: nowrap; font-family: 'Lora', serif; }
-.sb-divider { height: 0.5px; background: var(--border2); margin: 12px 14px; }
-.sb-filter-btn {
-  display: flex; align-items: center; gap: 8px;
-  padding: 7px 14px; cursor: pointer; border: none;
-  background: none; width: 100%; text-align: left; transition: background 0.15s, opacity 0.2s;
-  opacity: 0.4;
-}
-.sb-filter-btn.active { opacity: 1; }
-.sb-filter-btn:hover { background: rgba(255,255,255,0.03); }
-.sb-filter-name { font-size: 13px; color: var(--text); white-space: nowrap; font-family: 'Lora', serif; }
+.sb-filter-btn.active{opacity:1;}
+.sb-filter-btn:hover{background:rgba(255,255,255,0.03);}
+.sb-filter-name{font-size:12px;color:var(--text);white-space:nowrap;font-family:'Lora',serif;}
 
 /* MAP */
-#map-wrap { flex: 1; position: relative; }
-#map { width: 100%; height: 100%; }
+#map-wrap{flex:1;position:relative;}
+#map{width:100%;height:100%;}
 
 /* TOGGLE BTN */
-#toggle-btn {
-  position: absolute; top: 12px; left: 12px; z-index: 10;
-  background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: 3px; padding: 7px 10px; cursor: pointer;
-  color: var(--text2); font-size: 14px; transition: color 0.2s; font-family: monospace;
+#toggle-btn{
+  position:absolute;top:12px;left:12px;z-index:10;
+  background:var(--bg2);border:0.5px solid var(--border2);border-radius:3px;
+  padding:7px 12px;cursor:pointer;color:var(--text2);font-size:14px;
+  transition:color .2s;font-family:monospace;
 }
-#toggle-btn:hover { color: var(--text); }
+#toggle-btn:hover{color:var(--text);}
 
 /* SEARCH */
-#search-wrap {
-  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-  z-index: 10; width: 280px;
+#search-wrap{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:10;width:280px;}
+#pac-input{
+  width:100%;background:var(--bg2);border:0.5px solid var(--border2);border-radius:3px;
+  padding:8px 14px;font-size:11px;color:var(--text);letter-spacing:1px;outline:none;
+  font-family:'Lora',Georgia,serif;
 }
-#pac-input {
-  width: 100%; background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: 3px 3px 0 0; padding: 8px 14px; font-size: 11px;
-  color: var(--text); letter-spacing: 1px; outline: none;
-  font-family: 'Lora', Georgia, serif;
-}
-#pac-input::placeholder { color: var(--text3); letter-spacing: 2px; font-size: 10px; }
-#pac-input:focus { border-color: rgba(255,255,255,0.2); }
-#pin-results {
-  display: none; background: var(--bg2); border: 0.5px solid var(--border2);
-  border-top: 0.5px solid var(--border); max-height: 160px; overflow-y: auto;
-}
-.pin-result-item {
-  padding: 8px 14px; cursor: pointer; font-size: 11px; color: var(--text2);
-  border-bottom: 0.5px solid var(--border); transition: background 0.15s;
-  font-family: 'Lora', serif;
-}
-.pin-result-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
-.pin-result-item:last-child { border-bottom: none; }
-.pac-container {
-  background: var(--bg2) !important; border: 0.5px solid var(--border2) !important;
-  border-top: none !important; border-radius: 0 0 3px 3px !important;
-  box-shadow: none !important; font-family: 'Lora', Georgia, serif !important;
-}
-.pac-item { color: var(--text2) !important; border-top: 0.5px solid var(--border) !important; padding: 6px 14px !important; cursor: pointer; font-size: 11px !important; }
-.pac-item:hover { background: rgba(255,255,255,0.04) !important; }
-.pac-item-query { color: var(--text) !important; font-size: 11px !important; }
-.pac-matched { color: var(--coral) !important; }
-.pac-icon { display: none !important; }
+#pac-input::placeholder{color:var(--text3);letter-spacing:2px;font-size:10px;}
+#pac-input:focus{border-color:rgba(255,255,255,0.2);}
+#pin-results{display:none;background:var(--bg2);border:0.5px solid var(--border2);border-top:none;border-radius:0 0 3px 3px;max-height:160px;overflow-y:auto;}
+.pin-result-item{padding:8px 14px;cursor:pointer;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);transition:background .15s;font-family:'Lora',serif;}
+.pin-result-item:hover{background:rgba(255,255,255,0.04);color:var(--text);}
+
+/* Google autocomplete override */
+.pac-container{background:var(--bg2)!important;border:0.5px solid var(--border2)!important;border-top:none!important;border-radius:0 0 3px 3px!important;box-shadow:none!important;font-family:'Lora',Georgia,serif!important;}
+.pac-item{color:var(--text2)!important;border-top:0.5px solid var(--border)!important;padding:6px 14px!important;font-size:11px!important;}
+.pac-item:hover{background:rgba(255,255,255,0.04)!important;}
+.pac-item-query{color:var(--text)!important;font-size:11px!important;}
+.pac-matched{color:var(--coral)!important;}
+.pac-icon{display:none!important;}
 
 /* ZONES TOGGLE */
-#zones-toggle {
-  position: absolute; top: 12px; right: 12px; z-index: 10;
-  background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: 3px; padding: 7px 12px; cursor: pointer;
-  font-size: 8px; letter-spacing: 2px; color: var(--text2);
-  transition: color 0.2s, border-color 0.2s; font-family: 'Lora', serif;
+#zones-toggle{
+  position:absolute;top:12px;right:12px;z-index:10;
+  background:var(--bg2);border:0.5px solid var(--border2);border-radius:3px;
+  padding:7px 12px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--text2);
+  transition:color .2s,border-color .2s;font-family:'Lora',serif;
 }
-#zones-toggle.active { border-color: var(--coral); color: var(--coral); }
+#zones-toggle.active{border-color:var(--coral);color:var(--coral);}
 
-/* PLACE CARD */
-#place-card {
-  position: absolute; bottom: 0; left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  z-index: 15; background: var(--bg2); border: 0.5px solid var(--border2);
-  border-radius: 4px 4px 0 0; padding: 14px 18px 16px;
-  min-width: 280px; max-width: 380px; transition: transform 0.25s ease;
-}
-#place-card.visible { transform: translateX(-50%) translateY(0); }
-.pc-name { font-family: 'EB Garamond', Georgia, serif; font-size: 14px; color: var(--text); margin-bottom: 3px; }
-.pc-addr { font-size: 10px; color: var(--text3); margin-bottom: 8px; letter-spacing: 0.3px; }
-.pc-close-btn { position: absolute; top: 10px; right: 12px; background: none; border: none; color: var(--text3); cursor: pointer; font-size: 12px; }
-.zone-tag {
-  display: inline-block; font-size: 8px; letter-spacing: 2px;
-  padding: 3px 8px; border-radius: 2px; margin-top: 2px; font-family: 'Lora', serif;
-}
-.zt-blue { background: rgba(74,144,217,0.15); color: #6BADD4; border: 0.5px solid rgba(74,144,217,0.3); }
-.zt-yellow { background: rgba(232,184,75,0.15); color: #C9A43E; border: 0.5px solid rgba(232,184,75,0.3); }
-.zt-orange { background: rgba(216,90,48,0.15); color: #D85A30; border: 0.5px solid rgba(216,90,48,0.3); }
-.zt-red { background: rgba(160,30,30,0.15); color: #C04040; border: 0.5px solid rgba(160,30,30,0.3); }
-.zt-unknown { background: rgba(255,255,255,0.05); color: var(--text3); border: 0.5px solid var(--border); }
+/* VIEW BUTTONS */
+#view-btns{position:absolute;top:52px;right:12px;z-index:10;display:flex;flex-direction:column;gap:2px;}
+#view-btns button{background:var(--bg2);border:0.5px solid var(--border2);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--text2);font-family:'Lora',serif;transition:color .2s,border-color .2s;}
+#view-btns button.active{border-color:var(--coral);color:var(--coral);}
 
-/* ZONE SIDE PANEL */
-#zone-panel {
-  position: fixed; top: 48px; left: 0; bottom: 0; z-index: 60;
-  width: 0; overflow: hidden;
-  background: var(--bg2); border-right: 0.5px solid var(--border2);
-  transition: width 0.3s ease;
+/* ZONE PANEL — desliza da esquerda */
+#zone-panel{
+  position:fixed;top:48px;left:0;bottom:0;z-index:60;
+  width:0;overflow:hidden;
+  background:var(--bg2);border-right:0.5px solid var(--border2);
+  transition:width .3s ease;
 }
-#zone-panel.visible { width: 420px; }
-.zp-inner { width: 420px; height: 100%; overflow-y: auto; display: flex; flex-direction: column; }
-.zp-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px; border-bottom: 0.5px solid var(--border);
-  position: sticky; top: 0; background: var(--bg2); z-index: 1; flex-shrink: 0;
+#zone-panel.visible{width:380px;}
+.zp-inner{width:380px;height:100%;overflow-y:auto;display:flex;flex-direction:column;}
+.zp-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-bottom:0.5px solid var(--border);
+  position:sticky;top:0;background:var(--bg2);z-index:1;flex-shrink:0;
 }
-.zp-header-zone { display: flex; align-items: center; gap: 10px; }
-.zp-header-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.zp-header-name { font-family: 'EB Garamond', Georgia, serif; font-size: 18px; color: var(--text); }
-.zp-close {
-  font-size: 18px; color: var(--text2); cursor: pointer;
-  background: none; border: none; padding: 4px 8px;
-  transition: color 0.2s;
-}
-.zp-close:hover { color: var(--text); }
-.zp-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-.zp-zone-area { font-size: 8px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; margin-bottom: 4px; }
-.zp-desc { font-size: 13px; color: var(--text2); line-height: 1.7; font-family: 'Lora', serif; }
-.zp-divider { height: 0.5px; background: var(--border); }
-.zp-stats { display: flex; flex-direction: column; gap: 12px; }
-.zp-stat { display: flex; flex-direction: column; gap: 3px; }
-.zp-stat-label { font-size: 8px; letter-spacing: 2px; color: var(--text3); font-family: 'Lora', serif; }
-.zp-stat-value { font-size: 13px; color: var(--text2); font-family: 'Lora', serif; line-height: 1.5; }
-.zp-stat-value span { color: var(--coral); }
+.zp-header-zone{display:flex;align-items:center;gap:10px;}
+.zp-header-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.zp-header-name{font-family:'EB Garamond',Georgia,serif;font-size:18px;color:var(--text);}
+.zp-close{font-size:16px;color:var(--text2);cursor:pointer;background:none;border:none;padding:4px 8px;transition:color .2s;font-family:'Lora',serif;}
+.zp-close:hover{color:var(--text);}
+.zp-body{padding:20px;display:flex;flex-direction:column;gap:14px;}
+.zp-zone-area{font-size:8px;letter-spacing:2px;color:var(--text3);font-family:'Lora',serif;}
+.zp-desc{font-size:12px;color:var(--text2);line-height:1.7;font-family:'Lora',serif;}
+.zp-divider{height:0.5px;background:var(--border2);}
+.zp-stats{display:flex;flex-direction:column;gap:12px;}
+.zp-stat{display:flex;flex-direction:column;gap:3px;}
+.zp-stat-label{font-size:8px;letter-spacing:2px;color:var(--text3);font-family:'Lora',serif;}
+.zp-stat-value{font-size:12px;color:var(--text2);font-family:'Lora',serif;line-height:1.5;}
+.zp-stat-value span{color:var(--coral);}
 
-/* + botão nas zonas da sidebar */
-.sb-zone-plus {
-  margin-left: auto; font-size: 16px; color: var(--text3);
-  transition: color 0.2s; line-height: 1; padding-right: 4px;
+/* FOOTER */
+#footer{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  height:28px;background:var(--bg3);border-top:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;pointer-events:none;
 }
-.sb-zone-btn:hover .sb-zone-plus { color: var(--text2); }
+.f-slogan{font-family:'EB Garamond',Georgia,serif;font-size:9px;font-style:italic;color:var(--text3);}
+.f-coords{font-size:7px;color:var(--border2);letter-spacing:1px;font-family:monospace;}
 
-/* scrollbar */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 </style>
 </head>
 <body>
@@ -224,74 +178,57 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   <div id="sidebar">
     <div class="sb-inner">
       <div class="sb-label">Zones</div>
-      <button class="sb-zone-btn sb-all-zones active" onclick="showAllZones()">
-        <div class="sb-dot" style="background:linear-gradient(135deg,#4A90D9 0%,#4A90D9 25%,#E8B84B 25%,#E8B84B 50%,#E07020 50%,#E07020 75%,#C01515 75%);"></div>
+      <button class="sb-zone-btn active" onclick="showAllZones()">
+        <div class="sb-dot" style="background:linear-gradient(135deg,#4A90D9 0%,#4A90D9 50%,#C01515 50%);"></div>
         <div class="sb-zone-name">All Zones</div>
       </button>
       <button class="sb-zone-btn" data-zone="fakesafe">
         <div class="sb-dot" style="background:#4A90D9;"></div>
         <div class="sb-zone-name">Fake Safe</div>
-        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('fakesafe')">+</span>
+        <span class="sb-plus" onclick="event.stopPropagation();openZonePanel('fakesafe')">+</span>
       </button>
       <button class="sb-zone-btn" data-zone="caution">
         <div class="sb-dot" style="background:#E8B84B;"></div>
         <div class="sb-zone-name">Caution</div>
-        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('caution')">+</span>
+        <span class="sb-plus" onclick="event.stopPropagation();openZonePanel('caution')">+</span>
       </button>
       <button class="sb-zone-btn" data-zone="avoid">
         <div class="sb-dot" style="background:#E07020;"></div>
         <div class="sb-zone-name">Avoid at night</div>
-        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('avoid')">+</span>
+        <span class="sb-plus" onclick="event.stopPropagation();openZonePanel('avoid')">+</span>
       </button>
       <button class="sb-zone-btn" data-zone="highrisk">
         <div class="sb-dot" style="background:#C01515;"></div>
         <div class="sb-zone-name">High risk</div>
-        <span class="sb-zone-plus" onclick="event.stopPropagation(); openZonePanel('highrisk')">+</span>
+        <span class="sb-plus" onclick="event.stopPropagation();openZonePanel('highrisk')">+</span>
       </button>
       <div class="sb-divider"></div>
       <div class="sb-label">Filters</div>
-      <button class="sb-filter-btn active" data-filter="hotel">
-        <div class="sb-filter-name">🏨 Hotel · Work</div>
-      </button>
-      <button class="sb-filter-btn active" data-filter="coffee">
-        <div class="sb-filter-name">☕ Coffee</div>
-      </button>
-      <button class="sb-filter-btn active" data-filter="restaurant">
-        <div class="sb-filter-name">🍽 Restaurant</div>
-      </button>
-      <button class="sb-filter-btn active" data-filter="market">
-        <div class="sb-filter-name">🛒 Market · OXXO</div>
-      </button>
-      <button class="sb-filter-btn active" data-filter="pharmacy">
-        <div class="sb-filter-name">💊 Pharmacy</div>
-      </button>
-      <button class="sb-filter-btn active" data-filter="atm">
-        <div class="sb-filter-name">🏧 ATM · Bank</div>
-      </button>
+      <button class="sb-filter-btn active" data-filter="hotel"><div class="sb-filter-name">&#x1F3E8; Hotel &middot; Work</div></button>
+      <button class="sb-filter-btn active" data-filter="coffee"><div class="sb-filter-name">&#x2615; Coffee</div></button>
+      <button class="sb-filter-btn active" data-filter="restaurant"><div class="sb-filter-name">&#x1F37D; Restaurant</div></button>
+      <button class="sb-filter-btn active" data-filter="market"><div class="sb-filter-name">&#x1F6D2; Market &middot; OXXO</div></button>
+      <button class="sb-filter-btn active" data-filter="pharmacy"><div class="sb-filter-name">&#x1F48A; Pharmacy</div></button>
+      <button class="sb-filter-btn active" data-filter="atm"><div class="sb-filter-name">&#x1F3E7; ATM &middot; Bank</div></button>
     </div>
   </div>
 
   <div id="map-wrap">
     <div id="map"></div>
-    <button id="toggle-btn" onclick="toggleSidebar()">→</button>
+
+    <button id="toggle-btn" onclick="toggleSidebar()">&#x2192;</button>
 
     <div id="search-wrap">
-      <input id="pac-input" type="text" placeholder="SEARCH" autocomplete="off" />
+      <input id="pac-input" type="text" placeholder="SEARCH" autocomplete="off"/>
       <div id="pin-results"></div>
     </div>
 
     <button id="zones-toggle" class="active" onclick="toggleZones()">ZONES ON</button>
-    <div id="view-btns" style="position:absolute;top:52px;right:12px;z-index:10;display:flex;flex-direction:column;gap:2px;">
-      <button onclick="setMapView('dark')" data-view="dark" style="background:var(--bg2);border:0.5px solid var(--coral);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--coral);font-family:'Lora',serif;">DARK</button>
-      <button onclick="setMapView('light')" data-view="light" style="background:var(--bg2);border:0.5px solid var(--border2);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--text2);font-family:'Lora',serif;">LIGHT</button>
-      <button onclick="setMapView('satellite')" data-view="satellite" style="background:var(--bg2);border:0.5px solid var(--border2);border-radius:2px;padding:5px 10px;cursor:pointer;font-size:8px;letter-spacing:2px;color:var(--text2);font-family:'Lora',serif;">SAT</button>
-    </div>
 
-    <div id="place-card">
-      <button class="pc-close-btn" onclick="closePlaceCard()">✕</button>
-      <div class="pc-name" id="pc-name"></div>
-      <div class="pc-addr" id="pc-addr"></div>
-      <div id="pc-zone-tag"></div>
+    <div id="view-btns">
+      <button class="active" data-view="dark" onclick="setMapView('dark')">DARK</button>
+      <button data-view="light" onclick="setMapView('light')">LIGHT</button>
+      <button data-view="satellite" onclick="setMapView('satellite')">SAT</button>
     </div>
 
     <div id="zone-panel">
@@ -310,293 +247,244 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
   </div>
 </div>
 
+<div id="footer">
+  <div class="f-slogan">Porque a l&iacute;ngua certa faz toda a diferen&ccedil;a.</div>
+  <div class="f-coords">-23.6042&deg; S &middot; -46.6922&deg; W</div>
+</div>
 
 <script>
-const MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
-const TG_TOKEN   = '8655634703:AAGF4DR9lUNH10tM4079_hN64-MTf-IA0Wg';
-const TG_CHAT_ID = '1057611719';
-
-var darkStyles = [
-  { elementType: 'geometry', stylers: [{ color: '#1a1714' }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: '#888780' }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: '#141210' }] },
-  { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#2a2724' }] },
-  { featureType: 'poi', stylers: [{ visibility: 'off' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
-  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#1a1714' }] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a3530' }] },
-  { featureType: 'road.arterial', elementType: 'labels.text.fill', stylers: [{ color: '#5f5e5a' }] },
-  { featureType: 'road.local', elementType: 'labels.text.fill', stylers: [{ color: '#444441' }] },
-  { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#2c2825' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#0f0d0c' }] }
-];
+var MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
+var TG_TOKEN = '8655634703:AAGF4DR9lUNH10tM4079_hN64-MTf-IA0Wg';
+var TG_CHAT_ID = '1057611719';
 
 var ZONES = {
-  fakesafe: { label: 'Fake Safe', color: '#4A90D9', fillOpacity: 0.30, tagClass: 'zt-blue', paths: [[{lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},{lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},{lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},{lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},{lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},{lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},{lat:-23.5580,lng:-46.7050}]] },
-  caution: { label: 'Caution', color: '#E8B84B', fillOpacity: 0.25, tagClass: 'zt-yellow', paths: [[{lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},{lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},{lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},{lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},{lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},{lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},{lat:-23.5580,lng:-46.6480},{lat:-23.5500,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},{lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},{lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},{lat:-23.5400,lng:-46.7200}]] },
-  avoid: { label: 'Avoid at night', color: '#E07020', fillOpacity: 0.25, tagClass: 'zt-orange', paths: [[{lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},{lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},{lat:-23.7100,lng:-46.6800},{lat:-23.7000,lng:-46.7200},{lat:-23.6700,lng:-46.7300},{lat:-23.6600,lng:-46.7200},{lat:-23.6500,lng:-46.6900}]] },
-  highrisk: { label: 'High risk', color: '#C01515', fillOpacity: 0.32, tagClass: 'zt-red', paths: [[{lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},{lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},{lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5300,lng:-46.6500}]] }
+  fakesafe:{label:'Fake Safe',color:'#4A90D9',fillOpacity:0.28,tagClass:'zt-blue',paths:[[{lat:-23.5580,lng:-46.7050},{lat:-23.5580,lng:-46.6650},{lat:-23.5650,lng:-46.6480},{lat:-23.5720,lng:-46.6400},{lat:-23.5800,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.6050,lng:-46.6350},{lat:-23.6150,lng:-46.6420},{lat:-23.6250,lng:-46.6550},{lat:-23.6300,lng:-46.6700},{lat:-23.6270,lng:-46.6900},{lat:-23.6150,lng:-46.7080},{lat:-23.5980,lng:-46.7150},{lat:-23.5800,lng:-46.7150},{lat:-23.5580,lng:-46.7050}]]},
+  caution:{label:'Caution',color:'#E8B84B',fillOpacity:0.22,tagClass:'zt-yellow',paths:[[{lat:-23.5400,lng:-46.7200},{lat:-23.5400,lng:-46.6200},{lat:-23.5580,lng:-46.6480},{lat:-23.5580,lng:-46.7050},{lat:-23.5800,lng:-46.7150},{lat:-23.5980,lng:-46.7150},{lat:-23.6150,lng:-46.7080},{lat:-23.6270,lng:-46.6900},{lat:-23.6300,lng:-46.6700},{lat:-23.6250,lng:-46.6550},{lat:-23.6150,lng:-46.6420},{lat:-23.6050,lng:-46.6350},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5720,lng:-46.6400},{lat:-23.5650,lng:-46.6480},{lat:-23.5500,lng:-46.6300},{lat:-23.5400,lng:-46.6050},{lat:-23.5600,lng:-46.5800},{lat:-23.5800,lng:-46.5900},{lat:-23.6100,lng:-46.5950},{lat:-23.6400,lng:-46.6100},{lat:-23.6500,lng:-46.6100},{lat:-23.6350,lng:-46.6300},{lat:-23.6350,lng:-46.6700},{lat:-23.6500,lng:-46.6900},{lat:-23.6600,lng:-46.7200},{lat:-23.6400,lng:-46.7400},{lat:-23.6200,lng:-46.7350},{lat:-23.5900,lng:-46.7300},{lat:-23.5400,lng:-46.7200}]]},
+  avoid:{label:'Avoid at night',color:'#E07020',fillOpacity:0.22,tagClass:'zt-orange',paths:[[{lat:-23.6500,lng:-46.6900},{lat:-23.6350,lng:-46.6700},{lat:-23.6600,lng:-46.6400},{lat:-23.6900,lng:-46.6500},{lat:-23.7100,lng:-46.6800},{lat:-23.7000,lng:-46.7200},{lat:-23.6700,lng:-46.7300},{lat:-23.6600,lng:-46.7200},{lat:-23.6500,lng:-46.6900}]]},
+  highrisk:{label:'High risk',color:'#C01515',fillOpacity:0.26,tagClass:'zt-red',paths:[[{lat:-23.5300,lng:-46.6500},{lat:-23.5300,lng:-46.5950},{lat:-23.5500,lng:-46.5750},{lat:-23.5700,lng:-46.5800},{lat:-23.5900,lng:-46.5900},{lat:-23.6000,lng:-46.6000},{lat:-23.5950,lng:-46.6320},{lat:-23.5800,lng:-46.6350},{lat:-23.5600,lng:-46.6300},{lat:-23.5400,lng:-46.6200},{lat:-23.5300,lng:-46.6500}]]}
 };
 
-var pinData = [];
-var map, polygons = {}, zonesVisible = true, selectedMarker = null, autocomplete, activeTab = 'fakesafe';
+var ZONE_INFO = {
+  fakesafe:{color:'#4A90D9',label:'Fake Safe',area:'BERRINI · BROOKLIN · ITAIM BIBI · VILA OLIMPIA · FARIA LIMA',desc:'This is where your hotel and workplace are. Corporate towers, private security everywhere, Uber on every corner. During business hours, one of the most controlled environments in Sao Paulo. The problem starts when you assume the rest of the city works the same way. It does not.',stats:[['DISTANCE FROM HOTEL','<span>0 km</span> — you are here'],['UBER AVAILABILITY','<span>High</span> — usually under 3 min'],['DAYTIME','Comfortable. Walk freely.'],['NIGHTTIME','Relatively safe. Stay on main avenues. Phone in pocket.'],['WHAT TO KNOW','The corporate bubble creates a false sense of security. Do not use Berrini as your reference for the rest of Sao Paulo.'],['WATCH OUT FOR','Phone theft near busy intersections. Motorcycle approach at traffic lights. Empty side streets after 10pm.']]},
+  caution:{color:'#E8B84B',label:'Caution',area:'MOEMA · CAMPO BELO · SANTO AMARO · VILA MARIANA · JABAQUARA · IPIRANGA',desc:'Transition zone. Still relatively safe during the day. But you are leaving the corporate bubble. Fewer security cameras, less pedestrian flow. Google Maps may say 10 minutes walk. Check the route first.',stats:[['DISTANCE FROM HOTEL','<span>2-6 km</span> — short Uber ride'],['UBER AVAILABILITY','<span>Good</span> — wait may vary'],['TRAVEL TIME (UBER)','<span>15-40 min</span> depending on traffic'],['NIGHTTIME','Pay attention. Avoid isolated streets. Stay near busy areas.'],['WHAT TO KNOW','Looks similar to Berrini on the surface. The difference is in the details.'],['WATCH OUT FOR','Phone visible on street. Do not walk back to the hotel alone late at night.']]},
+  avoid:{color:'#E07020',label:'Avoid at night',area:'VILA ANDRADE · CAPAO REDONDO DIRECTION · OUTER ZONA SUL',desc:'Not where you will be staying. But Sao Paulo is a city where a 5km trip can completely change your context. Requires awareness, planning, and ideally company.',stats:[['DISTANCE FROM HOTEL','<span>8-15 km</span> — feels close, it is not'],['UBER AVAILABILITY','<span>Lower</span> — surge pricing common'],['TRAVEL TIME (UBER)','<span>40-90 min</span> in peak hours'],['NIGHTTIME','Strongly avoid unless with trusted local company.'],['WHAT TO KNOW','Zona Sul has the highest crime growth rates in the city.'],['WATCH OUT FOR','Motorcycle theft. Armed robbery near bus terminals.']]},
+  highrisk:{color:'#C01515',label:'High risk',area:'CENTRO HISTORICO · SE · REPUBLICA · LUZ · BRAS · LIBERDADE',desc:'The historic center. Landmarks, culture, architecture and the highest robbery rates in the city. Go with purpose, go during the day, go alert.',stats:[['DISTANCE FROM HOTEL','<span>12-16 km</span> from Berrini'],['UBER AVAILABILITY','<span>High</span> — central area, many cars'],['TRAVEL TIME (UBER)','<span>30-75 min</span> — Sao Paulo traffic'],['NIGHTTIME','Avoid unless specific planned event with safe return.'],['WORTH VISITING','Liberdade · Pinacoteca · Mercadao · Theatro Municipal · MASP'],['WATCH OUT FOR','Phone on hand near Se metro. Strangers with distraction tactics.']]}
+};
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: -23.6042, lng: -46.6922 }, zoom: 13,
-    mapTypeId: 'roadmap', styles: darkStyles,
-    disableDefaultUI: true, zoomControl: true,
-    zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER }
+var darkStyles=[{elementType:'geometry',stylers:[{color:'#1a1714'}]},{elementType:'labels.text.fill',stylers:[{color:'#888780'}]},{elementType:'labels.text.stroke',stylers:[{color:'#141210'}]},{featureType:'administrative',elementType:'geometry',stylers:[{color:'#2a2724'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#2c2825'}]},{featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1a1714'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#3a3530'}]},{featureType:'road.arterial',elementType:'labels.text.fill',stylers:[{color:'#5f5e5a'}]},{featureType:'road.local',elementType:'labels.text.fill',stylers:[{color:'#444441'}]},{featureType:'transit',elementType:'geometry',stylers:[{color:'#2c2825'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#0f0d0c'}]}];
+
+var map,polygons={},zonesVisible=true,autocomplete,pinData=[];
+
+function initMap(){
+  map=new google.maps.Map(document.getElementById('map'),{
+    center:{lat:-23.6042,lng:-46.6922},zoom:13,
+    mapTypeId:'roadmap',styles:darkStyles,
+    disableDefaultUI:true,zoomControl:true,
+    zoomControlOptions:{position:google.maps.ControlPosition.RIGHT_CENTER}
   });
 
-  var kmlLayer = new google.maps.KmlLayer({
-    url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
-    map: map, preserveViewport: true, suppressInfoWindows: false
+  // KML — pins do My Maps com popup nativo do Google
+  var kml=new google.maps.KmlLayer({
+    url:'https://www.google.com/maps/d/kml?forcekml=1&mid='+MY_MAPS_ID,
+    map:map,preserveViewport:true,suppressInfoWindows:false
   });
-  var kmlClickPending = false;
-  kmlLayer.addListener('click', function(e) {
-    kmlClickPending = true;
-    var name = (e.featureData && e.featureData.name) ? e.featureData.name : '';
-    if (name) {
-      logSearch(name);
-      var loc = e.latLng;
-      var zone = getZoneForPoint(loc.lat(), loc.lng());
-      document.getElementById('pc-name').textContent = name;
-      document.getElementById('pc-addr').textContent = '';
-      var tag = document.getElementById('pc-zone-tag');
-      tag.innerHTML = zone
-        ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
-        : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
-      document.getElementById('place-card').classList.add('visible');
-    }
-    setTimeout(function() { kmlClickPending = false; }, 300);
+  kml.addListener('click',function(e){
+    var name=(e.featureData&&e.featureData.name)?e.featureData.name:'';
+    if(name) logSearch(name);
   });
 
   loadPinData();
 
-  Object.keys(ZONES).forEach(function(key) {
-    var zone = ZONES[key];
-    zone.paths.forEach(function(path) {
-      var poly = new google.maps.Polygon({
-        paths: path, strokeColor: zone.color, strokeOpacity: 0.9,
-        strokeWeight: 2, fillColor: zone.color, fillOpacity: zone.fillOpacity,
-        map: map, clickable: true
+  // Polígonos das zonas — SEM ação no clique
+  Object.keys(ZONES).forEach(function(key){
+    var z=ZONES[key];
+    z.paths.forEach(function(path){
+      var poly=new google.maps.Polygon({
+        paths:path,strokeColor:z.color,strokeOpacity:0.8,strokeWeight:2,
+        fillColor:z.color,fillOpacity:z.fillOpacity,map:map,clickable:false
       });
-      poly.addListener('click', function() { /* zona clicada — sem acao */ });
-      if (!polygons[key]) polygons[key] = [];
+      if(!polygons[key])polygons[key]=[];
       polygons[key].push(poly);
     });
   });
 
-  var input = document.getElementById('pac-input');
-  var spBounds = new google.maps.LatLngBounds(
-    new google.maps.LatLng(-24.0, -46.9),
-    new google.maps.LatLng(-23.3, -46.3)
+  // Autocomplete com bias para SP
+  var input=document.getElementById('pac-input');
+  var spBounds=new google.maps.LatLngBounds(
+    new google.maps.LatLng(-24.0,-46.9),
+    new google.maps.LatLng(-23.3,-46.3)
   );
-  autocomplete = new google.maps.places.Autocomplete(input, {
-    fields: ['geometry', 'name', 'formatted_address'],
-    bounds: spBounds,
-    strictBounds: false
+  autocomplete=new google.maps.places.Autocomplete(input,{
+    fields:['geometry','name','formatted_address'],
+    bounds:spBounds,strictBounds:false
   });
-  autocomplete.addListener('place_changed', onPlaceSelected);
+  autocomplete.addListener('place_changed',onPlaceSelected);
 
-  input.addEventListener('input', function() {
-    var q = input.value.trim().toLowerCase();
-    if (q.length < 2) { hidePinResults(); return; }
-    showPinResults(pinData.filter(function(p) { return p.name.toLowerCase().indexOf(q) > -1; }));
+  input.addEventListener('input',function(){
+    var q=input.value.trim().toLowerCase();
+    if(q.length<2){hidePinResults();return;}
+    showPinResults(pinData.filter(function(p){return p.name.toLowerCase().indexOf(q)>-1;}));
   });
-
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') { hidePinResults(); input.value = ''; }
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){hidePinResults();input.value='';}
   });
 
-  map.addListener('click', function() { if (kmlClickPending) return; closePlaceCard(); hidePinResults(); });
+  map.addListener('click',function(){hidePinResults();});
 }
 
-function setMapView(view) {
-  document.querySelectorAll('#view-btns button').forEach(function(b) {
-    var active = b.dataset.view === view;
-    b.style.borderColor = active ? '#D85A30' : 'rgba(255,255,255,0.12)';
-    b.style.color = active ? '#D85A30' : '#B4B2A9';
-  });
-  if (view === 'dark') { map.setOptions({ styles: darkStyles, mapTypeId: 'roadmap' }); }
-  else if (view === 'light') { map.setOptions({ styles: [], mapTypeId: 'roadmap' }); }
-  else { map.setOptions({ styles: [], mapTypeId: 'satellite' }); }
-}
-
-function showOnlyZone(key) {
-  zonesVisible = true;
-  Object.keys(polygons).forEach(function(k) {
-    polygons[k].forEach(function(p) { p.setMap(k === key ? map : null); });
-  });
-  document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
-    btn.classList.toggle('active', btn.dataset.zone === key);
-  });
-  var allBtn = document.querySelector('.sb-all-zones');
-  if (allBtn) allBtn.classList.remove('active');
-}
-
-function showAllZones() {
-  zonesVisible = true;
-  Object.keys(polygons).forEach(function(k) {
-    polygons[k].forEach(function(p) { p.setMap(map); });
-  });
-  document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) { btn.classList.remove('active'); });
-  var allBtn = document.querySelector('.sb-all-zones');
-  if (allBtn) allBtn.classList.add('active');
-  var zt = document.getElementById('zones-toggle');
-  if (zt) { zt.textContent = 'ZONES ON'; zt.classList.add('active'); }
-}
-
-function loadPinData() {
-  fetch('https://corsproxy.io/?url=' + encodeURIComponent('https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID))
-    .then(function(r) { return r.text(); })
-    .then(function(xml) {
-      var doc = new DOMParser().parseFromString(xml, 'text/xml');
-      pinData = [];
-      doc.querySelectorAll('Placemark').forEach(function(pm) {
-        var nameEl = pm.querySelector('name');
-        var coordEl = pm.querySelector('coordinates');
-        if (!nameEl || !coordEl) return;
-        var coords = coordEl.textContent.trim().split(',');
-        if (coords.length < 2) return;
-        var lng = parseFloat(coords[0]), lat = parseFloat(coords[1]);
-        if (!isNaN(lat) && !isNaN(lng)) pinData.push({ name: nameEl.textContent.trim(), lat: lat, lng: lng });
+function loadPinData(){
+  fetch('https://corsproxy.io/?url='+encodeURIComponent('https://www.google.com/maps/d/kml?forcekml=1&mid='+MY_MAPS_ID))
+    .then(function(r){return r.text();})
+    .then(function(xml){
+      var doc=new DOMParser().parseFromString(xml,'text/xml');
+      pinData=[];
+      doc.querySelectorAll('Placemark').forEach(function(pm){
+        var nameEl=pm.querySelector('name');
+        var coordEl=pm.querySelector('coordinates');
+        if(!nameEl||!coordEl)return;
+        var coords=coordEl.textContent.trim().split(',');
+        if(coords.length<2)return;
+        var lng=parseFloat(coords[0]),lat=parseFloat(coords[1]);
+        if(!isNaN(lat)&&!isNaN(lng))pinData.push({name:nameEl.textContent.trim(),lat:lat,lng:lng});
       });
-    }).catch(function() {});
+    }).catch(function(){});
 }
 
-function showPinResults(matches) {
-  var container = document.getElementById('pin-results');
-  if (!matches.length) { hidePinResults(); return; }
-  container.innerHTML = '';
-  matches.slice(0, 5).forEach(function(pin) {
-    var item = document.createElement('div');
-    item.className = 'pin-result-item';
-    item.textContent = pin.name;
-    item.addEventListener('click', function() {
-      map.panTo(new google.maps.LatLng(pin.lat, pin.lng));
+function showPinResults(matches){
+  var container=document.getElementById('pin-results');
+  if(!matches.length){hidePinResults();return;}
+  container.innerHTML='';
+  matches.slice(0,5).forEach(function(pin){
+    var item=document.createElement('div');
+    item.className='pin-result-item';
+    item.textContent=pin.name;
+    item.addEventListener('click',function(){
+      map.panTo(new google.maps.LatLng(pin.lat,pin.lng));
       map.setZoom(16);
       hidePinResults();
-      document.getElementById('pac-input').value = pin.name;
-      var zone = getZoneForPoint(pin.lat, pin.lng);
-      showPlaceCard(pin.name, '', zone);
+      document.getElementById('pac-input').value=pin.name;
       logSearch(pin.name);
     });
     container.appendChild(item);
   });
-  container.style.display = 'block';
+  container.style.display='block';
 }
+function hidePinResults(){document.getElementById('pin-results').style.display='none';}
 
-function hidePinResults() { document.getElementById('pin-results').style.display = 'none'; }
-
-function onPlaceSelected() {
-  var place = autocomplete.getPlace();
-  if (!place || !place.geometry) return;
+var selectedMarker=null;
+function onPlaceSelected(){
+  var place=autocomplete.getPlace();
+  if(!place||!place.geometry)return;
   hidePinResults();
-  var loc = place.geometry.location;
-  map.panTo(loc); map.setZoom(15);
-  if (selectedMarker) selectedMarker.setMap(null);
-  selectedMarker = new google.maps.Marker({
-    position: loc, map: map,
-    icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillColor: '#D85A30', fillOpacity: 1, strokeColor: '#1A1714', strokeWeight: 2 }
+  var loc=place.geometry.location;
+  map.panTo(loc);map.setZoom(15);
+  if(selectedMarker)selectedMarker.setMap(null);
+  selectedMarker=new google.maps.Marker({
+    position:loc,map:map,
+    icon:{path:google.maps.SymbolPath.CIRCLE,scale:8,fillColor:'#D85A30',fillOpacity:1,strokeColor:'#1A1714',strokeWeight:2}
   });
-  var zone = getZoneForPoint(loc.lat(), loc.lng());
-  showPlaceCard(place.name, place.formatted_address || '', zone);
   logSearch(place.name);
 }
 
-function logSearch(term) {
-  fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: TG_CHAT_ID, text: 'DuoL Maps: ' + term })
-  }).catch(function() {});
+function logSearch(term){
+  fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:TG_CHAT_ID,text:'DuoL Maps: '+term})
+  }).catch(function(){});
 }
 
-function getZoneForPoint(lat, lng) {
-  var point = new google.maps.LatLng(lat, lng);
-  for (var key in ZONES) {
-    for (var i = 0; i < ZONES[key].paths.length; i++) {
-      var poly = new google.maps.Polygon({ paths: ZONES[key].paths[i] });
-      if (google.maps.geometry.poly.containsLocation(point, poly)) return Object.assign({ key: key }, ZONES[key]);
+function getZoneForPoint(lat,lng){
+  var point=new google.maps.LatLng(lat,lng);
+  for(var key in ZONES){
+    for(var i=0;i<ZONES[key].paths.length;i++){
+      var poly=new google.maps.Polygon({paths:ZONES[key].paths[i]});
+      if(google.maps.geometry.poly.containsLocation(point,poly))return key;
     }
   }
   return null;
 }
 
-function showPlaceCard(name, addr, zone) {
-  document.getElementById('pc-name').textContent = name || '';
-  document.getElementById('pc-addr').textContent = addr || '';
-  var tag = document.getElementById('pc-zone-tag');
-  tag.innerHTML = zone
-    ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g, '') + '</span>'
-    : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
-  document.getElementById('place-card').classList.add('visible');
-}
-
-function closePlaceCard() {
-  document.getElementById('place-card').classList.remove('visible');
-  if (selectedMarker) { selectedMarker.setMap(null); selectedMarker = null; }
-  document.getElementById('pac-input').value = '';
-}
-
-function toggleSidebar() {
-  var sb = document.getElementById('sidebar');
+function toggleSidebar(){
+  var sb=document.getElementById('sidebar');
   sb.classList.toggle('open');
-  document.getElementById('toggle-btn').textContent = sb.classList.contains('open') ? '<' : '>';
+  document.getElementById('toggle-btn').innerHTML=sb.classList.contains('open')?'&#x2190;':'&#x2192;';
 }
 
-function toggleZones() {
-  zonesVisible = !zonesVisible;
-  var btn = document.getElementById('zones-toggle');
-  btn.textContent = zonesVisible ? 'ZONES ON' : 'ZONES OFF';
-  btn.classList.toggle('active', zonesVisible);
-  Object.keys(polygons).forEach(function(k) {
-    polygons[k].forEach(function(p) { p.setMap(zonesVisible ? map : null); });
+function toggleZones(){
+  zonesVisible=!zonesVisible;
+  var btn=document.getElementById('zones-toggle');
+  btn.textContent=zonesVisible?'ZONES ON':'ZONES OFF';
+  btn.classList.toggle('active',zonesVisible);
+  Object.keys(polygons).forEach(function(k){
+    polygons[k].forEach(function(p){p.setMap(zonesVisible?map:null);});
   });
 }
 
-var ZONE_INFO = {"fakesafe": {"color": "#4A90D9", "label": "Fake Safe", "area": "BERRINI · BROOKLIN · ITAIM BIBI · VILA OLÍMPIA · FARIA LIMA", "desc": "This is where your hotel and workplace are. Corporate towers, private security everywhere, Uber on every corner. During business hours, this is one of the most controlled environments in São Paulo. The problem starts when you assume the rest of the city works the same way. It does not.", "stats": [["DISTANCE FROM HOTEL", "<span>0 km</span> — you are here"], ["UBER AVAILABILITY", "<span>High</span> — usually under 3 min"], ["DAYTIME", "Comfortable. Walk freely."], ["NIGHTTIME", "Relatively safe. Stay on main avenues. Phone in pocket."], ["WHAT TO KNOW", "The corporate bubble creates a false sense of security. The city changes completely beyond Av. Santo Amaro and Marginal Pinheiros. Do not use Berrini as your reference for the rest of Sao Paulo."], ["WATCH OUT FOR", "Phone theft near busy intersections. Motorcycle approach at traffic lights. Empty side streets after 10pm."]]}, "caution": {"color": "#E8B84B", "label": "Caution", "area": "MOEMA · CAMPO BELO · SANTO AMARO · VILA MARIANA · JABAQUARA · IPIRANGA", "desc": "Transition zone. Still relatively safe during the day. But you are leaving the corporate bubble. Fewer security cameras, less pedestrian flow, more variance by street and time. Google Maps may say 10 minutes walk. Check the route first.", "stats": [["DISTANCE FROM HOTEL", "<span>2-6 km</span> — short Uber ride"], ["UBER AVAILABILITY", "<span>Good</span> — wait may vary"], ["TRAVEL TIME (UBER)", "<span>15-40 min</span> depending on traffic"], ["NIGHTTIME", "Pay attention. Avoid isolated streets. Stay near busy areas."], ["WHAT TO KNOW", "These neighborhoods look similar to Berrini on the surface. The difference is in the details: lighting, pedestrian density, and what happens at the end of the block."], ["WATCH OUT FOR", "Less predictable traffic. Phone visible on street. Do not walk back to the hotel alone late at night."]]}, "avoid": {"color": "#E07020", "label": "Avoid at night", "area": "VILA ANDRADE · CAPAO REDONDO DIRECTION · OUTER ZONA SUL", "desc": "Not where you will be staying. But Sao Paulo is a city where a 5km trip can completely change your context. If you venture beyond the bubble, this is what exists on the other side. Requires awareness, planning, and ideally company.", "stats": [["DISTANCE FROM HOTEL", "<span>8-15 km</span> — feels close, it is not"], ["UBER AVAILABILITY", "<span>Lower</span> — surge pricing common"], ["TRAVEL TIME (UBER)", "<span>40-90 min</span> in peak hours"], ["NIGHTTIME", "Strongly avoid unless with trusted local company."], ["WHAT TO KNOW", "Sao Paulo Zona Sul has the highest crime growth rates in the city. Capao Redondo consistently ranks among the most dangerous districts. Distance on the map is misleading."], ["WATCH OUT FOR", "Motorcycle theft. Armed robbery near bus terminals. Long waits for Uber after 10pm with no safe spot to wait."]]}, "highrisk": {"color": "#C01515", "label": "High risk", "area": "CENTRO HISTORICO · SE · REPUBLICA · LUZ · BRAS · LIBERDADE", "desc": "The historic center. Landmarks, culture, architecture and the highest robbery rates in the city. Go with purpose, go during the day, go alert. Liberdade is worth visiting. So is Pinacoteca. Just do not treat it like Berrini.", "stats": [["DISTANCE FROM HOTEL", "<span>12-16 km</span> from Berrini"], ["UBER AVAILABILITY", "<span>High</span> — central area, many cars"], ["TRAVEL TIME (UBER)", "<span>30-75 min</span> — Sao Paulo traffic"], ["NIGHTTIME", "Avoid unless specific planned event with safe return."], ["WHAT TO KNOW", "Pickpockets and phone theft are extremely common near tourist spots. High-volume crime area many targets and fast exits."], ["WORTH VISITING", "Liberdade · Pinacoteca · Mercadao · Theatro Municipal · MASP"], ["WATCH OUT FOR", "Phone on hand near Se metro. Strangers approaching with distraction tactics. Isolated alleyways."]]}};
-
-function openZonePanel(key) {
-  var zone = ZONE_INFO[key];
-  if (!zone) return;
-  document.getElementById('zp-dot').style.background = zone.color;
-  document.getElementById('zp-name').textContent = zone.label;
-  var body = document.getElementById('zp-body');
-  var html = '<div class="zp-zone-area">' + zone.area + '</div>';
-  html += '<div class="zp-desc">' + zone.desc + '</div>';
-  html += '<div class="zp-divider"></div>';
-  html += '<div class="zp-stats">';
-  zone.stats.forEach(function(s) {
-    html += '<div class="zp-stat"><div class="zp-stat-label">' + s[0] + '</div><div class="zp-stat-value">' + s[1] + '</div></div>';
+function showOnlyZone(key){
+  zonesVisible=true;
+  Object.keys(polygons).forEach(function(k){
+    polygons[k].forEach(function(p){p.setMap(k===key?map:null);});
   });
-  html += '</div>';
-  body.innerHTML = html;
+  document.querySelectorAll('.sb-zone-btn').forEach(function(btn){
+    btn.classList.toggle('active',btn.dataset.zone===key);
+  });
+  document.querySelector('.sb-zone-btn:first-child').classList.remove('active');
+  document.getElementById('zones-toggle').textContent='ZONES ON';
+  document.getElementById('zones-toggle').classList.add('active');
+}
+
+function showAllZones(){
+  zonesVisible=true;
+  Object.keys(polygons).forEach(function(k){
+    polygons[k].forEach(function(p){p.setMap(map);});
+  });
+  document.querySelectorAll('.sb-zone-btn').forEach(function(btn){btn.classList.remove('active');});
+  document.querySelector('.sb-zone-btn:first-child').classList.add('active');
+  document.getElementById('zones-toggle').textContent='ZONES ON';
+  document.getElementById('zones-toggle').classList.add('active');
+}
+
+function setMapView(view){
+  document.querySelectorAll('#view-btns button').forEach(function(b){
+    b.classList.toggle('active',b.dataset.view===view);
+  });
+  if(view==='dark')map.setOptions({styles:darkStyles,mapTypeId:'roadmap'});
+  else if(view==='light')map.setOptions({styles:[],mapTypeId:'roadmap'});
+  else map.setOptions({styles:[],mapTypeId:'satellite'});
+}
+
+function openZonePanel(key){
+  var z=ZONE_INFO[key];
+  if(!z)return;
+  document.getElementById('zp-dot').style.background=z.color;
+  document.getElementById('zp-name').textContent=z.label;
+  var html='<div class="zp-zone-area">'+z.area+'</div>';
+  html+='<div class="zp-desc">'+z.desc+'</div>';
+  html+='<div class="zp-divider"></div>';
+  html+='<div class="zp-stats">';
+  z.stats.forEach(function(s){
+    html+='<div class="zp-stat"><div class="zp-stat-label">'+s[0]+'</div><div class="zp-stat-value">'+s[1]+'</div></div>';
+  });
+  html+='</div>';
+  document.getElementById('zp-body').innerHTML=html;
   document.getElementById('zone-panel').classList.add('visible');
   showOnlyZone(key);
 }
 
-function openPanelTab(key) { openZonePanel(key); }
-function closePanel() {
+function closePanel(){
   document.getElementById('zone-panel').classList.remove('visible');
   showAllZones();
 }
 
-function switchTab(tab) {
-  if (tab === 'all') { showAllZones(); }
-  else { openZonePanel(tab); }
-}
-
-document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn) {
-  btn.addEventListener('click', function() { showOnlyZone(btn.dataset.zone); });
+// Sidebar zone buttons — isolam zona mas NÃO abrem painel
+document.querySelectorAll('.sb-zone-btn[data-zone]').forEach(function(btn){
+  btn.addEventListener('click',function(){showOnlyZone(btn.dataset.zone);});
 });
 
-document.querySelectorAll('.sb-filter-btn').forEach(function(btn) {
-  btn.addEventListener('click', function() { btn.classList.toggle('active'); });
+// Filter buttons — toggle visual
+document.querySelectorAll('.sb-filter-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){btn.classList.toggle('active');});
 });
-</script>
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCCahWJZzec6FIZW_m6fvUBCH9MS3i-9ns&libraries=places,geometry&callback=initMap" async defer></script>

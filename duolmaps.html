@@ -294,121 +294,22 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
       <div id="pc-zone-tag"></div>
     </div>
 
-    <button id="zone-guide-btn" onclick="openPanel()">↑</button>
-
     <div id="zone-panel">
-      <div class="zp-header">
-        <div class="zp-tabs">
-          <button class="zp-tab" data-tab="all" onclick="switchTab('all')">
-            <div class="zp-tab-dot" style="background:linear-gradient(135deg,#4A90D9 0%,#4A90D9 50%,#C01515 50%);"></div>ALL
-          </button>
-          <button class="zp-tab active" data-tab="fakesafe" onclick="switchTab('fakesafe')">
-            <div class="zp-tab-dot" style="background:#4A90D9;"></div>FAKE SAFE
-          </button>
-          <button class="zp-tab" data-tab="caution" onclick="switchTab('caution')">
-            <div class="zp-tab-dot" style="background:#E8B84B;"></div>CAUTION
-          </button>
-          <button class="zp-tab" data-tab="avoid" onclick="switchTab('avoid')">
-            <div class="zp-tab-dot" style="background:#E07020;"></div>AVOID AT NIGHT
-          </button>
-          <button class="zp-tab" data-tab="highrisk" onclick="switchTab('highrisk')">
-            <div class="zp-tab-dot" style="background:#C01515;"></div>HIGH RISK
-          </button>
-        </div>
-        <button class="zp-close" onclick="closePanel()">↓</button>
-      </div>
-
-      <div class="zp-content active" id="tab-fakesafe">
-        <div>
-          <div class="zp-zone-name">Fake Safe</div>
-          <div class="zp-zone-area">BERRINI · BROOKLIN · ITAIM BIBI · VILA OLÍMPIA · FARIA LIMA</div>
-          <div class="zp-desc">This is where your hotel and workplace are. Corporate towers, private security everywhere, Uber on every corner. During business hours, this is one of the most controlled environments in São Paulo. The problem starts when you assume the rest of the city works the same way. It does not.</div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">DISTANCE FROM HOTEL</div><div class="zp-stat-value"><span>0 km</span> — you are here</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">UBER AVAILABILITY</div><div class="zp-stat-value"><span>High</span> — usually under 3 min</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">DAYTIME</div><div class="zp-stat-value">Comfortable. Walk freely.</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">NIGHTTIME</div><div class="zp-stat-value">Relatively safe. Stay on main avenues. Phone in pocket.</div></div>
+      <div class="zp-inner">
+        <div class="zp-header">
+          <div class="zp-header-zone">
+            <div class="zp-header-dot" id="zp-dot"></div>
+            <div class="zp-header-name" id="zp-name"></div>
           </div>
+          <button class="zp-close" onclick="closePanel()">&#x2715;</button>
         </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">WHAT TO KNOW</div><div class="zp-stat-value">The corporate bubble creates a false sense of security. The city changes completely beyond Av. Santo Amaro and Marginal Pinheiros. Do not use Berrini as your reference for the rest of São Paulo.</div></div>
-            <div class="zp-stat" style="margin-top:10px;"><div class="zp-stat-label">WATCH OUT FOR</div><div class="zp-stat-value">Phone theft near busy intersections. Motorcycle approach at traffic lights. Empty side streets after 10pm.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="zp-content" id="tab-caution">
-        <div>
-          <div class="zp-zone-name">Caution</div>
-          <div class="zp-zone-area">MOEMA · CAMPO BELO · SANTO AMARO · VILA MARIANA · JABAQUARA · IPIRANGA</div>
-          <div class="zp-desc">Transition zone. Still relatively safe during the day. But you are leaving the corporate bubble. Fewer security cameras, less pedestrian flow, more variance by street and time. Google Maps may say 10 minutes walk. Check the route first.</div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">DISTANCE FROM HOTEL</div><div class="zp-stat-value"><span>2–6 km</span> — short Uber ride</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">UBER AVAILABILITY</div><div class="zp-stat-value"><span>Good</span> — wait may vary</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">TRAVEL TIME (UBER)</div><div class="zp-stat-value"><span>15–40 min</span> depending on traffic</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">NIGHTTIME</div><div class="zp-stat-value">Pay attention. Avoid isolated streets. Stay near busy areas.</div></div>
-          </div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">WHAT TO KNOW</div><div class="zp-stat-value">These neighborhoods look similar to Berrini on the surface. The difference is in the details: lighting, pedestrian density, and what happens at the end of the block.</div></div>
-            <div class="zp-stat" style="margin-top:10px;"><div class="zp-stat-label">WATCH OUT FOR</div><div class="zp-stat-value">Less predictable traffic. Phone visible on street. Don't walk back to the hotel alone late at night.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="zp-content" id="tab-avoid">
-        <div>
-          <div class="zp-zone-name">Avoid at night</div>
-          <div class="zp-zone-area">VILA ANDRADE · CAPÃO REDONDO DIRECTION · OUTER ZONA SUL</div>
-          <div class="zp-desc">Not where you will be staying. But São Paulo is a city where a 5km trip can completely change your context. If you venture beyond the bubble, this is what exists on the other side. Requires awareness, planning, and ideally company.</div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">DISTANCE FROM HOTEL</div><div class="zp-stat-value"><span>8–15 km</span> — feels close, it is not</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">UBER AVAILABILITY</div><div class="zp-stat-value"><span>Lower</span> — surge pricing common</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">TRAVEL TIME (UBER)</div><div class="zp-stat-value"><span>40–90 min</span> in peak hours</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">NIGHTTIME</div><div class="zp-stat-value">Strongly avoid unless with trusted local company.</div></div>
-          </div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">WHAT TO KNOW</div><div class="zp-stat-value">São Paulo's Zona Sul has the highest crime growth rates in the city. Capão Redondo consistently ranks among the most dangerous districts. Distance on the map is misleading.</div></div>
-            <div class="zp-stat" style="margin-top:10px;"><div class="zp-stat-label">WATCH OUT FOR</div><div class="zp-stat-value">Motorcycle theft. Armed robbery near bus terminals. Long waits for Uber after 10pm with no safe spot to wait.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="zp-content" id="tab-highrisk">
-        <div>
-          <div class="zp-zone-name">High risk</div>
-          <div class="zp-zone-area">CENTRO HISTÓRICO · SÉ · REPÚBLICA · LUZ · BRÁS · LIBERDADE</div>
-          <div class="zp-desc">The historic center. Landmarks, culture, architecture — and the highest robbery rates in the city. Go with purpose, go during the day, go alert. Liberdade is worth visiting. So is Pinacoteca. Just don't treat it like Berrini.</div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">DISTANCE FROM HOTEL</div><div class="zp-stat-value"><span>12–16 km</span> from Berrini</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">UBER AVAILABILITY</div><div class="zp-stat-value"><span>High</span> — central area, many cars</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">TRAVEL TIME (UBER)</div><div class="zp-stat-value"><span>30–75 min</span> — São Paulo traffic</div></div>
-            <div class="zp-stat"><div class="zp-stat-label">NIGHTTIME</div><div class="zp-stat-value">Avoid unless specific planned event with safe return.</div></div>
-          </div>
-        </div>
-        <div>
-          <div class="zp-stats">
-            <div class="zp-stat"><div class="zp-stat-label">WHAT TO KNOW</div><div class="zp-stat-value">Pickpockets and phone theft are extremely common near tourist spots. High-volume crime area — many targets and fast exits.</div></div>
-            <div class="zp-stat" style="margin-top:10px;"><div class="zp-stat-label">WORTH VISITING</div><div class="zp-stat-value">Liberdade · Pinacoteca · Mercadão · Theatro Municipal · MASP</div></div>
-            <div class="zp-stat" style="margin-top:10px;"><div class="zp-stat-label">WATCH OUT FOR</div><div class="zp-stat-value">Phone on hand near Sé metro. Strangers approaching with distraction tactics. Isolated alleyways.</div></div>
-          </div>
-        </div>
+        <div class="zp-body" id="zp-body"></div>
       </div>
     </div>
+
   </div>
 </div>
+
 
 <script>
 const MY_MAPS_ID = '1ZF_Fzwf9JlZK7QcNvhjiU4qvCz3hTLY';
@@ -452,9 +353,23 @@ function initMap() {
     url: 'https://www.google.com/maps/d/kml?forcekml=1&mid=' + MY_MAPS_ID,
     map: map, preserveViewport: true, suppressInfoWindows: false
   });
+  var kmlClickPending = false;
   kmlLayer.addListener('click', function(e) {
+    kmlClickPending = true;
     var name = (e.featureData && e.featureData.name) ? e.featureData.name : '';
-    if (name) { logSearch(name); }
+    if (name) {
+      logSearch(name);
+      var loc = e.latLng;
+      var zone = getZoneForPoint(loc.lat(), loc.lng());
+      document.getElementById('pc-name').textContent = name;
+      document.getElementById('pc-addr').textContent = '';
+      var tag = document.getElementById('pc-zone-tag');
+      tag.innerHTML = zone
+        ? '<span class="zone-tag ' + zone.tagClass + '">#' + zone.label.replace(/ /g,'') + '</span>'
+        : '<span class="zone-tag zt-unknown">#OutsideZones</span>';
+      document.getElementById('place-card').classList.add('visible');
+    }
+    setTimeout(function() { kmlClickPending = false; }, 300);
   });
 
   loadPinData();
@@ -489,7 +404,7 @@ function initMap() {
     if (e.key === 'Escape') { hidePinResults(); input.value = ''; }
   });
 
-  map.addListener('click', function() { closePlaceCard(); hidePinResults(); });
+  map.addListener('click', function() { if (kmlClickPending) return; closePlaceCard(); hidePinResults(); });
 }
 
 function setMapView(view) {

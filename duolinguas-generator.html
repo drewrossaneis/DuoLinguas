@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoLínguas — Card Generator</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --ui-bg: #111010;
+  --ui-panel: #191716;
+  --ui-border: rgba(255,255,255,0.07);
+  --ui-border2: rgba(255,255,255,0.12);
+  --ui-text: #F1EFE8;
+  --ui-text2: #888780;
+  --ui-text3: #444441;
+  --ui-coral: #D85A30;
+  --ui-input-bg: #222120;
+}
+
+html, body {
+  height: 100%;
+  background: var(--ui-bg);
+  font-family: 'Montserrat', sans-serif;
+  color: var(--ui-text);
+  overflow: hidden;
+}
+
+/* ── PASSWORD SCREEN ── */
+#pw-screen {
+  position: fixed;
+  inset: 0;
+  background: #0D0B0A;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 32px;
+}
+#pw-screen.gone { display: none; }
+
+.pw-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.pw-logo-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: #F1EFE8;
+  letter-spacing: 0.5px;
+}
+.pw-logo-sub {
+  font-size: 7px;
+  letter-spacing: 5px;
+  color: #444441;
+  text-transform: uppercase;
+}
+
+.pw-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 260px;
+}
+.pw-box input {
+  width: 100%;
+  background: #191716;
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  letter-spacing: 6px;
+  color: #F1EFE8;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.pw-box input:focus { border-color: rgba(216,90,48,0.5); }
+.pw-box input.error { border-color: rgba(216,90,48,0.8); animation: shake 0.3s; }
+.pw-btn {
+  width: 100%;
+  padding: 11px;
+  border-radius: 8px;
+  border: none;
+  background: #D85A30;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.pw-btn:hover { opacity: 0.85; }
+.pw-err {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #D85A30;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.pw-err.show { opacity: 1; }
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* ── LAYOUT ── */
+#app { display: flex; height: 100vh; }
+
+/* ── PANEL ── */
+#panel {
+  width: 320px;
+  flex-shrink: 0;
+  background: var(--ui-panel);
+  border-right: 0.5px solid var(--ui-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px 100px;
+}
+#panel-scroll::-webkit-scrollbar { width: 3px; }
+#panel-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* panel header */
+.panel-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid var(--ui-border);
+  flex-shrink: 0;
+}
+.panel-logo-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--ui-text);
+}
+.panel-logo-sub {
+  font-size: 6px;
+  letter-spacing: 3px;
+  color: var(--ui-text3);
+  display: block;
+}
+
+/* section labels */
+.sec-label {
+  font-size: 7px;
+  letter-spacing: 3px;
+  color: var(--ui-text3);
+  text-transform: uppercase;
+  margin: 18px 0 8px;
+  display: block;
+}
+
+/* ── PROFILE SELECTOR ── */
+.profile-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.profile-btn {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 6px;
+  border: 1px solid var(--ui-border);
+  background: none;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--ui-text2);
+  text-transform: uppercase;
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.profile-btn:hover { border-color: var(--ui-coral); color: var(--ui-text); }
+.profile-btn.active { border-color: var(--ui-coral); color: var(--ui-coral); background: rgba(216,90,48,0.06); }
+.profile-swatch {
+  width: 28px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+/* ── INPUTS ── */
+.field { margin-bottom: 10px; }
+.field label {
+  font-size: 7px;
+  letter-spacing: 2px;
+  color: var(--ui-text3);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.field input, .field textarea {
+  width: 100%;
+  background: var(--ui-input-bg);
+  border: 0.5px solid var(--ui-border2);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: var(--ui-text);
+  outline: none;
+  resize: none;
+  transition: border-color 0.15s;
+}
+.field input:focus, .field textarea:focus {
+  border-color: rgba(216,90,48,0.4);
+}
+.field input::placeholder, .field textarea::placeholder {
+  color: var(--ui-text3);
+  font-size: 10px;
+}
+
+/* font size control */
+.font-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.font-ctrl label {
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--ui-text3);
+  text-transform: uppercase;
+  flex: 1;
+  margin: 0;
+}
+.font-ctrl span {
+  font-size: 11px;
+  color: var(--ui-text2);
+  min-width: 26px;
+  text-align: center;
+}
+.fz-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 0.5px solid var(--ui-border2);
+  background: var(--ui-input-bg);
+  color: var(--ui-text2);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  line-height: 1;
+}
+.fz-btn:hover { border-color: var(--ui-coral); color: var(--ui-coral); }
+
+/* ── ICON PICKER ── */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  margin-bottom: 4px;
+}
+.icon-btn {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  border: 1px solid var(--ui-border);
+  background: var(--ui-input-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 6px;
+}
+.icon-btn:hover { border-color: var(--ui-coral); }
+.icon-btn.active { border-color: var(--ui-coral); background: rgba(216,90,48,0.1); }
+.icon-btn svg { width: 16px; height: 16px; stroke: var(--ui-text2); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn.active svg { stroke: var(--ui-coral); }
+.icon-none-btn {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--ui-text3);
+  border: 1px dashed var(--ui-border);
+  background: none;
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+  margin-bottom: 8px;
+}
+.icon-none-btn:hover { color: var(--ui-text2); border-color: var(--ui-border2); }
+
+/* ── PHRASE FORM ── */
+.phrase-form {
+  background: rgba(216,90,48,0.05);
+  border: 0.5px solid rgba(216,90,48,0.2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.phrase-form .field { margin-bottom: 6px; }
+.phrase-form .field:last-of-type { margin-bottom: 10px; }
+
+.btn-insert {
+  width: 100%;
+  padding: 9px;
+  border-radius: 6px;
+  border: none;
+  background: var(--ui-coral);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-insert:hover { opacity: 0.85; }
+
+/* ── TIP FORM ── */
+.tip-form {
+  background: var(--ui-input-bg);
+  border: 0.5px solid var(--ui-border2);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.tip-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.tip-toggle span {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--ui-text2);
+  text-transform: uppercase;
+}
+.toggle-switch {
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--ui-border2);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  flex-shrink: 0;
+}
+.toggle-switch.on { background: var(--ui-coral); }
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s;
+}
+.toggle-switch.on::after { left: 17px; }
+
+/* tip style btns */
+.tip-style-row {
+  display: flex;
+  gap: 5px;
+  margin-top: 8px;
+}
+.tip-style-btn {
+  flex: 1;
+  padding: 5px 4px;
+  border-radius: 4px;
+  border: 1px solid var(--ui-border);
+  background: none;
+  cursor: pointer;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--ui-text3);
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+.tip-style-btn:hover { border-color: var(--ui-border2); color: var(--ui-text2); }
+.tip-style-btn.active { border-color: var(--ui-coral); color: var(--ui-coral); }
+
+/* ── PANEL FOOTER ACTIONS ── */
+#panel-actions {
+  padding: 12px 16px;
+  border-top: 0.5px solid var(--ui-border);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex-shrink: 0;
+  background: var(--ui-panel);
+}
+.btn-save {
+  width: 100%;
+  padding: 11px;
+  border-radius: 6px;
+  border: none;
+  background: var(--ui-coral);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-save:hover { opacity: 0.85; }
+.action-row { display: flex; gap: 7px; }
+.btn-action {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 0.5px solid var(--ui-border2);
+  background: none;
+  color: var(--ui-text2);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-action:hover { border-color: var(--ui-coral); color: var(--ui-coral); }
+
+/* ── PREVIEW AREA ── */
+#preview-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ui-bg);
+  position: relative;
+  overflow: auto;
+  padding: 60px 40px;
+}
+
+/* ── CARD ── */
+#card-wrap {
+  position: relative;
+}
+
+.card {
+  width: 390px;
+  border-radius: 24px;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+  transition: background 0.3s;
+}
+
+/* ICON CIRCLE */
+.icon-circle {
+  position: absolute;
+  top: -40px;
+  right: 28px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  z-index: 10;
+  transition: all 0.3s;
+}
+.icon-circle svg {
+  width: 46px;
+  height: 46px;
+  fill: none;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s;
+}
+
+/* CARD TOP */
+.card-top {
+  padding: 12px 28px 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+#card-category {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  line-height: 1.05;
+  word-break: break-word;
+  transition: color 0.3s, font-size 0.15s;
+}
+
+.subcategory-wrap {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 5px 12px;
+  transition: background 0.3s;
+}
+#card-subcategory {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s, font-size 0.15s;
+}
+.subcategory-wrap.hidden { display: none; }
+
+.card-divider {
+  width: 100%;
+  height: 0.5px;
+  margin: 16px 0 0 0;
+  transition: background 0.3s;
+}
+
+/* PHRASES */
+#phrases-list {
+  padding: 14px 20px 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1;
+}
+
+.phrase-block {
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.phrase-block:hover .block-controls { opacity: 1; }
+
+.block-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.block-ctrl-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.btn-edit-block { background: rgba(255,255,255,0.12); color: #ccc; }
+.btn-edit-block:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.btn-del-block { background: rgba(216,90,48,0.2); color: var(--ui-coral); }
+.btn-del-block:hover { background: rgba(216,90,48,0.4); }
+
+.p-pt {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: color 0.3s, font-size 0.15s;
+}
+.p-ph {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  line-height: 1.35;
+  padding-left: 14px;
+  transition: color 0.3s, font-size 0.15s;
+}
+.p-en {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  line-height: 1.4;
+  padding-left: 26px;
+  transition: color 0.3s, font-size 0.15s;
+}
+
+/* FOOTER */
+#card-footer {
+  padding: 14px 20px 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1;
+}
+#footer-logo { flex-shrink: 0; cursor: pointer; }
+#footer-logo svg { width: 36px; height: 38px; display: block; }
+
+#tip-block {
+  flex: 1;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: background 0.3s, border 0.3s, backdrop-filter 0.3s;
+}
+#tip-block.hidden { display: none; }
+#tip-label-el {
+  font-size: 7px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  transition: color 0.3s;
+}
+#tip-text-el {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  line-height: 1.5;
+  transition: color 0.3s;
+}
+
+/* ── THEMES ── */
+/* PROFILE A — dark */
+.theme-a .card { background: #1C1917; border: 0.5px solid rgba(255,255,255,0.07); }
+.theme-a .icon-circle { background: #1C1917; border-color: #D85A30; }
+.theme-a .icon-circle svg { stroke: #D85A30; }
+.theme-a #card-category { color: #D85A30; }
+.theme-a .subcategory-wrap { background: #D85A30; }
+.theme-a #card-subcategory { color: #F1EFE8; }
+.theme-a .card-divider { background: rgba(255,255,255,0.08); }
+.theme-a .phrase-block { background: #F1EFE8; }
+.theme-a .p-pt { color: #1C1917; }
+.theme-a .p-ph { color: #D85A30; }
+.theme-a .p-en { color: #5F5E5A; }
+.theme-a #tip-block.solid { background: #F1EFE8; }
+.theme-a #tip-block.glass { background: rgba(241,239,232,0.08); backdrop-filter: blur(8px); border: 0.5px solid rgba(241,239,232,0.15); }
+.theme-a #tip-label-el { color: #D85A30; }
+.theme-a #tip-text-el { color: #3a3632; }
+.theme-a #tip-block.glass #tip-text-el { color: #888780; }
+
+/* PROFILE B — light */
+.theme-b .card { background: #F1EFE8; border: 0.5px solid rgba(0,0,0,0.07); box-shadow: 0 32px 80px rgba(0,0,0,0.15); }
+.theme-b .icon-circle { background: #F1EFE8; border-color: #1C1917; }
+.theme-b .icon-circle svg { stroke: #1C1917; }
+.theme-b #card-category { color: #1C1917; }
+.theme-b .subcategory-wrap { background: #1C1917; }
+.theme-b #card-subcategory { color: #F1EFE8; }
+.theme-b .card-divider { background: rgba(0,0,0,0.1); }
+.theme-b .phrase-block { background: #1C1917; }
+.theme-b .p-pt { color: #F1EFE8; }
+.theme-b .p-ph { color: #D85A30; }
+.theme-b .p-en { color: #888780; }
+.theme-b #tip-block.solid { background: #1C1917; }
+.theme-b #tip-block.glass { background: rgba(28,25,23,0.08); backdrop-filter: blur(8px); border: 0.5px solid rgba(28,25,23,0.15); }
+.theme-b #tip-label-el { color: #D85A30; }
+.theme-b #tip-text-el { color: #888780; }
+.theme-b #tip-block.glass #tip-text-el { color: #888780; }
+
+/* PROFILE C — copper */
+.theme-c .card { background: #3D1F0E; border: 0.5px solid rgba(216,90,48,0.2); }
+.theme-c .icon-circle { background: #3D1F0E; border-color: #F1EFE8; }
+.theme-c .icon-circle svg { stroke: #F1EFE8; }
+.theme-c #card-category { color: #F1EFE8; }
+.theme-c .subcategory-wrap { background: rgba(216,90,48,0.25); border: 1px solid rgba(216,90,48,0.5); }
+.theme-c #card-subcategory { color: #F1EFE8; }
+.theme-c .card-divider { background: rgba(241,239,232,0.1); }
+.theme-c .phrase-block { background: #2A1208; border: 0.5px solid rgba(241,239,232,0.08); }
+.theme-c .p-pt { color: #F1EFE8; }
+.theme-c .p-ph { color: #D85A30; }
+.theme-c .p-en { color: #9A7A6A; }
+.theme-c #tip-block.solid { background: #2A1208; border: 0.5px solid rgba(241,239,232,0.08); border-left: 2px solid #F1EFE8; }
+.theme-c #tip-block.glass { background: rgba(42,18,8,0.4); backdrop-filter: blur(8px); border: 0.5px solid rgba(241,239,232,0.1); }
+.theme-c #tip-label-el { color: #F1EFE8; }
+.theme-c #tip-text-el { color: #9A7A6A; }
+
+/* ── BLOCK CTRL THEME ── */
+.theme-a .btn-edit-block, .theme-c .btn-edit-block { background: rgba(255,255,255,0.15); color: #aaa; }
+.theme-b .btn-edit-block { background: rgba(0,0,0,0.12); color: #555; }
+.theme-b .btn-del-block { background: rgba(216,90,48,0.15); }
+
+/* ── EDIT MODAL ── */
+#edit-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+}
+#edit-modal.open { display: flex; }
+.modal-box {
+  background: #1E1C1A;
+  border: 0.5px solid var(--ui-border2);
+  border-radius: 12px;
+  padding: 20px;
+  width: 320px;
+}
+.modal-title {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--ui-text3);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.btn-modal-save {
+  flex: 1;
+  padding: 9px;
+  border-radius: 6px;
+  border: none;
+  background: var(--ui-coral);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn-modal-cancel {
+  padding: 9px 14px;
+  border-radius: 6px;
+  border: 0.5px solid var(--ui-border2);
+  background: none;
+  color: var(--ui-text2);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  cursor: pointer;
+}
+.btn-modal-copy {
+  padding: 9px 12px;
+  border-radius: 6px;
+  border: 0.5px solid var(--ui-border2);
+  background: none;
+  color: var(--ui-text2);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  cursor: pointer;
+}
+.btn-modal-copy:hover { border-color: var(--ui-coral); color: var(--ui-coral); }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="pw-screen">
+  <div class="pw-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="52" viewBox="0 0 200 215">
+      <circle cx="100" cy="95" r="62" fill="none" stroke="#D85A30" stroke-width="2.5"/>
+      <circle cx="100" cy="95" r="54" fill="#1A2235"/>
+      <path d="M 71 67 L 71 123 Q 97 123 97 95 Q 97 67 71 67 Z" fill="#FFFFFF"/>
+      <path d="M 129 67 L 129 123 Q 103 123 103 95 Q 103 67 129 67 Z" fill="#FFFFFF"/>
+      <path d="M 84 173 Q 100 187 116 173" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+    <div class="pw-logo-name">DuoLínguas</div>
+    <div class="pw-logo-sub">Card Generator</div>
+  </div>
+  <div class="pw-box">
+    <input type="password" id="pw-input" placeholder="······" maxlength="10"
+      onkeydown="if(event.key==='Enter') checkPw()">
+    <button class="pw-btn" onclick="checkPw()">Entrar</button>
+    <div class="pw-err" id="pw-err">Senha incorreta</div>
+  </div>
+</div>
+
+<div id="app">
+
+  <!-- ── PANEL ── -->
+  <div id="panel">
+    <div class="panel-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" viewBox="0 0 200 215">
+        <circle cx="100" cy="95" r="62" fill="none" stroke="#D85A30" stroke-width="3"/>
+        <circle cx="100" cy="95" r="54" fill="#1A2235"/>
+        <path d="M 71 67 L 71 123 Q 97 123 97 95 Q 97 67 71 67 Z" fill="#FFF"/>
+        <path d="M 129 67 L 129 123 Q 103 123 103 95 Q 103 67 129 67 Z" fill="#FFF"/>
+      </svg>
+      <div>
+        <div class="panel-logo-name">DuoLínguas</div>
+        <span class="panel-logo-sub">CARD GENERATOR · FONÉTICA</span>
+      </div>
+    </div>
+
+    <div id="panel-scroll">
+
+      <!-- PROFILE -->
+      <span class="sec-label">Perfil</span>
+      <div class="profile-row">
+        <button class="profile-btn active" onclick="setProfile('a')">
+          <div class="profile-swatch" style="background:#1C1917;border:1px solid #D85A30;"></div>
+          A · Escuro
+        </button>
+        <button class="profile-btn" onclick="setProfile('b')">
+          <div class="profile-swatch" style="background:#F1EFE8;border:1px solid #1C1917;"></div>
+          B · Claro
+        </button>
+        <button class="profile-btn" onclick="setProfile('c')">
+          <div class="profile-swatch" style="background:#3D1F0E;border:1px solid rgba(216,90,48,0.5);"></div>
+          C · Cobre
+        </button>
+      </div>
+
+      <!-- CATEGORY -->
+      <span class="sec-label">Categoria</span>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="inp-category" placeholder="ex: Aeroporto" oninput="updateCategory()">
+      </div>
+      <div class="font-ctrl">
+        <label>Tamanho</label>
+        <button class="fz-btn" onclick="changeFz('cat',-2)">−</button>
+        <span id="fz-cat-val">52</span>
+        <button class="fz-btn" onclick="changeFz('cat',2)">+</button>
+      </div>
+
+      <!-- SUBCATEGORY -->
+      <span class="sec-label" style="margin-top:14px;">Subcategoria</span>
+      <div class="field">
+        <label>Nome (opcional)</label>
+        <input type="text" id="inp-sub" placeholder="ex: Check-in · Embarque" oninput="updateSub()">
+      </div>
+      <div class="font-ctrl">
+        <label>Tamanho</label>
+        <button class="fz-btn" onclick="changeFz('sub',-1)">−</button>
+        <span id="fz-sub-val">15</span>
+        <button class="fz-btn" onclick="changeFz('sub',1)">+</button>
+      </div>
+
+      <!-- ICON -->
+      <span class="sec-label" style="margin-top:14px;">Ícone</span>
+      <button class="icon-none-btn" onclick="setIcon('none')">Sem ícone</button>
+      <div class="icon-grid" id="icon-grid"></div>
+
+      <!-- PHRASES -->
+      <span class="sec-label" style="margin-top:14px;">Nova frase</span>
+      <div class="phrase-form">
+        <div class="field">
+          <label>Português</label>
+          <input type="text" id="inp-pt" placeholder="Onde é o check-in?">
+        </div>
+        <div class="field">
+          <label>Fonética</label>
+          <input type="text" id="inp-ph" placeholder="On-dji é o chéqui-in?">
+        </div>
+        <div class="field">
+          <label>Inglês</label>
+          <input type="text" id="inp-en" placeholder="Where is the check-in?">
+        </div>
+        <button class="btn-insert" onclick="insertPhrase()">+ Inserir frase</button>
+      </div>
+
+      <div class="font-ctrl" style="margin-bottom:4px;">
+        <label>Português</label>
+        <button class="fz-btn" onclick="changeFz('pt',-1)">−</button>
+        <span id="fz-pt-val">24</span>
+        <button class="fz-btn" onclick="changeFz('pt',1)">+</button>
+      </div>
+      <div class="font-ctrl" style="margin-bottom:4px;">
+        <label>Fonética</label>
+        <button class="fz-btn" onclick="changeFz('ph',-1)">−</button>
+        <span id="fz-ph-val">20</span>
+        <button class="fz-btn" onclick="changeFz('ph',1)">+</button>
+      </div>
+      <div class="font-ctrl">
+        <label>Inglês</label>
+        <button class="fz-btn" onclick="changeFz('en',-1)">−</button>
+        <span id="fz-en-val">15</span>
+        <button class="fz-btn" onclick="changeFz('en',1)">+</button>
+      </div>
+
+      <!-- TIP -->
+      <span class="sec-label" style="margin-top:16px;">Tip / Bônus</span>
+      <div class="tip-form">
+        <div class="tip-toggle">
+          <span>Ativar tip</span>
+          <button class="toggle-switch" id="tip-toggle" onclick="toggleTip()"></button>
+        </div>
+        <div id="tip-fields" style="display:none;">
+          <div class="field">
+            <label>Label (ex: Tip, Bônus, Atenção)</label>
+            <input type="text" id="inp-tip-label" placeholder="Tip" oninput="updateTip()" value="Tip">
+          </div>
+          <div class="field">
+            <label>Texto</label>
+            <textarea id="inp-tip-text" rows="3" placeholder="Dica ou observação situacional..." oninput="updateTip()"></textarea>
+          </div>
+          <div class="tip-style-row">
+            <button class="tip-style-btn active" id="ts-solid" onclick="setTipStyle('solid')">Sólido</button>
+            <button class="tip-style-btn" id="ts-glass" onclick="setTipStyle('glass')">Vidro</button>
+          </div>
+          <div class="font-ctrl" style="margin-top:8px;">
+            <label>Tamanho texto</label>
+            <button class="fz-btn" onclick="changeFz('tip',-1)">−</button>
+            <span id="fz-tip-val">10</span>
+            <button class="fz-btn" onclick="changeFz('tip',1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGO -->
+      <span class="sec-label">Logo</span>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button class="tip-style-btn active" id="logo-dark" onclick="setLogo('dark')" style="flex:1;">Versão escura</button>
+        <button class="tip-style-btn" id="logo-light" onclick="setLogo('light')" style="flex:1;">Versão clara</button>
+      </div>
+
+    </div><!-- end panel-scroll -->
+
+    <!-- ACTIONS -->
+    <div id="panel-actions">
+      <button class="btn-save" onclick="saveCard()">↓ Salvar PNG</button>
+      <div class="action-row">
+        <button class="btn-action" onclick="sameCategory()">+ Mesmo tema</button>
+        <button class="btn-action" onclick="newCard()">Novo card</button>
+      </div>
+    </div>
+
+  </div><!-- end panel -->
+
+  <!-- ── PREVIEW ── -->
+  <div id="preview-area">
+    <div id="card-wrap">
+      <div class="card theme-a" id="the-card">
+
+        <div class="icon-circle" id="card-icon-circle">
+          <svg id="card-icon-svg" viewBox="0 0 24 24">
+            <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+          </svg>
+        </div>
+
+        <div class="card-top">
+          <div id="card-category" style="font-size:52px;">Categoria</div>
+          <div class="subcategory-wrap" id="sub-wrap">
+            <div id="card-subcategory" style="font-size:15px;">Subcategoria</div>
+          </div>
+          <div class="card-divider"></div>
+        </div>
+
+        <div id="phrases-list"></div>
+
+        <div id="card-footer">
+          <div id="footer-logo" onclick="toggleLogo()" title="Clique para alternar logo">
+            <svg id="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 215">
+              <circle cx="100" cy="95" r="62" fill="none" stroke="#D85A30" stroke-width="2.5"/>
+              <circle cx="100" cy="95" r="54" fill="#1A2235"/>
+              <path d="M 71 67 L 71 123 Q 97 123 97 95 Q 97 67 71 67 Z" fill="#FFFFFF"/>
+              <path d="M 129 67 L 129 123 Q 103 123 103 95 Q 103 67 129 67 Z" fill="#FFFFFF"/>
+              <path d="M 84 173 Q 100 187 116 173" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div id="tip-block" class="solid hidden">
+            <div id="tip-label-el">Tip</div>
+            <div id="tip-text-el"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end app -->
+
+<!-- EDIT MODAL -->
+<div id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-title">Editar frase</div>
+    <div class="field"><label>Português</label><input type="text" id="modal-pt"></div>
+    <div class="field"><label>Fonética</label><input type="text" id="modal-ph"></div>
+    <div class="field"><label>Inglês</label><input type="text" id="modal-en"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-copy" onclick="copyModalText()">Copiar</button>
+      <button class="btn-modal-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-modal-save" onclick="saveModal()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+
+// ── STATE ──
+let profile = 'a';
+let selectedIcon = 'plane';
+let tipActive = false;
+let tipStyle = 'solid';
+let logoVariant = 'dark';
+let editingIndex = null;
+let phrases = [];
+
+let fz = { cat: 52, sub: 15, pt: 24, ph: 20, en: 15, tip: 10 };
+
+// ── ICONS ──
+const ICONS = {
+  plane: `<path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>`,
+  food: `<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>`,
+  hotel: `<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>`,
+  money: `<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>`,
+  medical: `<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>`,
+  transport: `<rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>`,
+  shopping: `<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>`,
+  phone: `<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.24h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.12 6.12l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>`,
+  work: `<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>`,
+  bar: `<path d="M8 22H6a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2h.5"/><path d="M18 22h-2a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2h.5"/><path d="M11 22v-4"/><path d="M17 2H7L3 8l9 12 9-12z"/>`,
+  map: `<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>`,
+  emergency: `<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>`,
+};
+
+const ICON_LABELS = {
+  plane:'Avião', food:'Comida', hotel:'Hotel', money:'Dinheiro',
+  medical:'Saúde', transport:'Transporte', shopping:'Compras',
+  phone:'Telefone', work:'Trabalho', bar:'Bar', map:'Mapa', emergency:'Emergência'
+};
+
+function buildIconGrid() {
+  const grid = document.getElementById('icon-grid');
+  grid.innerHTML = '';
+  Object.entries(ICONS).forEach(([key, path]) => {
+    const btn = document.createElement('button');
+    btn.className = 'icon-btn' + (key === selectedIcon ? ' active' : '');
+    btn.title = ICON_LABELS[key];
+    btn.innerHTML = `<svg viewBox="0 0 24 24">${path}</svg>`;
+    btn.onclick = () => setIcon(key);
+    grid.appendChild(btn);
+  });
+}
+
+function setIcon(key) {
+  selectedIcon = key;
+  document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
+  if (key !== 'none') {
+    document.querySelectorAll('.icon-btn')[Object.keys(ICONS).indexOf(key)]?.classList.add('active');
+    document.getElementById('card-icon-svg').innerHTML = ICONS[key];
+    document.getElementById('card-icon-circle').style.display = 'flex';
+  } else {
+    document.getElementById('card-icon-circle').style.display = 'none';
+  }
+}
+
+// ── PROFILE ──
+function setProfile(p) {
+  profile = p;
+  document.querySelectorAll('.profile-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['a','b','c'][i] === p);
+  });
+  const card = document.getElementById('the-card');
+  card.className = `card theme-${p}`;
+  applyTipStyle();
+}
+
+// ── CATEGORY ──
+function updateCategory() {
+  const val = document.getElementById('inp-category').value || 'Categoria';
+  document.getElementById('card-category').textContent = val;
+}
+
+// ── SUBCATEGORY ──
+function updateSub() {
+  const val = document.getElementById('inp-sub').value;
+  const wrap = document.getElementById('sub-wrap');
+  if (val.trim()) {
+    wrap.classList.remove('hidden');
+    document.getElementById('card-subcategory').textContent = val;
+  } else {
+    wrap.classList.add('hidden');
+  }
+}
+
+// ── FONT SIZES ──
+function changeFz(key, delta) {
+  fz[key] = Math.max(8, Math.min(72, fz[key] + delta));
+  document.getElementById(`fz-${key}-val`).textContent = fz[key];
+  applyFontSizes();
+}
+
+function applyFontSizes() {
+  document.getElementById('card-category').style.fontSize = fz.cat + 'px';
+  document.getElementById('card-subcategory').style.fontSize = fz.sub + 'px';
+  document.querySelectorAll('.p-pt').forEach(el => el.style.fontSize = fz.pt + 'px');
+  document.querySelectorAll('.p-ph').forEach(el => el.style.fontSize = fz.ph + 'px');
+  document.querySelectorAll('.p-en').forEach(el => el.style.fontSize = fz.en + 'px');
+  document.getElementById('tip-text-el').style.fontSize = fz.tip + 'px';
+}
+
+// ── PHRASES ──
+function insertPhrase() {
+  const pt = document.getElementById('inp-pt').value.trim();
+  const ph = document.getElementById('inp-ph').value.trim();
+  const en = document.getElementById('inp-en').value.trim();
+  if (!pt && !ph && !en) return;
+  phrases.push({ pt, ph, en });
+  document.getElementById('inp-pt').value = '';
+  document.getElementById('inp-ph').value = '';
+  document.getElementById('inp-en').value = '';
+  renderPhrases();
+}
+
+function renderPhrases() {
+  const list = document.getElementById('phrases-list');
+  list.innerHTML = '';
+  phrases.forEach((p, i) => {
+    const block = document.createElement('div');
+    block.className = 'phrase-block';
+    block.innerHTML = `
+      <div class="block-controls">
+        <button class="block-ctrl-btn btn-edit-block" onclick="openEdit(${i})" title="Editar">✎</button>
+        <button class="block-ctrl-btn btn-del-block" onclick="deletePhrase(${i})" title="Apagar">×</button>
+      </div>
+      <div class="p-pt" style="font-size:${fz.pt}px;">${p.pt}</div>
+      <div class="p-ph" style="font-size:${fz.ph}px;">${p.ph}</div>
+      <div class="p-en" style="font-size:${fz.en}px;">${p.en}</div>`;
+    list.appendChild(block);
+  });
+}
+
+function deletePhrase(i) {
+  phrases.splice(i, 1);
+  renderPhrases();
+}
+
+// ── EDIT MODAL ──
+function openEdit(i) {
+  editingIndex = i;
+  document.getElementById('modal-pt').value = phrases[i].pt;
+  document.getElementById('modal-ph').value = phrases[i].ph;
+  document.getElementById('modal-en').value = phrases[i].en;
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  editingIndex = null;
+}
+
+function saveModal() {
+  if (editingIndex === null) return;
+  phrases[editingIndex] = {
+    pt: document.getElementById('modal-pt').value,
+    ph: document.getElementById('modal-ph').value,
+    en: document.getElementById('modal-en').value,
+  };
+  renderPhrases();
+  closeModal();
+}
+
+function copyModalText() {
+  const txt = [
+    document.getElementById('modal-pt').value,
+    document.getElementById('modal-ph').value,
+    document.getElementById('modal-en').value
+  ].join('\n');
+  navigator.clipboard.writeText(txt);
+}
+
+// ── TIP ──
+function toggleTip() {
+  tipActive = !tipActive;
+  const sw = document.getElementById('tip-toggle');
+  sw.classList.toggle('on', tipActive);
+  document.getElementById('tip-fields').style.display = tipActive ? 'block' : 'none';
+  const tb = document.getElementById('tip-block');
+  tb.classList.toggle('hidden', !tipActive);
+  if (tipActive) updateTip();
+}
+
+function updateTip() {
+  document.getElementById('tip-label-el').textContent = document.getElementById('inp-tip-label').value || 'Tip';
+  document.getElementById('tip-text-el').textContent = document.getElementById('inp-tip-text').value;
+}
+
+function setTipStyle(style) {
+  tipStyle = style;
+  document.getElementById('ts-solid').classList.toggle('active', style === 'solid');
+  document.getElementById('ts-glass').classList.toggle('active', style === 'glass');
+  applyTipStyle();
+}
+
+function applyTipStyle() {
+  const tb = document.getElementById('tip-block');
+  tb.classList.remove('solid','glass');
+  tb.classList.add(tipStyle);
+}
+
+// ── LOGO ──
+function setLogo(v) {
+  logoVariant = v;
+  document.getElementById('logo-dark').classList.toggle('active', v === 'dark');
+  document.getElementById('logo-light').classList.toggle('active', v === 'light');
+  renderLogo();
+}
+
+function toggleLogo() {
+  setLogo(logoVariant === 'dark' ? 'light' : 'dark');
+}
+
+function renderLogo() {
+  const svg = document.getElementById('logo-svg');
+  if (logoVariant === 'dark') {
+    svg.innerHTML = `
+      <circle cx="100" cy="95" r="62" fill="none" stroke="#D85A30" stroke-width="2.5"/>
+      <circle cx="100" cy="95" r="54" fill="#1A2235"/>
+      <path d="M 71 67 L 71 123 Q 97 123 97 95 Q 97 67 71 67 Z" fill="#FFFFFF"/>
+      <path d="M 129 67 L 129 123 Q 103 123 103 95 Q 103 67 129 67 Z" fill="#FFFFFF"/>
+      <path d="M 84 173 Q 100 187 116 173" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>`;
+  } else {
+    svg.innerHTML = `
+      <circle cx="100" cy="95" r="62" fill="none" stroke="#D85A30" stroke-width="2.5"/>
+      <circle cx="100" cy="95" r="54" fill="#F1EFE8"/>
+      <path d="M 71 67 L 71 123 Q 97 123 97 95 Q 97 67 71 67 Z" fill="#1C1917"/>
+      <path d="M 129 67 L 129 123 Q 103 123 103 95 Q 103 67 129 67 Z" fill="#1C1917"/>
+      <path d="M 84 173 Q 100 187 116 173" fill="none" stroke="#D85A30" stroke-width="2.5" stroke-linecap="round"/>`;
+  }
+}
+
+// ── SAVE PNG ──
+async function saveCard() {
+  const card = document.getElementById('the-card');
+  // hide controls
+  document.querySelectorAll('.block-controls').forEach(el => el.style.opacity = '0');
+  const canvas = await html2canvas(card, {
+    scale: 3,
+    useCORS: true,
+    backgroundColor: null,
+    logging: false,
+  });
+  document.querySelectorAll('.block-controls').forEach(el => el.style.opacity = '');
+  const cat = document.getElementById('inp-category').value || 'card';
+  const sub = document.getElementById('inp-sub').value;
+  const fname = `duolinguas-${cat}${sub ? '-' + sub : ''}.png`.replace(/\s+/g,'-').toLowerCase();
+  const a = document.createElement('a');
+  a.download = fname;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+
+// ── RESET ──
+function sameCategory() {
+  phrases = [];
+  renderPhrases();
+  document.getElementById('inp-tip-text').value = '';
+  if (tipActive) { toggleTip(); }
+  document.getElementById('inp-pt').value = '';
+  document.getElementById('inp-ph').value = '';
+  document.getElementById('inp-en').value = '';
+  updateTip();
+}
+
+function newCard() {
+  phrases = [];
+  renderPhrases();
+  document.getElementById('inp-category').value = '';
+  document.getElementById('inp-sub').value = '';
+  document.getElementById('inp-pt').value = '';
+  document.getElementById('inp-ph').value = '';
+  document.getElementById('inp-en').value = '';
+  document.getElementById('inp-tip-text').value = '';
+  document.getElementById('inp-tip-label').value = 'Tip';
+  if (tipActive) toggleTip();
+  updateCategory();
+  updateSub();
+  updateTip();
+}
+
+
+// ── PASSWORD ──
+function checkPw() {
+  const input = document.getElementById('pw-input');
+  const err = document.getElementById('pw-err');
+  if (input.value === '001288') {
+    document.getElementById('pw-screen').classList.add('gone');
+    input.value = '';
+  } else {
+    input.classList.add('error');
+    err.classList.add('show');
+    setTimeout(() => {
+      input.classList.remove('error');
+      err.classList.remove('show');
+      input.value = '';
+      input.focus();
+    }, 800);
+  }
+}
+
+// ── INIT ──
+buildIconGrid();
+applyFontSizes();
+document.getElementById('sub-wrap').classList.add('hidden');
+
+</script>
+</body>
+</html>

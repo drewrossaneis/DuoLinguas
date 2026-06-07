@@ -51,15 +51,15 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --ui-bg: #111010;
-  --ui-panel: #191716;
-  --ui-border: rgba(255,255,255,0.07);
-  --ui-border2: rgba(255,255,255,0.12);
+  --ui-bg: #0D0B0A;
+  --ui-panel: #1A1714;
+  --ui-border: rgba(255,255,255,0.1);
+  --ui-border2: rgba(255,255,255,0.18);
   --ui-text: #F1EFE8;
-  --ui-text2: #888780;
-  --ui-text3: #444441;
+  --ui-text2: #C8C6BE;
+  --ui-text3: #888780;
   --ui-coral: #D85A30;
-  --ui-input-bg: #222120;
+  --ui-input-bg: #2A2724;
 }
 
 html, body {
@@ -196,7 +196,7 @@ html, body {
 .panel-logo-sub {
   font-size: 6px;
   letter-spacing: 3px;
-  color: var(--ui-text3);
+  color: #888780;
   display: block;
 }
 
@@ -204,7 +204,7 @@ html, body {
 .sec-label {
   font-size: 7px;
   letter-spacing: 3px;
-  color: var(--ui-text3);
+  color: #D85A30;
   text-transform: uppercase;
   margin: 18px 0 8px;
   display: block;
@@ -220,13 +220,13 @@ html, body {
   flex: 1;
   padding: 8px 4px;
   border-radius: 6px;
-  border: 1px solid var(--ui-border);
+  border: 1px solid rgba(255,255,255,0.15);
   background: none;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
   font-size: 8px;
   letter-spacing: 2px;
-  color: var(--ui-text2);
+  color: #C8C6BE;
   text-transform: uppercase;
   transition: all 0.15s;
   display: flex;
@@ -234,8 +234,8 @@ html, body {
   align-items: center;
   gap: 5px;
 }
-.profile-btn:hover { border-color: var(--ui-coral); color: var(--ui-text); }
-.profile-btn.active { border-color: var(--ui-coral); color: var(--ui-coral); background: rgba(216,90,48,0.06); }
+.profile-btn:hover { border-color: var(--ui-coral); color: #F1EFE8; }
+.profile-btn.active { border-color: var(--ui-coral); color: var(--ui-coral); background: rgba(216,90,48,0.08); }
 .profile-swatch {
   width: 28px;
   height: 14px;
@@ -247,7 +247,7 @@ html, body {
 .field label {
   font-size: 7px;
   letter-spacing: 2px;
-  color: var(--ui-text3);
+  color: #C8C6BE;
   text-transform: uppercase;
   display: block;
   margin-bottom: 4px;
@@ -283,14 +283,14 @@ html, body {
 .font-ctrl label {
   font-size: 7px;
   letter-spacing: 1px;
-  color: var(--ui-text3);
+  color: #C8C6BE;
   text-transform: uppercase;
   flex: 1;
   margin: 0;
 }
 .font-ctrl span {
   font-size: 11px;
-  color: var(--ui-text2);
+  color: #F1EFE8;
   min-width: 26px;
   text-align: center;
 }
@@ -321,8 +321,8 @@ html, body {
 .icon-btn {
   aspect-ratio: 1;
   border-radius: 6px;
-  border: 1px solid var(--ui-border);
-  background: var(--ui-input-bg);
+  border: 1px solid rgba(255,255,255,0.15);
+  background: #2A2724;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -331,14 +331,14 @@ html, body {
   padding: 6px;
 }
 .icon-btn:hover { border-color: var(--ui-coral); }
-.icon-btn.active { border-color: var(--ui-coral); background: rgba(216,90,48,0.1); }
-.icon-btn svg { width: 16px; height: 16px; stroke: var(--ui-text2); fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn.active { border-color: var(--ui-coral); background: rgba(216,90,48,0.15); }
+.icon-btn svg { width: 16px; height: 16px; stroke: #C8C6BE; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 .icon-btn.active svg { stroke: var(--ui-coral); }
 .icon-none-btn {
   font-size: 8px;
   letter-spacing: 1px;
-  color: var(--ui-text3);
-  border: 1px dashed var(--ui-border);
+  color: #C8C6BE;
+  border: 1px dashed rgba(255,255,255,0.2);
   background: none;
   border-radius: 6px;
   padding: 5px 8px;
@@ -347,12 +347,12 @@ html, body {
   transition: all 0.15s;
   margin-bottom: 8px;
 }
-.icon-none-btn:hover { color: var(--ui-text2); border-color: var(--ui-border2); }
+.icon-none-btn:hover { color: #F1EFE8; border-color: rgba(255,255,255,0.35); }
 
 /* ── PHRASE FORM ── */
 .phrase-form {
-  background: rgba(216,90,48,0.05);
-  border: 0.5px solid rgba(216,90,48,0.2);
+  background: rgba(216,90,48,0.08);
+  border: 0.5px solid rgba(216,90,48,0.35);
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
@@ -378,8 +378,8 @@ html, body {
 
 /* ── TIP FORM ── */
 .tip-form {
-  background: var(--ui-input-bg);
-  border: 0.5px solid var(--ui-border2);
+  background: #2A2724;
+  border: 0.5px solid rgba(255,255,255,0.15);
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
@@ -393,7 +393,7 @@ html, body {
 .tip-toggle span {
   font-size: 8px;
   letter-spacing: 2px;
-  color: var(--ui-text2);
+  color: #C8C6BE;
   text-transform: uppercase;
 }
 .toggle-switch {
@@ -431,16 +431,16 @@ html, body {
   flex: 1;
   padding: 5px 4px;
   border-radius: 4px;
-  border: 1px solid var(--ui-border);
+  border: 1px solid rgba(255,255,255,0.15);
   background: none;
   cursor: pointer;
   font-size: 7px;
   letter-spacing: 1px;
-  color: var(--ui-text3);
+  color: #C8C6BE;
   text-transform: uppercase;
   transition: all 0.15s;
 }
-.tip-style-btn:hover { border-color: var(--ui-border2); color: var(--ui-text2); }
+.tip-style-btn:hover { border-color: rgba(255,255,255,0.3); color: #F1EFE8; }
 .tip-style-btn.active { border-color: var(--ui-coral); color: var(--ui-coral); }
 
 /* ── PANEL FOOTER ACTIONS ── */
@@ -473,9 +473,9 @@ html, body {
   flex: 1;
   padding: 8px;
   border-radius: 6px;
-  border: 0.5px solid var(--ui-border2);
+  border: 0.5px solid rgba(255,255,255,0.2);
   background: none;
-  color: var(--ui-text2);
+  color: #F1EFE8;
   font-family: 'Montserrat', sans-serif;
   font-size: 8px;
   letter-spacing: 1.5px;
@@ -504,6 +504,7 @@ html, body {
 
 .card {
   width: 390px;
+  min-height: 693px;
   border-radius: 24px;
   position: relative;
   overflow: visible;
@@ -702,11 +703,11 @@ html, body {
 .theme-a #tip-text-el { color: #3a3632; }
 .theme-a #tip-block.glass #tip-text-el { color: #888780; }
 
-/* PROFILE B — light */
-.theme-b .card { background: #F1EFE8; border: 0.5px solid rgba(0,0,0,0.07); box-shadow: 0 32px 80px rgba(0,0,0,0.15); }
-.theme-b .icon-circle { background: #F1EFE8; border-color: #1C1917; }
-.theme-b .icon-circle svg { stroke: #1C1917; }
-.theme-b #card-category { color: #1C1917; }
+/* PROFILE B — light (full inversion of A) */
+.theme-b .card { background: #F1EFE8; border: 0.5px solid rgba(0,0,0,0.08); box-shadow: 0 32px 80px rgba(0,0,0,0.18); }
+.theme-b .icon-circle { background: #F1EFE8; border-color: #D85A30; }
+.theme-b .icon-circle svg { stroke: #D85A30; }
+.theme-b #card-category { color: #D85A30; }
 .theme-b .subcategory-wrap { background: #1C1917; }
 .theme-b #card-subcategory { color: #F1EFE8; }
 .theme-b .card-divider { background: rgba(0,0,0,0.1); }
@@ -715,7 +716,7 @@ html, body {
 .theme-b .p-ph { color: #D85A30; }
 .theme-b .p-en { color: #888780; }
 .theme-b #tip-block.solid { background: #1C1917; }
-.theme-b #tip-block.glass { background: rgba(28,25,23,0.08); backdrop-filter: blur(8px); border: 0.5px solid rgba(28,25,23,0.15); }
+.theme-b #tip-block.glass { background: rgba(28,25,23,0.5); backdrop-filter: blur(8px); border: 0.5px solid rgba(28,25,23,0.3); }
 .theme-b #tip-label-el { color: #D85A30; }
 .theme-b #tip-text-el { color: #888780; }
 .theme-b #tip-block.glass #tip-text-el { color: #888780; }
@@ -1280,28 +1281,56 @@ function renderLogo() {
 
 // ── SAVE PNG ──
 async function saveCard() {
-  const card = document.getElementById('the-card');
   document.querySelectorAll('.block-controls').forEach(el => el.style.opacity = '0');
-  // Wait for fonts to be fully loaded
   await document.fonts.ready;
-  const canvas = await html2canvas(card, {
+
+  // Create an offscreen wrapper sized exactly 9:16 (1080x1920) for story format
+  const card = document.getElementById('the-card');
+  const cardRect = card.getBoundingClientRect();
+
+  // We capture card-wrap which includes the overflowing icon circle
+  const wrap = document.getElementById('card-wrap');
+
+  const canvas = await html2canvas(wrap, {
     scale: 3,
     useCORS: false,
     allowTaint: true,
     backgroundColor: null,
     logging: false,
-    onclone: function(clonedDoc) {
-      // ensure fonts applied in clone
-      clonedDoc.fonts.ready;
-    }
+    scrollX: 0,
+    scrollY: 0,
   });
+
   document.querySelectorAll('.block-controls').forEach(el => el.style.opacity = '');
+
+  // Now draw onto a 1080x1920 story canvas (9:16)
+  const storyW = 1080;
+  const storyH = 1920;
+  const storyCanvas = document.createElement('canvas');
+  storyCanvas.width = storyW;
+  storyCanvas.height = storyH;
+  const ctx = storyCanvas.getContext('2d');
+
+  // Fill story background with card's bg color
+  const cardBg = window.getComputedStyle(card).backgroundColor;
+  ctx.fillStyle = cardBg || '#1C1917';
+  ctx.fillRect(0, 0, storyW, storyH);
+
+  // Center the card capture on the story canvas
+  const scale = Math.min(storyW / canvas.width, storyH / canvas.height) * 0.92;
+  const drawW = canvas.width * scale;
+  const drawH = canvas.height * scale;
+  const offsetX = (storyW - drawW) / 2;
+  const offsetY = (storyH - drawH) / 2;
+
+  ctx.drawImage(canvas, offsetX, offsetY, drawW, drawH);
+
   const cat = document.getElementById('inp-category').value || 'card';
   const sub = document.getElementById('inp-sub').value;
   const fname = `duolinguas-${cat}${sub ? '-' + sub : ''}.png`.replace(/\s+/g,'-').toLowerCase();
   const a = document.createElement('a');
   a.download = fname;
-  a.href = canvas.toDataURL('image/png');
+  a.href = storyCanvas.toDataURL('image/png');
   a.click();
 }
 

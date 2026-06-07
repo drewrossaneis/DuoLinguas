@@ -688,14 +688,14 @@ html, body {
 
 /* ── THEMES ── */
 /* PROFILE A — dark */
-.theme-a .card { background: #1C1917; border: 0.5px solid rgba(255,255,255,0.07); }
-.theme-a .icon-circle { background: #1C1917; border-color: #D85A30; }
+.theme-a .card { background: #1C1917 !important; border: 0.5px solid rgba(255,255,255,0.07); }
+.theme-a .icon-circle { background: #1C1917 !important; border-color: #D85A30; }
 .theme-a .icon-circle svg { stroke: #D85A30; }
 .theme-a #card-category { color: #D85A30; }
 .theme-a .subcategory-wrap { background: #D85A30; }
 .theme-a #card-subcategory { color: #F1EFE8; }
 .theme-a .card-divider { background: rgba(255,255,255,0.08); }
-.theme-a .phrase-block { background: #F1EFE8; }
+.theme-a .phrase-block { background: #F1EFE8 !important; }
 .theme-a .p-pt { color: #1C1917; }
 .theme-a .p-ph { color: #D85A30; }
 .theme-a .p-en { color: #5F5E5A; }
@@ -706,14 +706,14 @@ html, body {
 .theme-a #tip-block.glass #tip-text-el { color: #888780; }
 
 /* PROFILE B — light (full inversion of A) */
-.theme-b .card { background: #F1EFE8; border: 0.5px solid rgba(0,0,0,0.08); box-shadow: 0 32px 80px rgba(0,0,0,0.18); }
-.theme-b .icon-circle { background: #F1EFE8; border-color: #D85A30; }
+.theme-b .card { background: #F1EFE8 !important; border: 0.5px solid rgba(0,0,0,0.08); box-shadow: 0 32px 80px rgba(0,0,0,0.18); }
+.theme-b .icon-circle { background: #F1EFE8 !important; border-color: #D85A30; }
 .theme-b .icon-circle svg { stroke: #D85A30; }
 .theme-b #card-category { color: #D85A30; }
 .theme-b .subcategory-wrap { background: #1C1917; }
 .theme-b #card-subcategory { color: #F1EFE8; }
 .theme-b .card-divider { background: rgba(0,0,0,0.1); }
-.theme-b .phrase-block { background: #1C1917; }
+.theme-b .phrase-block { background: #1C1917 !important; }
 .theme-b .p-pt { color: #F1EFE8; }
 .theme-b .p-ph { color: #D85A30; }
 .theme-b .p-en { color: #888780; }
@@ -724,14 +724,14 @@ html, body {
 .theme-b #tip-block.glass #tip-text-el { color: #888780; }
 
 /* PROFILE C — copper */
-.theme-c .card { background: #3D1F0E; border: 0.5px solid rgba(216,90,48,0.2); }
-.theme-c .icon-circle { background: #3D1F0E; border-color: #F1EFE8; }
+.theme-c .card { background: #3D1F0E !important; border: 0.5px solid rgba(216,90,48,0.2); }
+.theme-c .icon-circle { background: #3D1F0E !important; border-color: #F1EFE8; }
 .theme-c .icon-circle svg { stroke: #F1EFE8; }
 .theme-c #card-category { color: #F1EFE8; }
 .theme-c .subcategory-wrap { background: rgba(216,90,48,0.25); border: 1px solid rgba(216,90,48,0.5); }
 .theme-c #card-subcategory { color: #F1EFE8; }
 .theme-c .card-divider { background: rgba(241,239,232,0.1); }
-.theme-c .phrase-block { background: #2A1208; border: 0.5px solid rgba(241,239,232,0.08); }
+.theme-c .phrase-block { background: #2A1208 !important; border: 0.5px solid rgba(241,239,232,0.08); }
 .theme-c .p-pt { color: #F1EFE8; }
 .theme-c .p-ph { color: #D85A30; }
 .theme-c .p-en { color: #9A7A6A; }
@@ -900,6 +900,10 @@ html, body {
       <span class="sec-label" style="margin-top:14px;">Ícone</span>
       <button class="icon-none-btn" onclick="setIcon('none')">Sem ícone</button>
       <div class="icon-grid" id="icon-grid"></div>
+      <div class="field" style="margin-top:8px;">
+        <label>SVG personalizado (cole o código)</label>
+        <textarea id="custom-icon-input" rows="3" placeholder="<svg>...</svg>" oninput="applyCustomIcon()"></textarea>
+      </div>
 
       <!-- PHRASES -->
       <span class="sec-label" style="margin-top:14px;">Nova frase</span>
@@ -1092,6 +1096,15 @@ function buildIconGrid() {
     btn.onclick = () => setIcon(key);
     grid.appendChild(btn);
   });
+}
+
+function applyCustomIcon() {
+  const val = document.getElementById('custom-icon-input').value.trim();
+  if (!val) return;
+  selectedIcon = 'custom';
+  document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('card-icon-svg').innerHTML = val.replace(/<svg[^>]*>/, '').replace(/<\/svg>/, '');
+  document.getElementById('card-icon-circle').style.display = 'flex';
 }
 
 function setIcon(key) {

@@ -213,6 +213,16 @@
     line-height: 1.3;
   }
 
+
+  .card-desc {
+    font-size: 10px;
+    line-height: 1.4;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 7px;
+    max-width: 90%;
+  }
+
   .card-btn {
     display: inline-block;
     margin-top: 10px;
@@ -262,28 +272,42 @@
     .tagline { font-size: 14px; }
     .back-link { top: 20px; left: 16px; }
   }
+
   /* ── TOP NAV ── */
   .duol-topnav {
     display: flex; align-items: center; justify-content: center;
     gap: 32px; padding: 10px 20px;
     background: transparent;
-    border-bottom: 0.5px solid rgba(241,239,232,0.08);
+    border-bottom: 0.5px solid rgba(241,239,232,0.07);
   }
   .duol-topnav a {
     font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
-    text-decoration: none; color: #444441;
-    transition: color 0.2s; font-family: Helvetica, Arial, sans-serif;
+    text-decoration: none; color: #888780;
+    transition: color 0.2s;
   }
   .duol-topnav a:hover { color: #D85A30; }
   .duol-topnav a.nav-active { color: #D85A30; }
+
 </style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DLGZ93EE6Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DLGZ93EE6Y');
+</script>
 </head>
 <body>
-<nav class="duol-topnav"><a href="index.html">Schedule</a><a href="play.html" class="nav-active">Play</a><a href="duolmaps.html">Maps</a></nav>
 
 <header class="header">
+  <nav class="duol-topnav">
+  <a href="index.html">DuoLínguas</a>
+  <a href="play.html" class="nav-active">Play</a>
+  <a href="maps.html">Maps</a>
+</nav>
 
-  <a href="index.html" class="back-link">BACK to Portal</a>
+  
 
   <!-- Logo negativo (fundo claro dentro, para fundo escuro da página) -->
   <div class="logo-wrap">
@@ -314,54 +338,7 @@
 
   <div class="section-label">Playlists</div>
 
-  <div class="grid">
-
-    <!-- ============================================================ -->
-    <!-- PLAYLIST ATIVA — para ativar: status="active"               -->
-    <!-- Para desativar: troque class="card active" por class="card inactive" -->
-    <!-- ============================================================ -->
-    <div class="card active">
-      <a href="https://open.spotify.com/playlist/5QMaZq5EIvdl8BYV9hLQGj?si=EUf8YPp1SuKniXkAz62ipw&pi=Wgzz4M--TXaw-" target="_blank" class="card-icon" aria-label="Abrir playlist">
-        <!-- Ícone da marca -->
-        <img src="DuoLPlayv1.png" alt="Slowly Getting Closer
- to the Language" style="width:100%;height:100%;object-fit:cover;border-radius:11px;">
-        <!-- Ícone de play no hover -->
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="11" stroke="#D85A30" stroke-width="1"/>
-            <path d="M10 8.5L16 12L10 15.5V8.5Z" fill="#D85A30"/>
-          </svg>
-        </div>
-      </a>
-      <div class="card-name">Slowly Getting Closer
- to the Language</div>
-      <a href="https://open.spotify.com/playlist/5QMaZq5EIvdl8BYV9hLQGj?si=EUf8YPp1SuKniXkAz62ipw&pi=Wgzz4M--TXaw-" target="_blank" class="card-btn">PLAY - Spotify</a>
-    </div>
-    <!-- FIM PLAYLIST 1 -->
-
-
-<div class="card active">
-      <a href="https://open.spotify.com/playlist/14RpNkTCZRPm3rqTNvaDNe?si=jAR9TSraTl-cNOfs0npo-A&pi=rVlCEdBiSvWkV" target="_blank" class="card-icon" aria-label="Abrir playlist">
-        <img src="duoltracksvol2.png" alt="The Last Peaceful Moments Before You Understand Brazilian Funk" style="width:100%;height:100%;object-fit:cover;border-radius:11px;">
-        <div class="play-overlay">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="11" stroke="#D85A30" stroke-width="1"/>
-            <path d="M10 8.5L16 12L10 15.5V8.5Z" fill="#D85A30"/>
-          </svg>
-        </div>
-      </a>
-      <div class="card-name">The Last Peaceful Moments Before You Understand Brazilian Funk</div>
-      <a href="https://open.spotify.com/playlist/14RpNkTCZRPm3rqTNvaDNe?si=jAR9TSraTl-cNOfs0npo-A&pi=rVlCEdBiSvWkV" target="_blank" class="card-btn">PLAY - Spotify</a>
-    </div>
-    <!-- FIM PLAYLIST 2 -->
-
-
-    <!-- ============================================================ -->
-    <!-- DUPLIQUE O BLOCO ACIMA PARA ADICIONAR MAIS PLAYLISTS        -->
-    <!-- ============================================================ -->
-
-
-  </div><!-- fim .grid -->
+  <div class="grid" id="playlistGrid"></div><!-- fim .grid -->
 
 </main>
 
@@ -373,6 +350,48 @@
   </div>
   <p class="footer-text">DuoLínguas Private School &nbsp;·&nbsp; By Drew Rossaneis</p>
 </footer>
+
+<script src="playlists.js"></script>
+<script>
+  const grid = document.getElementById("playlistGrid");
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function createPlaylistCard(playlist) {
+    if (!playlist || playlist.active === false) return "";
+
+    const title = escapeHtml(playlist.title);
+    const description = escapeHtml(playlist.description);
+    const image = escapeHtml(playlist.image);
+    const url = escapeHtml(playlist.url);
+
+    return `
+      <div class="card active">
+        <a href="${url}" target="_blank" class="card-icon" aria-label="Abrir playlist ${title}">
+          <img src="${image}" alt="${title}">
+          <div class="play-overlay">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="11" stroke="#D85A30" stroke-width="1"/>
+              <path d="M10 8.5L16 12L10 15.5V8.5Z" fill="#D85A30"/>
+            </svg>
+          </div>
+        </a>
+        <div class="card-name">${title}</div>
+        ${description ? `<div class="card-desc">${description}</div>` : ""}
+        <a href="${url}" target="_blank" class="card-btn">PLAY - Spotify</a>
+      </div>
+    `;
+  }
+
+  grid.innerHTML = PLAYLISTS.map(createPlaylistCard).join("");
+</script>
 
 </body>
 </html>

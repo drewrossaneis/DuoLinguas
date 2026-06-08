@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DuoLínguas Playlist Generator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #141210;
+    color: #F1EFE8;
+    padding: 24px;
+    max-width: 720px;
+    margin: auto;
+  }
+  h1 { font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+  p { color: #888780; line-height: 1.5; }
+  label { display: block; margin-top: 16px; font-size: 13px; color: #888780; }
+  input, textarea {
+    width: 100%; margin-top: 6px; padding: 10px;
+    background: #1C1917; color: #F1EFE8;
+    border: 1px solid rgba(241,239,232,0.12); border-radius: 6px;
+  }
+  textarea { min-height: 80px; resize: vertical; }
+  button {
+    margin-top: 20px; margin-right: 8px; padding: 10px 18px;
+    background: #D85A30; color: #141210;
+    border: none; border-radius: 20px; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 2px; font-size: 11px;
+  }
+  pre {
+    margin-top: 24px; padding: 16px; background: #1C1917;
+    border: 1px solid rgba(241,239,232,0.12); border-radius: 8px;
+    white-space: pre-wrap; line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<h1>DuoLínguas Playlist Generator</h1>
+<p>Preencha os campos, clique em gerar e copie o bloco para dentro do arquivo playlists.js.</p>
+
+<label>Título da playlist</label>
+<input id="title" placeholder="Exemplo: Soft Brazilian Survival">
+
+<label>Descrição curta</label>
+<textarea id="description" placeholder="Uma frase curta sobre a função da playlist."></textarea>
+
+<label>Nome do arquivo da capa</label>
+<input id="image" placeholder="Exemplo: duol-play-vol-03.png">
+
+<label>URL do Spotify</label>
+<input id="url" placeholder="Cole aqui o link da playlist no Spotify">
+
+<button onclick="generate()">Gerar bloco</button>
+<button onclick="copyOutput()">Copiar</button>
+
+<pre id="output"></pre>
+
+<script>
+function clean(text) {
+  return String(text || "").replace(/\/g, "\\").replace(/"/g, '\"').trim();
+}
+function generate() {
+  const title = clean(document.getElementById("title").value);
+  const description = clean(document.getElementById("description").value);
+  const image = clean(document.getElementById("image").value);
+  const url = clean(document.getElementById("url").value);
+  const block = `{
+  title: "${title}",
+  description: "${description}",
+  image: "${image}",
+  url: "${url}",
+  active: true
+},`;
+  document.getElementById("output").textContent = block;
+}
+function copyOutput() {
+  const output = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(output);
+}
+</script>
+</body>
+</html>

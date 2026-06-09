@@ -5,155 +5,725 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DuoLínguas Playlist Generator</title>
 <style>
-  :root { --bg:#141210; --bg2:#1C1917; --text:#F1EFE8; --muted:#888780; --orange:#D85A30; --border:rgba(241,239,232,0.12); }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family: Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); padding:32px; }
-  main { max-width:900px; margin:0 auto; }
-  h1 { font-size:30px; margin:0 0 10px; font-weight:500; }
-  p { color:var(--muted); line-height:1.5; margin:0 0 22px; }
-  .box { border:1px solid var(--border); background:rgba(255,255,255,0.02); border-radius:10px; padding:18px; margin:18px 0; }
-  label { display:block; margin:14px 0 6px; font-size:14px; color:var(--muted); }
-  input, textarea { width:100%; padding:12px; background:var(--bg2); color:var(--text); border:1px solid var(--border); border-radius:7px; font-size:15px; }
-  textarea { min-height:95px; resize:vertical; }
-  button, .fakebtn { display:inline-block; margin:12px 10px 0 0; padding:12px 18px; background:var(--orange); color:var(--bg); border:0; border-radius:24px; cursor:pointer; text-transform:uppercase; letter-spacing:3px; font-size:11px; font-weight:700; text-decoration:none; }
-  button.secondary { background:transparent; color:var(--orange); border:1px solid rgba(216,90,48,0.45); }
-  button:disabled, .fakebtn.disabled { opacity:.4; pointer-events:none; }
-  pre { min-height:80px; white-space:pre-wrap; word-break:break-word; background:var(--bg2); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:14px; }
-  .status { margin-top:10px; color:var(--muted); font-size:13px; }
-  .ok { color:#8fbf8f; }
-  .warn { color:#d6a35f; }
-  .err { color:#e07a68; }
+  :root {
+    --bg: #141210;
+    --panel: #1C1917;
+    --panel2: #232019;
+    --modal: #303030;
+    --modal2: #3A3A3A;
+    --text: #F1EFE8;
+    --muted: #B8B4AA;
+    --muted2: #888780;
+    --orange: #D85A30;
+    --border: rgba(241,239,232,0.14);
+    --danger: #d86855;
+    --ok: #85c28a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  .wrap {
+    width: min(920px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 28px 0 44px;
+  }
+
+  header {
+    margin-bottom: 22px;
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .sub {
+    color: var(--muted);
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    align-items: center;
+    margin: 24px 0;
+    padding: 16px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    border-radius: 14px;
+  }
+
+  .status {
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .status strong { color: var(--text); }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+
+  .card h2 {
+    margin: 0 0 18px;
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  label {
+    display: block;
+    margin: 18px 0 7px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .hint {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted2);
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  input, textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: #0f0e0d;
+    color: var(--text);
+    border-radius: 10px;
+    padding: 14px 15px;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    outline: none;
+  }
+
+  textarea {
+    min-height: 96px;
+    resize: vertical;
+  }
+
+  input:focus, textarea:focus {
+    border-color: rgba(216,90,48,0.75);
+    box-shadow: 0 0 0 3px rgba(216,90,48,0.18);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  button, .filelike {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 13px 17px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .08s ease, opacity .15s ease, background .15s ease;
+  }
+
+  button:active { transform: translateY(1px); }
+
+  button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .primary {
+    background: var(--orange);
+    color: #141210;
+  }
+
+  .secondary {
+    background: var(--panel2);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .ghost {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--border);
+  }
+
+  .danger {
+    background: transparent;
+    color: var(--danger);
+    border-color: rgba(216,104,85,0.35);
+  }
+
+  .message {
+    display: none;
+    margin-top: 16px;
+    padding: 13px 14px;
+    border-radius: 10px;
+    font-size: 16px;
+    border: 1px solid var(--border);
+    background: #0f0e0d;
+    color: var(--muted);
+  }
+
+  .message.show { display: block; }
+  .message.ok { color: var(--ok); border-color: rgba(133,194,138,0.35); }
+  .message.err { color: var(--danger); border-color: rgba(216,104,85,0.35); }
+
+  .preview {
+    display: none;
+    margin-top: 14px;
+    gap: 12px;
+    align-items: center;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .preview.show { display: flex; }
+
+  .preview img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #0f0e0d;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.62);
+    padding: 18px;
+    z-index: 50;
+  }
+
+  .modal-backdrop.show { display: flex; }
+
+  .modal {
+    width: min(720px, 100%);
+    max-height: min(760px, calc(100vh - 40px));
+    overflow: auto;
+    background: var(--modal);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 18px;
+    box-shadow: 0 18px 70px rgba(0,0,0,0.46);
+    padding: 22px;
+  }
+
+  .modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .modal h2 {
+    margin: 0;
+    font-size: 26px;
+  }
+
+  .modal-note {
+    color: var(--muted);
+    margin: 0 0 18px;
+    font-size: 16px;
+  }
+
+  .pending-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .pending-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto auto;
+    gap: 8px;
+    align-items: center;
+    background: var(--modal2);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .pending-title {
+    font-size: 18px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mini {
+    padding: 9px 11px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+
+  .xbtn {
+    min-width: 42px;
+    color: var(--danger);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+  }
+
+  .editing-banner {
+    display: none;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border: 1px solid rgba(216,90,48,0.45);
+    background: rgba(216,90,48,0.14);
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--text);
+  }
+
+  .editing-banner.show { display: block; }
+
+  @media (max-width: 680px) {
+    body { font-size: 17px; }
+    .topbar { grid-template-columns: 1fr; }
+    .actions { flex-direction: column; }
+    button { width: 100%; }
+    .pending-item {
+      grid-template-columns: 1fr 42px 42px;
+      grid-template-areas:
+        "title title title"
+        "up down edit"
+        "del del del";
+    }
+    .pending-title { grid-area: title; white-space: normal; }
+    .up { grid-area: up; }
+    .down { grid-area: down; }
+    .edit { grid-area: edit; }
+    .delete { grid-area: del; width: 100%; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <h1>DuoLínguas Playlist Generator</h1>
-  <p>Preencha os dados, carregue o playlists.js atual e baixe um playlists.js novo já atualizado. Esta página não edita o GitHub sozinha.</p>
+<div class="wrap">
+  <header>
+    <h1>DuoLínguas Playlist Generator</h1>
+    <p class="sub">Ferramenta interna para criar várias playlists em lote e gerar um playlists.js final.</p>
+  </header>
 
-  <section class="box">
-    <label>1. Carregar o playlists.js atual</label>
-    <input id="fileInput" type="file" accept=".js,.txt">
-    <div class="status" id="fileStatus">Nenhum arquivo carregado.</div>
+  <div class="topbar">
+    <div class="status" id="topStatus"><strong>Lista atual:</strong> será buscada automaticamente quando você gerar o arquivo final.</div>
+    <button class="secondary" id="btnPending" disabled>Playlists em andamento (0)</button>
+  </div>
+
+  <section class="card">
+    <h2>Nova playlist</h2>
+
+    <div class="editing-banner" id="editingBanner"></div>
+
+    <label for="title">Nome da playlist</label>
+    <input id="title" autocomplete="off" placeholder="Exemplo: Pride Hits, Tits, Chicks, Fist">
+
+    <label for="description">Descrição</label>
+    <textarea id="description" placeholder="Resumo curto da energia da playlist."></textarea>
+
+    <label for="image">Foto da capa
+      <span class="hint">Use o nome do arquivo já no GitHub, por exemplo: duol-play-vol-03.png. Se estiver em pasta, use: assets/play/duol-play-vol-03.png.</span>
+    </label>
+    <input id="image" autocomplete="off" placeholder="duol-play-vol-03.png">
+    <div class="preview" id="preview">
+      <img id="previewImg" alt="Prévia da capa">
+      <span id="previewText">Prévia da imagem</span>
+    </div>
+
+    <label for="url">Link do Spotify</label>
+    <input id="url" autocomplete="off" placeholder="https://open.spotify.com/playlist/...">
+
+    <div class="actions">
+      <button class="primary" id="btnAdd">Adicionar ao lote</button>
+      <button class="ghost" id="btnCancelEdit" style="display:none;">Cancelar edição</button>
+      <button class="secondary" id="btnClear">Limpar campos</button>
+      <button class="secondary" id="btnGenerate" disabled>Gerar playlists.js final</button>
+      <button class="danger" id="btnClearBatch" disabled>Limpar lote</button>
+    </div>
+
+    <div class="message" id="message"></div>
   </section>
+</div>
 
-  <section class="box">
-    <label>Título da playlist</label>
-    <input id="title" placeholder="Ex.: Duol Tracks vol 3">
-
-    <label>Descrição curta</label>
-    <textarea id="description" placeholder="Descrição que aparecerá no card."></textarea>
-
-    <label>Nome exato do arquivo da capa</label>
-    <input id="image" placeholder="Ex.: DUOL tracks vol 3.png">
-
-    <label>URL do Spotify</label>
-    <input id="url" placeholder="https://open.spotify.com/playlist/...">
-
-    <button id="generateBtn">Gerar novo playlists.js</button>
-    <button class="secondary" id="clearBtn">Limpar campos</button>
-  </section>
-
-  <section class="box">
-    <label>Resultado</label>
-    <pre id="output"></pre>
-    <a id="downloadLink" class="fakebtn disabled" href="#" download="playlists.js">Baixar playlists.js atualizado</a>
-    <button class="secondary" id="copyBtn" disabled>Copiar conteúdo inteiro</button>
-    <div class="status" id="resultStatus">Gere o arquivo para liberar o download.</div>
-  </section>
-</main>
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <h2 id="modalTitle">Playlists em andamento</h2>
+      <button class="ghost mini" id="btnCloseModal">OK</button>
+    </div>
+    <p class="modal-note">A ordem abaixo será a ordem adicionada depois das playlists que já existem no site.</p>
+    <div class="pending-list" id="pendingList"></div>
+    <div class="modal-actions">
+      <button class="secondary" id="btnOkModal">OK</button>
+    </div>
+  </div>
+</div>
 
 <script>
-let currentFileText = "";
-let updatedText = "";
+(function(){
+  const els = {
+    title: document.getElementById('title'),
+    description: document.getElementById('description'),
+    image: document.getElementById('image'),
+    url: document.getElementById('url'),
+    btnAdd: document.getElementById('btnAdd'),
+    btnClear: document.getElementById('btnClear'),
+    btnGenerate: document.getElementById('btnGenerate'),
+    btnPending: document.getElementById('btnPending'),
+    btnClearBatch: document.getElementById('btnClearBatch'),
+    btnCancelEdit: document.getElementById('btnCancelEdit'),
+    msg: document.getElementById('message'),
+    topStatus: document.getElementById('topStatus'),
+    modal: document.getElementById('modalBackdrop'),
+    pendingList: document.getElementById('pendingList'),
+    btnCloseModal: document.getElementById('btnCloseModal'),
+    btnOkModal: document.getElementById('btnOkModal'),
+    editingBanner: document.getElementById('editingBanner'),
+    preview: document.getElementById('preview'),
+    previewImg: document.getElementById('previewImg'),
+    previewText: document.getElementById('previewText')
+  };
 
-const fileInput = document.getElementById("fileInput");
-const fileStatus = document.getElementById("fileStatus");
-const output = document.getElementById("output");
-const downloadLink = document.getElementById("downloadLink");
-const resultStatus = document.getElementById("resultStatus");
-const copyBtn = document.getElementById("copyBtn");
+  const STORAGE_KEY = 'duolinguas_pending_playlists_batch_v1';
+  let pending = loadPending();
+  let editingIndex = null;
 
-function escapeJS(text) {
-  return String(text || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"')
-    .replace(/\r?\n/g, " ")
-    .trim();
-}
-
-function makeEntry() {
-  const title = escapeJS(document.getElementById("title").value);
-  const description = escapeJS(document.getElementById("description").value);
-  const image = escapeJS(document.getElementById("image").value);
-  const url = escapeJS(document.getElementById("url").value);
-
-  if (!title || !image || !url) {
-    throw new Error("Preencha pelo menos título, imagem e URL do Spotify.");
+  function loadPending(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch(e) {
+      return [];
+    }
   }
 
-  return `  {\n    title: "${title}",\n    description: "${description}",\n    image: "${image}",\n    url: "${url}",\n    active: true\n  }`;
-}
-
-function insertEntry(fileText, entry) {
-  const trimmed = String(fileText || "").trim();
-  if (!trimmed) {
-    return `const PLAYLISTS = [\n${entry}\n];\n`;
+  function savePending(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
   }
 
-  const closeIndex = trimmed.lastIndexOf("];" );
-  const closeIndexNoSemi = trimmed.lastIndexOf("]");
-  const index = closeIndex !== -1 ? closeIndex : closeIndexNoSemi;
-
-  if (index === -1) {
-    throw new Error("Não encontrei o fechamento da lista no playlists.js. Use o arquivo atual correto.");
+  function showMessage(text, type){
+    els.msg.textContent = text;
+    els.msg.className = 'message show' + (type ? ' ' + type : '');
   }
 
-  const before = trimmed.slice(0, index).trimEnd();
-  const after = trimmed.slice(index);
-  const needsComma = !before.endsWith("[") && !before.endsWith(",");
-  const separator = needsComma ? ",\n" : "\n";
-  return before + separator + entry + "\n" + after + "\n";
-}
-
-fileInput.addEventListener("change", async function() {
-  const file = fileInput.files && fileInput.files[0];
-  if (!file) return;
-  currentFileText = await file.text();
-  fileStatus.innerHTML = `<span class="ok">Arquivo carregado:</span> ${file.name}`;
-});
-
-document.getElementById("generateBtn").addEventListener("click", function() {
-  try {
-    const entry = makeEntry();
-    updatedText = insertEntry(currentFileText, entry);
-    output.textContent = updatedText;
-
-    const blob = new Blob([updatedText], { type: "application/javascript" });
-    const url = URL.createObjectURL(blob);
-    downloadLink.href = url;
-    downloadLink.classList.remove("disabled");
-    copyBtn.disabled = false;
-    resultStatus.innerHTML = `<span class="ok">Arquivo atualizado gerado.</span> Baixe e substitua o playlists.js no GitHub.`;
-  } catch (err) {
-    output.textContent = "";
-    downloadLink.classList.add("disabled");
-    copyBtn.disabled = true;
-    resultStatus.innerHTML = `<span class="err">Erro:</span> ${err.message}`;
+  function clearMessage(){
+    els.msg.className = 'message';
+    els.msg.textContent = '';
   }
-});
 
-copyBtn.addEventListener("click", async function() {
-  if (!updatedText) return;
-  await navigator.clipboard.writeText(updatedText);
-  resultStatus.innerHTML = `<span class="ok">Conteúdo copiado.</span>`;
-});
+  function value(id){
+    return els[id].value.trim();
+  }
 
-document.getElementById("clearBtn").addEventListener("click", function() {
-  document.getElementById("title").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("image").value = "";
-  document.getElementById("url").value = "";
-});
+  function formData(){
+    return {
+      title: value('title'),
+      description: value('description'),
+      image: value('image'),
+      url: value('url'),
+      active: true
+    };
+  }
+
+  function hasFormData(){
+    const data = formData();
+    return !!(data.title || data.description || data.image || data.url);
+  }
+
+  function validate(data){
+    if(!data.title) return 'Preencha o nome da playlist.';
+    if(!data.description) return 'Preencha a descrição.';
+    if(!data.image) return 'Preencha o nome ou caminho da imagem.';
+    if(!data.url) return 'Preencha o link do Spotify.';
+    if(!/^https?:\/\//i.test(data.url)) return 'O link do Spotify precisa começar com http ou https.';
+    return '';
+  }
+
+  function resetForm(){
+    els.title.value = '';
+    els.description.value = '';
+    els.image.value = '';
+    els.url.value = '';
+    editingIndex = null;
+    els.btnAdd.textContent = 'Adicionar ao lote';
+    els.btnCancelEdit.style.display = 'none';
+    els.editingBanner.classList.remove('show');
+    els.editingBanner.textContent = '';
+    updatePreview();
+    clearMessage();
+  }
+
+  function updateUI(){
+    const count = pending.length;
+    els.btnPending.textContent = 'Playlists em andamento (' + count + ')';
+    els.btnPending.disabled = count === 0;
+    els.btnGenerate.disabled = count === 0;
+    els.btnClearBatch.disabled = count === 0;
+    savePending();
+    renderPendingList();
+  }
+
+  function addOrSave(){
+    clearMessage();
+    const data = formData();
+    const error = validate(data);
+    if(error){
+      showMessage(error, 'err');
+      return;
+    }
+
+    if(editingIndex !== null){
+      pending[editingIndex] = data;
+      showMessage('Edição salva no lote.', 'ok');
+    } else {
+      pending.push(data);
+      showMessage('Playlist adicionada ao lote.', 'ok');
+    }
+
+    resetForm();
+    updateUI();
+  }
+
+  function renderPendingList(){
+    els.pendingList.innerHTML = '';
+
+    if(!pending.length){
+      const empty = document.createElement('div');
+      empty.className = 'modal-note';
+      empty.textContent = 'Nenhuma playlist em andamento.';
+      els.pendingList.appendChild(empty);
+      return;
+    }
+
+    pending.forEach((item, index) => {
+      const row = document.createElement('div');
+      row.className = 'pending-item';
+
+      const title = document.createElement('div');
+      title.className = 'pending-title';
+      title.textContent = item.title || 'Sem título';
+      row.appendChild(title);
+
+      const up = document.createElement('button');
+      up.className = 'secondary mini up';
+      up.textContent = '↑';
+      up.disabled = index === 0;
+      up.onclick = () => moveItem(index, -1);
+      row.appendChild(up);
+
+      const down = document.createElement('button');
+      down.className = 'secondary mini down';
+      down.textContent = '↓';
+      down.disabled = index === pending.length - 1;
+      down.onclick = () => moveItem(index, 1);
+      row.appendChild(down);
+
+      const edit = document.createElement('button');
+      edit.className = 'secondary mini edit';
+      edit.textContent = 'Editar';
+      edit.onclick = () => startEdit(index);
+      row.appendChild(edit);
+
+      const del = document.createElement('button');
+      del.className = 'danger mini xbtn delete';
+      del.textContent = 'X';
+      del.onclick = () => deleteItem(index);
+      row.appendChild(del);
+
+      els.pendingList.appendChild(row);
+    });
+  }
+
+  function moveItem(index, direction){
+    const target = index + direction;
+    if(target < 0 || target >= pending.length) return;
+    const temp = pending[index];
+    pending[index] = pending[target];
+    pending[target] = temp;
+    updateUI();
+  }
+
+  function deleteItem(index){
+    pending.splice(index, 1);
+    if(editingIndex === index) resetForm();
+    if(editingIndex !== null && editingIndex > index) editingIndex--;
+    updateUI();
+  }
+
+  function startEdit(index){
+    const item = pending[index];
+    els.title.value = item.title || '';
+    els.description.value = item.description || '';
+    els.image.value = item.image || '';
+    els.url.value = item.url || '';
+    editingIndex = index;
+    els.btnAdd.textContent = 'Salvar edição';
+    els.btnCancelEdit.style.display = 'inline-block';
+    els.editingBanner.textContent = 'Editando: ' + (item.title || 'playlist sem título');
+    els.editingBanner.classList.add('show');
+    closeModal();
+    updatePreview();
+    showMessage('Edite os campos e clique em Salvar edição.', 'ok');
+  }
+
+  function openModal(){
+    clearMessage();
+    if(!pending.length) return;
+
+    if(hasFormData() && editingIndex === null){
+      showMessage('Adicione ou limpe a playlist atual antes de abrir as playlists em andamento.', 'err');
+      return;
+    }
+
+    if(editingIndex !== null){
+      showMessage('Salve ou cancele a edição antes de abrir as playlists em andamento.', 'err');
+      return;
+    }
+
+    els.modal.classList.add('show');
+    els.modal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeModal(){
+    els.modal.classList.remove('show');
+    els.modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function parsePlaylistsJS(text){
+    const fn = new Function(text + '\n; return typeof PLAYLISTS !== "undefined" ? PLAYLISTS : [];');
+    const result = fn();
+    if(!Array.isArray(result)) throw new Error('PLAYLISTS não é uma lista.');
+    return result;
+  }
+
+  async function fetchCurrentPlaylists(){
+    const url = 'playlists.js?v=' + Date.now();
+    const response = await fetch(url, { cache: 'no-store' });
+    if(!response.ok) throw new Error('Não consegui buscar playlists.js publicado.');
+    const text = await response.text();
+    return parsePlaylistsJS(text);
+  }
+
+  function buildJS(list){
+    return 'const PLAYLISTS = ' + JSON.stringify(list, null, 2) + ';\n';
+  }
+
+  function downloadFile(filename, content){
+    const blob = new Blob([content], { type: 'text/javascript;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  async function generateFinalFile(){
+    clearMessage();
+
+    if(!pending.length){
+      showMessage('Não há playlists em andamento para adicionar.', 'err');
+      return;
+    }
+
+    if(hasFormData() && editingIndex === null){
+      showMessage('Adicione ou limpe a playlist atual antes de gerar o arquivo final.', 'err');
+      return;
+    }
+
+    if(editingIndex !== null){
+      showMessage('Salve ou cancele a edição antes de gerar o arquivo final.', 'err');
+      return;
+    }
+
+    els.btnGenerate.disabled = true;
+    els.btnGenerate.textContent = 'Gerando...';
+    els.topStatus.innerHTML = '<strong>Lista atual:</strong> buscando playlists.js publicado...';
+
+    try {
+      const current = await fetchCurrentPlaylists();
+      const finalList = current.concat(pending);
+      const js = buildJS(finalList);
+      downloadFile('playlists.js', js);
+      els.topStatus.innerHTML = '<strong>Lista atual:</strong> ' + current.length + ' playlist(s) publicada(s). Arquivo final com ' + finalList.length + ' playlist(s).';
+      showMessage('Arquivo playlists.js final baixado. Substitua o playlists.js no GitHub por esse arquivo.', 'ok');
+    } catch(e) {
+      showMessage('Erro ao gerar arquivo final: ' + e.message, 'err');
+      els.topStatus.innerHTML = '<strong>Lista atual:</strong> erro ao buscar playlists.js.';
+    } finally {
+      els.btnGenerate.disabled = pending.length === 0;
+      els.btnGenerate.textContent = 'Gerar playlists.js final';
+    }
+  }
+
+  function clearBatch(){
+    pending = [];
+    resetForm();
+    updateUI();
+    showMessage('Lote limpo.', 'ok');
+  }
+
+  function updatePreview(){
+    const img = value('image');
+    if(!img){
+      els.preview.classList.remove('show');
+      return;
+    }
+    els.previewImg.src = img;
+    els.previewText.textContent = 'Prévia usando: ' + img;
+    els.preview.classList.add('show');
+  }
+
+  els.btnAdd.addEventListener('click', addOrSave);
+  els.btnClear.addEventListener('click', resetForm);
+  els.btnPending.addEventListener('click', openModal);
+  els.btnGenerate.addEventListener('click', generateFinalFile);
+  els.btnClearBatch.addEventListener('click', clearBatch);
+  els.btnCancelEdit.addEventListener('click', resetForm);
+  els.btnCloseModal.addEventListener('click', closeModal);
+  els.btnOkModal.addEventListener('click', closeModal);
+  els.modal.addEventListener('click', (e) => { if(e.target === els.modal) closeModal(); });
+  els.image.addEventListener('input', updatePreview);
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && els.modal.classList.contains('show')) closeModal();
+  });
+
+  updateUI();
+  updatePreview();
+})();
 </script>
 </body>
 </html>

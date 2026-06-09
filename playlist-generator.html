@@ -5,79 +5,155 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DuoLínguas Playlist Generator</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #141210;
-    color: #F1EFE8;
-    padding: 24px;
-    max-width: 720px;
-    margin: auto;
-  }
-  h1 { font-size: 24px; font-weight: 400; margin-bottom: 8px; }
-  p { color: #888780; line-height: 1.5; }
-  label { display: block; margin-top: 16px; font-size: 13px; color: #888780; }
-  input, textarea {
-    width: 100%; margin-top: 6px; padding: 10px;
-    background: #1C1917; color: #F1EFE8;
-    border: 1px solid rgba(241,239,232,0.12); border-radius: 6px;
-  }
-  textarea { min-height: 80px; resize: vertical; }
-  button {
-    margin-top: 20px; margin-right: 8px; padding: 10px 18px;
-    background: #D85A30; color: #141210;
-    border: none; border-radius: 20px; cursor: pointer;
-    text-transform: uppercase; letter-spacing: 2px; font-size: 11px;
-  }
-  pre {
-    margin-top: 24px; padding: 16px; background: #1C1917;
-    border: 1px solid rgba(241,239,232,0.12); border-radius: 8px;
-    white-space: pre-wrap; line-height: 1.4;
-  }
+  :root { --bg:#141210; --bg2:#1C1917; --text:#F1EFE8; --muted:#888780; --orange:#D85A30; --border:rgba(241,239,232,0.12); }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family: Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); padding:32px; }
+  main { max-width:900px; margin:0 auto; }
+  h1 { font-size:30px; margin:0 0 10px; font-weight:500; }
+  p { color:var(--muted); line-height:1.5; margin:0 0 22px; }
+  .box { border:1px solid var(--border); background:rgba(255,255,255,0.02); border-radius:10px; padding:18px; margin:18px 0; }
+  label { display:block; margin:14px 0 6px; font-size:14px; color:var(--muted); }
+  input, textarea { width:100%; padding:12px; background:var(--bg2); color:var(--text); border:1px solid var(--border); border-radius:7px; font-size:15px; }
+  textarea { min-height:95px; resize:vertical; }
+  button, .fakebtn { display:inline-block; margin:12px 10px 0 0; padding:12px 18px; background:var(--orange); color:var(--bg); border:0; border-radius:24px; cursor:pointer; text-transform:uppercase; letter-spacing:3px; font-size:11px; font-weight:700; text-decoration:none; }
+  button.secondary { background:transparent; color:var(--orange); border:1px solid rgba(216,90,48,0.45); }
+  button:disabled, .fakebtn.disabled { opacity:.4; pointer-events:none; }
+  pre { min-height:80px; white-space:pre-wrap; word-break:break-word; background:var(--bg2); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:14px; }
+  .status { margin-top:10px; color:var(--muted); font-size:13px; }
+  .ok { color:#8fbf8f; }
+  .warn { color:#d6a35f; }
+  .err { color:#e07a68; }
 </style>
 </head>
 <body>
-<h1>DuoLínguas Playlist Generator</h1>
-<p>Preencha os campos, clique em gerar e copie o bloco para dentro do arquivo playlists.js.</p>
+<main>
+  <h1>DuoLínguas Playlist Generator</h1>
+  <p>Preencha os dados, carregue o playlists.js atual e baixe um playlists.js novo já atualizado. Esta página não edita o GitHub sozinha.</p>
 
-<label>Título da playlist</label>
-<input id="title" placeholder="Exemplo: Soft Brazilian Survival">
+  <section class="box">
+    <label>1. Carregar o playlists.js atual</label>
+    <input id="fileInput" type="file" accept=".js,.txt">
+    <div class="status" id="fileStatus">Nenhum arquivo carregado.</div>
+  </section>
 
-<label>Descrição curta</label>
-<textarea id="description" placeholder="Uma frase curta sobre a função da playlist."></textarea>
+  <section class="box">
+    <label>Título da playlist</label>
+    <input id="title" placeholder="Ex.: Duol Tracks vol 3">
 
-<label>Nome do arquivo da capa</label>
-<input id="image" placeholder="Exemplo: duol-play-vol-03.png">
+    <label>Descrição curta</label>
+    <textarea id="description" placeholder="Descrição que aparecerá no card."></textarea>
 
-<label>URL do Spotify</label>
-<input id="url" placeholder="Cole aqui o link da playlist no Spotify">
+    <label>Nome exato do arquivo da capa</label>
+    <input id="image" placeholder="Ex.: DUOL tracks vol 3.png">
 
-<button onclick="generate()">Gerar bloco</button>
-<button onclick="copyOutput()">Copiar</button>
+    <label>URL do Spotify</label>
+    <input id="url" placeholder="https://open.spotify.com/playlist/...">
 
-<pre id="output"></pre>
+    <button id="generateBtn">Gerar novo playlists.js</button>
+    <button class="secondary" id="clearBtn">Limpar campos</button>
+  </section>
+
+  <section class="box">
+    <label>Resultado</label>
+    <pre id="output"></pre>
+    <a id="downloadLink" class="fakebtn disabled" href="#" download="playlists.js">Baixar playlists.js atualizado</a>
+    <button class="secondary" id="copyBtn" disabled>Copiar conteúdo inteiro</button>
+    <div class="status" id="resultStatus">Gere o arquivo para liberar o download.</div>
+  </section>
+</main>
 
 <script>
-function clean(text) {
-  return String(text || "").replace(/\/g, "\\").replace(/"/g, '\"').trim();
+let currentFileText = "";
+let updatedText = "";
+
+const fileInput = document.getElementById("fileInput");
+const fileStatus = document.getElementById("fileStatus");
+const output = document.getElementById("output");
+const downloadLink = document.getElementById("downloadLink");
+const resultStatus = document.getElementById("resultStatus");
+const copyBtn = document.getElementById("copyBtn");
+
+function escapeJS(text) {
+  return String(text || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\r?\n/g, " ")
+    .trim();
 }
-function generate() {
-  const title = clean(document.getElementById("title").value);
-  const description = clean(document.getElementById("description").value);
-  const image = clean(document.getElementById("image").value);
-  const url = clean(document.getElementById("url").value);
-  const block = `{
-  title: "${title}",
-  description: "${description}",
-  image: "${image}",
-  url: "${url}",
-  active: true
-},`;
-  document.getElementById("output").textContent = block;
+
+function makeEntry() {
+  const title = escapeJS(document.getElementById("title").value);
+  const description = escapeJS(document.getElementById("description").value);
+  const image = escapeJS(document.getElementById("image").value);
+  const url = escapeJS(document.getElementById("url").value);
+
+  if (!title || !image || !url) {
+    throw new Error("Preencha pelo menos título, imagem e URL do Spotify.");
+  }
+
+  return `  {\n    title: "${title}",\n    description: "${description}",\n    image: "${image}",\n    url: "${url}",\n    active: true\n  }`;
 }
-function copyOutput() {
-  const output = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(output);
+
+function insertEntry(fileText, entry) {
+  const trimmed = String(fileText || "").trim();
+  if (!trimmed) {
+    return `const PLAYLISTS = [\n${entry}\n];\n`;
+  }
+
+  const closeIndex = trimmed.lastIndexOf("];" );
+  const closeIndexNoSemi = trimmed.lastIndexOf("]");
+  const index = closeIndex !== -1 ? closeIndex : closeIndexNoSemi;
+
+  if (index === -1) {
+    throw new Error("Não encontrei o fechamento da lista no playlists.js. Use o arquivo atual correto.");
+  }
+
+  const before = trimmed.slice(0, index).trimEnd();
+  const after = trimmed.slice(index);
+  const needsComma = !before.endsWith("[") && !before.endsWith(",");
+  const separator = needsComma ? ",\n" : "\n";
+  return before + separator + entry + "\n" + after + "\n";
 }
+
+fileInput.addEventListener("change", async function() {
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) return;
+  currentFileText = await file.text();
+  fileStatus.innerHTML = `<span class="ok">Arquivo carregado:</span> ${file.name}`;
+});
+
+document.getElementById("generateBtn").addEventListener("click", function() {
+  try {
+    const entry = makeEntry();
+    updatedText = insertEntry(currentFileText, entry);
+    output.textContent = updatedText;
+
+    const blob = new Blob([updatedText], { type: "application/javascript" });
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.classList.remove("disabled");
+    copyBtn.disabled = false;
+    resultStatus.innerHTML = `<span class="ok">Arquivo atualizado gerado.</span> Baixe e substitua o playlists.js no GitHub.`;
+  } catch (err) {
+    output.textContent = "";
+    downloadLink.classList.add("disabled");
+    copyBtn.disabled = true;
+    resultStatus.innerHTML = `<span class="err">Erro:</span> ${err.message}`;
+  }
+});
+
+copyBtn.addEventListener("click", async function() {
+  if (!updatedText) return;
+  await navigator.clipboard.writeText(updatedText);
+  resultStatus.innerHTML = `<span class="ok">Conteúdo copiado.</span>`;
+});
+
+document.getElementById("clearBtn").addEventListener("click", function() {
+  document.getElementById("title").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("image").value = "";
+  document.getElementById("url").value = "";
+});
 </script>
 </body>
 </html>

@@ -158,17 +158,15 @@ html,body{height:100%;overflow:hidden;font-family:'Montserrat',sans-serif;color:
 .ct{padding:80px 28px 0 28px;position:relative;z-index:1}
 #cc{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.3px;line-height:1.05;word-break:break-word;transition:color .3s,font-size .15s}
 .sw{margin-top:8px;display:inline-flex;align-items:center;border-radius:4px;padding:5px 12px;transition:background .3s}
-#cs{font-family:'Montserrat',sans-serif;font-weight:500;letter-spacing:1px;text-transform:uppercase;transition:color .3s,font-size .15s}
+#cs{font-family:'Montserrat',sans-serif;font-weight:500;letter-spacing:1px;transition:color .3s,font-size .15s}
 .sw.hid{display:none}
 .cd{width:100%;height:.5px;margin:16px 0 0}
 
 /* phrases */
 #pl{padding:14px 20px 0 20px;display:flex;flex-direction:column;gap:10px;z-index:1;flex:1}
-.pb2{border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;gap:4px;position:relative;transition:background .3s;overflow:hidden;resize:vertical;min-height:60px}
+.pb2{border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;gap:4px;position:relative;transition:background .3s;overflow:hidden;min-height:40px}
 .pb2:hover .bc{opacity:1}
-.pb2::-webkit-resizer{background:transparent}
-.pb2::after{content:'';position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:30px;height:3px;border-radius:2px;background:rgba(255,255,255,0.15)}
-.pb2:hover::after{background:rgba(216,90,48,0.4)}
+
 .bc{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .15s}
 .bcb{width:22px;height:22px;border-radius:4px;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center}
 .be{background:rgba(255,255,255,0.15);color:#ccc}
@@ -250,6 +248,11 @@ html,body{height:100%;overflow:hidden;font-family:'Montserrat',sans-serif;color:
 .mc{padding:9px 14px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:none;color:#C8C6BE;font-family:'Montserrat',sans-serif;font-size:9px;cursor:pointer}
 .mcp{padding:9px 12px;border-radius:6px;border:1px solid rgba(255,255,255,0.2);background:none;color:#C8C6BE;font-family:'Montserrat',sans-serif;font-size:9px;cursor:pointer}
 .mcp:hover{border-color:#D85A30;color:#D85A30}
+
+.pal{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.palc{width:24px;height:24px;border-radius:4px;border:1px solid rgba(255,255,255,0.15);cursor:pointer;transition:all .15s}
+.palc:hover{border-color:#D85A30}
+.palc.on{border:2px solid #D85A30}
 </style>
 </head>
 <body>
@@ -401,11 +404,32 @@ html,body{height:100%;overflow:hidden;font-family:'Montserrat',sans-serif;color:
 
 <!-- EDIT MODAL -->
 <div id="em">
-  <div class="mb">
+  <div class="mb" style="max-height:90vh;overflow-y:auto;width:360px">
     <div class="mt">Editar frase</div>
     <div class="f"><label>Português</label><input type="text" id="mpt"></div>
     <div class="f"><label>Fonética</label><input type="text" id="mph"></div>
     <div class="f"><label>Inglês</label><input type="text" id="men"></div>
+
+    <div class="mt" style="margin-top:14px">Altura do bloco</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="fb" onclick="mbh(-20)">−</button>
+      <span id="mbhv" style="font-size:11px;color:#F1EFE8;min-width:30px;text-align:center">0</span>
+      <button class="fb" onclick="mbh(20)">+</button>
+      <span style="font-size:8px;color:#888780">px extra</span>
+    </div>
+
+    <div class="mt" style="margin-top:14px">Cor do fundo</div>
+    <div class="pal" id="palbg"></div>
+
+    <div class="mt" style="margin-top:10px">Cor — Português</div>
+    <div class="pal" id="palpt"></div>
+
+    <div class="mt" style="margin-top:10px">Cor — Fonética</div>
+    <div class="pal" id="palph"></div>
+
+    <div class="mt" style="margin-top:10px">Cor — Inglês</div>
+    <div class="pal" id="palen"></div>
+
     <div class="ma">
       <button class="mcp" onclick="cmt()">Copiar</button>
       <button class="mc" onclick="cm()">Cancelar</button>
@@ -521,10 +545,11 @@ function afs(){
 }
 
 // PHRASES
+const PAL=['#1C1917','#2A1208','#3D1F0E','#3a3632','#5F5E5A','#888780','#9A7A6A','#C8C6BE','#F1EFE8','#D85A30','#C07040','#FFFFFF'];
+
 function ip(){
-  const pt=document.getElementById('ipt').value.trim(),ph=document.getElementById('iph').value.trim(),en=document.getElementById('ien').value.trim();
-  if(!pt&&!ph&&!en)return;
-  phrases.push({pt,ph,en});
+  const pt=document.getElementById('ipt').value,ph=document.getElementById('iph').value,en=document.getElementById('ien').value;
+  phrases.push({pt,ph,en,bg:null,cpt:null,cph:null,cen:null,extraH:0});
   document.getElementById('ipt').value='';document.getElementById('iph').value='';document.getElementById('ien').value='';
   rp();
 }
@@ -533,17 +558,50 @@ function rp(){
   const l=document.getElementById('pl');l.innerHTML='';
   phrases.forEach((p,i)=>{
     const b=document.createElement('div');b.className='pb2';
-    b.innerHTML=`<div class="bc"><button class="bcb be" onclick="oe(${i})" title="Editar">✎</button><button class="bcb bd" onclick="dp(${i})" title="Apagar">×</button></div><div class="lpt" style="font-size:${fz.pt}px">${p.pt}</div><div class="lph" style="font-size:${fz.ph}px">${p.ph}</div><div class="len" style="font-size:${fz.en}px">${p.en}</div>`;
+    if(p.bg)b.style.background=p.bg;
+    if(p.extraH)b.style.paddingBottom=(14+p.extraH)+'px';
+    b.innerHTML=`<div class="bc"><button class="bcb be" onclick="oe(${i})" title="Editar">✎</button><button class="bcb bd" onclick="dp(${i})" title="Apagar">×</button></div><div class="lpt" style="font-size:${fz.pt}px;${p.cpt?'color:'+p.cpt:''}">${p.pt||''}</div><div class="lph" style="font-size:${fz.ph}px;${p.cph?'color:'+p.cph:''}">${p.ph||''}</div><div class="len" style="font-size:${fz.en}px;${p.cen?'color:'+p.cen:''}">${p.en||''}</div>`;
     l.appendChild(b);
   });
 }
 
 function dp(i){phrases.splice(i,1);rp()}
 
-// EDIT MODAL
-function oe(i){editIdx=i;document.getElementById('mpt').value=phrases[i].pt;document.getElementById('mph').value=phrases[i].ph;document.getElementById('men').value=phrases[i].en;document.getElementById('em').classList.add('open')}
+function buildPal(cid,sel,cb){
+  const c=document.getElementById(cid);c.innerHTML='';
+  PAL.forEach(color=>{
+    const d=document.createElement('div');d.className='palc'+(color===sel?' on':'');
+    d.style.background=color;d.onclick=()=>{c.querySelectorAll('.palc').forEach(x=>x.classList.remove('on'));d.classList.add('on');cb(color)};
+    c.appendChild(d);
+  });
+}
+
+let modalBg=null,modalCpt=null,modalCph=null,modalCen=null,modalExtraH=0;
+
+function oe(i){
+  editIdx=i;const p=phrases[i];
+  document.getElementById('mpt').value=p.pt||'';
+  document.getElementById('mph').value=p.ph||'';
+  document.getElementById('men').value=p.en||'';
+  modalBg=p.bg;modalCpt=p.cpt;modalCph=p.cph;modalCen=p.cen;modalExtraH=p.extraH||0;
+  document.getElementById('mbhv').textContent=modalExtraH;
+  buildPal('palbg',modalBg,c=>{modalBg=c});
+  buildPal('palpt',modalCpt,c=>{modalCpt=c});
+  buildPal('palph',modalCph,c=>{modalCph=c});
+  buildPal('palen',modalCen,c=>{modalCen=c});
+  document.getElementById('em').classList.add('open');
+}
+
+function mbh(d){modalExtraH=Math.max(0,modalExtraH+d);document.getElementById('mbhv').textContent=modalExtraH}
+
 function cm(){document.getElementById('em').classList.remove('open');editIdx=null}
-function svm(){if(editIdx===null)return;phrases[editIdx]={pt:document.getElementById('mpt').value,ph:document.getElementById('mph').value,en:document.getElementById('men').value};rp();cm()}
+
+function svm(){
+  if(editIdx===null)return;
+  phrases[editIdx]={pt:document.getElementById('mpt').value,ph:document.getElementById('mph').value,en:document.getElementById('men').value,bg:modalBg,cpt:modalCpt,cph:modalCph,cen:modalCen,extraH:modalExtraH};
+  rp();cm();
+}
+
 function cmt(){navigator.clipboard.writeText([document.getElementById('mpt').value,document.getElementById('mph').value,document.getElementById('men').value].join('\n'))}
 
 // TIP
